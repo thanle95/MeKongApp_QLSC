@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_viewmoreinfo_id_su_co"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_margin="@dimen/activity_margin"
+            android:layout_weight="2"
+            android:text="ID sự cố:"
+            android:textColor="#444"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_alertdialog_id_su_co"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/activity_margin"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:textSize="15dp"
+            android:textStyle="bold"></TextView>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/framelayout_viewmoreinfo_attachment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/activity_margin"
+            android:text="Hình ảnh đính kèm"
+            android:textColor="#444"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:src="@drawable/ic_right" />
+    </FrameLayout>
+
+    <ListView
+        android:id="@+id/lstView_alertdialog_info"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7">
+
+    </ListView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginRight="@dimen/margin_small"
+        android:layout_weight="1"
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal"
+        tools:ignore="RtlHardcoded">
+
+        <Button
+            android:id="@+id/btn_updateinfo_left"
+            style="@style/MyTextAppearance.Blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_border_transparent"
+       />
+
+        <Button
+            android:id="@+id/btn_updateinfo_right"
+            style="@style/MyTextAppearance.White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:paddingLeft="@dimen/padding_small"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/padding_small"
+            />
+    </LinearLayout>
+
+</LinearLayout>

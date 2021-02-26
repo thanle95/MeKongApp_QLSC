@@ -1,0 +1,18 @@
+<resources>
+    <string name="async_dang_lay_hinh_anh_dinh_kem">Đang tải hình ảnh đính kèm…</string>
+    <string name="async_dang_cap_nhat_giao_dien">Đang cập nhật giao diện…</string>
+    <string name="async_dang_xu_ly">Đang xử lý…</string>
+    <string name="message_error_add_feature">Không tạo được thuộc tính. Vui lòng thử lại sau</string>
+    <string name="message_not_area_management">Vị trí không thuộc địa bàn quản lý</string>
+    <string name="message_no_geocoder_available">Cần cập nhật phiên bản Google+ mới nhất để dùng tính năng này</string>
+    <string name="message_preparing">Đang khởi tạo bản đồ…</string>
+    <string name="message_unloaded_map">Chưa khởi tạo xong bản đồ Vui lòng làm mới lại dữ liệu</string>
+
+
+    <string name="message_progress_title">Vui lòng đợi!</string>
+    <string name="message_set_service_message">Đang tải bản đồ …</string>
+    <string name="message_delete_bookmark_title">Xóa bookmark</string>
+    <string name="message_delete_bookmark_message">Bạn có chắc chắn muốn xóa bookmark: %1$s?</string>
+    <string name="message_add_feature_had_not_point">Bạn cần chọn một điểm trên bản đồ trước khi thêm thuộc tính</string>
+    <string name="message_add_feature_had_not_feature">Bạn cần chọn lớp dữ liệu</string>
+</resources>

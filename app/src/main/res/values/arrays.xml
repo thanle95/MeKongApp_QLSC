@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="field_subtype_array">
+        <item>@string/Field_SuCo_NguyenNhan</item>
+        <item>@string/Field_SuCo_VatLieu</item>
+        <item>@string/Field_SuCo_ViTri</item>
+        <item>@string/Field_SuCo_VatTu</item>
+        <item>@string/Field_SuCo_DuongKinhOng</item>
+    </string-array>
+    <string-array name="update_fields_arrays">
+        <item>NgaySuaChua</item>
+        <item>@string/Field_SuCo_NguyenNhan</item>
+        <item>NguoiSuaChua</item>
+        <item>GhiChuVatTu</item>
+        <item>@string/Field_SuCo_ViTri</item>
+        <item>GhiChu</item>
+        <item>PhanLoaiSuCo</item>
+        <item>DonViSuaChua</item>
+        <item>DuongKinhOng</item>
+        <item>HinhThucPhatHien</item>
+        <item>@string/Field_SuCo_VatLieu</item>
+        <item>@string/Field_SuCo_TrangThai</item>
+        <item>VatTu</item>
+        <item>KetQuaKiemTra</item>
+        <item>ApLuc</item>
+        <item>ThoiGianThucHien</item>
+        <item>VatLieuOng</item>
+        <item>@string/Field_SuCo_LoaiSuCo</item>
+        <item>SDTNguoiBao</item>
+        <item>MADMA</item>
+        <item>TIETDIENBE</item>
+        <item>@string/Field_SuCo_PhuiDao1</item>
+        <item>@string/Field_SuCo_PhuiDao1_Dai</item>
+        <item>@string/Field_SuCo_PhuiDao1_Sau</item>
+        <item>@string/Field_SuCo_PhuiDao1_Rong</item>
+        <item>@string/Field_SuCo_PhuiDao2</item>>
+        <item>@string/Field_SuCo_PhuiDao2_Dai</item>
+        <item>@string/Field_SuCo_PhuiDao2_Sau</item>
+        <item>@string/Field_SuCo_PhuiDao2_Rong</item>
+        <item>@string/Field_SuCo_PhuiDao3</item>
+        <item>@string/Field_SuCo_PhuiDao3_Dai</item>
+        <item>@string/Field_SuCo_PhuiDao3_Sau</item>
+        <item>@string/Field_SuCo_PhuiDao3_Rong</item>
+        <item>SoNha</item>
+        <item>LuongNuocThatThoatChuQuan</item>
+        <item>LuongNuocThatThoatKhachQuan</item>
+    </string-array>
+    <string-array name="add_fields_arrays">
+        <item>IDSuCo</item>
+        <item>NgayXayRa</item>
+        <item>HinhThucPhatHien</item>
+        <item>SoNha</item>
+        <item>SDTNguoiBao</item>
+    </string-array>
+    <string-array name="no_display_fields_arrays">
+        <item>OBJECTID</item>
+        <item>VatLieuOng</item>
+        <item>NgaySuaChua</item>
+        <item>GlobalID</item>
+        <item>TENDMA</item>
+        <item>MaDuong</item>
+        <item>MaPhuong</item>
+        <item>LoaiSuCo</item>
+    </string-array>
+    <string-array name="vitri_ongnganh_arrays">
+        <item>Bên phải nhà</item>
+        <item>Bên trái nhà</item>
+    </string-array>
+    <string-array name="vitri_ongchinh1_arrays">
+        <item>Cách mép nhà…</item>
+        <item>Cách bó vỉa…</item>
+    </string-array>
+    <string-array name="nguyennhan_ongnganh_array">
+        <item>Tét ống</item>
+        <item>Gãy ống</item>
+        <item>Mục ống</item>
+        <item>Xì joint ĐHN</item>
+        <item>Xì joint van góc</item>
+        <item>Xì joint khóa góc</item>
+        <item>Hư van góc</item>
+        <item>Hư khóa góc</item>
+        <item>Hư Van cóc</item>
+        <item>Hư Con cóc</item>
+    </string-array>
+    <string-array name="nguyennhan_ongchinh_array">
+        <item>Nứt ống theo chiều dọc</item>
+        <item>Nứt ống theo chiều ngang</item>
+        <item>Do bị ăn mòn ống</item>
+        <item>Rò rì tại đầu cái (mối nối)</item>
+        <item>Rò rỉ tại mặt bích</item>
+        <item>Rò rỉ tại đai khởi thủy</item>
+        <item>Hư van</item>
+        <item>Hư Tê</item>
+        <item>Hư Khuỷu 1/4</item>
+        <item>Hư Khuỷu 1/8</item>
+        <item>Hư Khuỷu 1/16</item>
+        <item>Hư Khuỷu 1/32</item>
+        <item>Hư Bù Manchon</item>
+        <item>Hư Kiềng</item>
+        <item>Hư joint kiềng</item>
+        <item>Hư Joint mặt bích</item>
+    </string-array>
+    <string-array name="vatlieu_ongnganh_array">
+        <item>HDPE</item>
+        <item>PE</item>
+        <item>Gang</item>
+        <item>Pb</item>
+        <item>PVC</item>
+        <item>STK</item>
+    </string-array>
+    <string-array name="vatlieu_ongchinh_array">
+        <item>uPVC</item>
+        <item>HDPE</item>
+        <item>Gang dẻo</item>
+        <item>Gang xám</item>
+        <item>AC</item>
+        <item>Bêtông</item>
+        <item>Thép</item>
+    </string-array>
+    <!--Query field begin-->
+    <string-array name="queryFields_dma">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>TENDMA</item>
+    </string-array>
+    <string-array name="queryFields_diemcuoiong">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>TenQuan</item>
+    </string-array>
+    <string-array name="queryFields_diemapluc">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>IDDiemApLuc</item>
+    </string-array>
+    <string-array name="queryFields_van">
+        <item>OBJECTID</item>
+        <item>DuongChinh</item>
+        <item>TenHanhChinh</item>
+        <item>TenQuan</item>
+        <item>VITRIVAN</item>
+
+    </string-array>
+    <string-array name="queryFields_truhong">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>IDMATRUHONG</item>
+        <item>TenHanhChinh</item>
+        <item>TenQuan</item>
+    </string-array>
+    <string-array name="queryFields_moinoi">
+        <item>OBJECTID</item>
+        <item>TenHanhChinh</item>
+        <item>TenQuan</item>
+    </string-array>
+    <string-array name="queryFields_diemsuco">
+        <item>OBJECTID</item>
+        <item>IDSuCo</item>
+        <item>ViTri</item>
+        <item>NgayCapNhat</item>
+        <item>NgayThongBao</item>
+    </string-array>
+    <string-array name="queryFields_ongtruyendan">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>VatLieu</item>
+    </string-array>
+    <string-array name="queryFields_ongphanphoi">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>TenConDuong</item>
+    </string-array>
+    <string-array name="queryFields_ongnganh">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>TenChuSoHuu</item>
+        <item>SoNhaMoi</item>
+        <item>TenConDuong</item>
+    </string-array>
+    <string-array name="queryFields_donghotong">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>MADUONG</item>
+        <item>TenHanhChinh</item>
+        <item>TenQuan</item>
+    </string-array>
+    <string-array name="queryFields_donghokhachhang">
+        <item>OBJECTID</item>
+        <item>DBDONGHONUOC</item>
+        <item>TENTHUEBAO</item>
+        <item>TenDuong</item>
+        <item>CODONGHO</item>
+        <item>NGAYLAPDAT</item>
+    </string-array>
+    <string-array name="queryFields_diemXaCan">
+        <item>HinhThucXa</item>
+        <item>TinhTrang</item>
+        <item>TenHam</item>
+        <item>ChucNangHam</item>
+    </string-array>
+    <string-array name="queryFields_beChua">
+        <item>TENBECHUA</item>
+        <item>DIADIEM</item>
+    </string-array>
+    <string-array name="queryFields_thapCatAp">
+        <item>KTHINHHOC</item>
+        <item>DIADIEM</item>
+    </string-array>
+    <string-array name="queryFields_thuyDai">
+        <item>TENTHUYDAI</item>
+        <item>DIADIEM</item>
+    </string-array>
+
+    <!--Query field end-->
+
+    <!--Out field begin-->
+    <string-array name="outFields_dma">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>TENDMA</item>
+    </string-array>
+    <string-array name="outFields_diemcuoiong">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>TenQuan</item>
+    </string-array>
+    <string-array name="outFields_diemapluc">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>IDDiemApLuc</item>
+    </string-array>
+    <string-array name="outFields_van">
+        <item>OBJECTID</item>
+        <item>DuongChinh</item>
+        <item>TenHanhChinh</item>
+        <item>TenQuan</item>
+        <item>VITRIVAN</item>
+
+    </string-array>
+    <string-array name="outFields_truhong">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>IDMATRUHONG</item>
+        <item>TenHanhChinh</item>
+        <item>TenQuan</item>
+    </string-array>
+    <string-array name="outFields_moinoi">
+        <item>OBJECTID</item>
+        <item>TenHanhChinh</item>
+        <item>TenQuan</item>
+    </string-array>
+    <string-array name="outFields_diemsuco">
+        <item>OBJECTID</item>
+        <item>IDSuCo</item>
+        <item>ViTri</item>
+        <item>NgayCapNhat</item>
+        <item>NgayThongBao</item>
+    </string-array>
+    <string-array name="outFields_ongtruyendan">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>VatLieu</item>
+    </string-array>
+    <string-array name="outFields_ongphanphoi">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>TenConDuong</item>
+    </string-array>
+    <string-array name="outFields_ongnganh">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>TenChuSoHuu</item>
+        <item>SoNhaMoi</item>
+        <item>TenConDuong</item>
+    </string-array>
+    <string-array name="outFields_donghotong">
+        <item>OBJECTID</item>
+        <item>MADMA</item>
+        <item>MADUONG</item>
+        <item>TenHanhChinh</item>
+        <item>TenQuan</item>
+    </string-array>
+    <string-array name="outFields_donghokhachhang">
+        <item>OBJECTID</item>
+        <item>DBDONGHONUOC</item>
+        <item>TENTHUEBAO</item>
+        <item>TenDuong</item>
+        <item>CODONGHO</item>
+        <item>NGAYLAPDAT</item>
+    </string-array>
+    <string-array name="outFields_diemXaCan">
+        <item>HinhThucXa</item>
+        <item>TinhTrang</item>
+        <item>TenHam</item>
+        <item>ChucNangHam</item>
+    </string-array>
+    <string-array name="outFields_beChua">
+        <item>TENBECHUA</item>
+        <item>DIADIEM</item>
+    </string-array>
+    <string-array name="outFields_thapCatAp">
+        <item>KTHINHHOC</item>
+        <item>DIADIEM</item>
+    </string-array>
+    <string-array name="outFields_thuyDai">
+        <item>TENTHUYDAI</item>
+        <item>DIADIEM</item>
+    </string-array>
+    <string-array name="hidden_Fields">
+        <item>OBJECTID</item>
+        <item>GLOBALID</item>
+        <item>GlobalID</item>
+    </string-array>
+    <string-array name="unedit_Fields">
+        <item>OBJECTID</item>
+        <item>IDSuCo</item>
+        <item>MaDMA</item>
+        <item>MaDuong</item>
+        <item>MaPhuong</item>
+        <item>MaQuan</item>
+        <item>SDTPhanAnh</item>
+        <item>NguoiPhanAnh</item>
+        <item>created_user</item>
+        <item>created_date</item>
+        <item>last_edited_user</item>
+        <item>last_edited_date</item>
+    </string-array>
+    <string-array name="add_Fields">
+        <item>DiaChi</item>
+        <item>NguoiPhanAnh</item>
+        <item>SDTPhanAnh</item>
+        <item>ThongTinPhanAnh</item>
+        <item>GhiChu</item>
+    </string-array>
+    <!--Out field end-->
+</resources>

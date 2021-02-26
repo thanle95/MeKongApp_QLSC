@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:orientation="vertical">
+
+
+        <FrameLayout
+
+            android:id="@+id/layout_edit_viewmoreinfo_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/txt_edit_viewmoreinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:text="ádfdasf"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Button
+                android:id="@+id/btn_edit_viewmoreinfo"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="right|end"
+                android:layout_marginRight="20dp"
+                android:text="..."
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_edit_viewmoreinfo_AutoCompleteTV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/margin_popup"
+            android:layout_marginRight="@dimen/margin_popup"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+
+            <TextView
+                style="@style/MyTextAppearance.Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="Thêm vật tư" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Nhập vật tư" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTV_edit_viewmoreinfo"
+                    style="@style/MyTextAppearance.Black"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:background="@drawable/layout_border"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_small" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Số lượng" />
+
+                <EditText
+                    android:id="@+id/etxt_soLuong"
+                    style="@style/MyTextAppearance.Black"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@drawable/layout_border"
+                    android:gravity="right"
+                    android:inputType="numberDecimal"
+                    android:padding="@dimen/padding_small" />
+
+                <TextView
+                    android:id="@+id/txt_donvitinh"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_them_vattu"
+                style="@style/MyTextAppearance.White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginBottom="@dimen/margin_popup"
+                android:background="@color/colorPrimary"
+                android:clickable="true"
+                android:padding="@dimen/padding_small"
+                android:text="Thêm" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorPrimary" />
+
+            <TextView
+                style="@style/MyTextAppearance.Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="Danh sách vật tư" />
+
+            <ListView
+                android:id="@+id/lstview_viewmoreinfo_autoCompleteTV"
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_edit_viewmoreinfo_Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <Spinner
+                android:id="@+id/spin_edit_viewmoreinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:gravity="right"
+                android:paddingLeft="20dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_edit_viewmoreinfo_Editext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/etxt_edit_viewmoreinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:layout_marginRight="@dimen/margin_small"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_updateinfo_left"
+            style="@style/MyTextAppearance.Blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_border_transparent" />
+
+        <Button
+            android:id="@+id/btn_updateinfo_right"
+            style="@style/MyTextAppearance.White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:background="@color/colorPrimary"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small" />
+    </LinearLayout>
+</LinearLayout>

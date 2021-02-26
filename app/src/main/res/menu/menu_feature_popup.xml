@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content">
+    <item
+        android:id="@+id/item_popup_view_attachments"
+        android:title="Tệp đính kèm"
+        android:visible="false"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/item_popup_find_route"
+        android:title="Tìm đường đi"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/item_popup_edit"
+        android:title="Cập nhật thông tin"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/item_popup_change_geometry"
+        android:title="Cập nhật vị trí"
+        android:visible="false"
+        app:showAsAction="withText" />
+</menu>

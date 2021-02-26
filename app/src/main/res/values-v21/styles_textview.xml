@@ -1,0 +1,90 @@
+<resources>
+
+    <style name="MyTextAppearance.Red" parent="@android:style/TextAppearance">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">@color/colorRed</item>
+    </style>
+
+    <style name="MyTextAppearance.Black" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/black</item>
+
+    </style>
+
+    <style name="MyTextAppearance.Black.Big" parent="MyTextAppearance.Black">
+        <item name="android:textSize">17sp</item>
+
+    </style>
+
+    <style name="MyTextAppearance.Black.Big.Bold" parent="MyTextAppearance.Black.Big">
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
+    <style name="MyTextAppearance.Black.Small" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="MyTextAppearance.Black.Small.Italic" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="MyTextAppearance.White.Small" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="MyTextAppearance.Primary.Light.Big" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorPrimaryLight</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="MyTextAppearance.Primary.Dark" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="MyTextAppearance.White" parent="@android:style/TextAppearance">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="MyTextAppearance.White.Big" parent="MyTextAppearance.White">
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <style name="MyTextAppearance.White.Big.Bold" parent="MyTextAppearance.White.Big">
+
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="MyTextAppearance.Blue" parent="@android:style/TextAppearance">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="MyTextAppearance.Blue.Small" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="MyTextAppearance.Blue.Big" parent="@android:style/TextAppearance">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="MyTextAppearance.Blue.Big.Bold" parent="@android:style/TextAppearance">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="MyTextAppearance.Blue.VeryBig" parent="@android:style/TextAppearance">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+    <style name="MyTextAppearance.Blue.VeryBig.Bold" parent="MyTextAppearance.Blue.VeryBig">
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

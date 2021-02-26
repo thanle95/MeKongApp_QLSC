@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_tracuu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:alpha="0.9"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        android:padding="@dimen/padding_small">
+
+        <TextView
+            android:id="@+id/txt_objectid"
+            style="@style/MyTextAppearance.Black.Big.Bold"
+            android:layout_width="318dp"
+            android:layout_height="40dp"
+            android:text="" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txt_id"
+                style="@style/MyTextAppearance.Black.Big.Bold"
+                android:layout_width="318dp"
+                android:layout_height="40dp"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/txt_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="12-03-2018" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/txt_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txt_id"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="phường 10, quận 5, TP.HCM"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/txt_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txt_id"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="phường 10, quận 5, TP.HCM"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorWhite"></View>
+
+
+</LinearLayout>

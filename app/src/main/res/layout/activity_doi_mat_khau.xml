@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/padding_layout"
+    tools:context="hcm.ditagis.com.vinhlong.qlsc.DoiMatKhauActivity">
+
+    <LinearLayout
+        android:id="@+id/layout_changepassword"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--Nhập mật khẩu cũ-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/MyTextAppearance.Blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="@string/changepassword_oldpassword" />
+
+            <EditText
+                android:id="@+id/etxt_change_password_old"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:inputType="text"
+                android:maxLines="1"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@drawable/layout_border"
+                android:hint="@string/changepassword_oldpassword"
+                android:padding="@dimen/padding_small"
+                android:password="true" />
+        </LinearLayout>
+        <!--Nhập mật khẩu mới-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/MyTextAppearance.Blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/changepassword_newpassword" />
+
+            <EditText
+                android:id="@+id/etxt_change_password_new"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:inputType="text"
+                android:maxLines="1"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@drawable/layout_border"
+                android:hint="@string/changepassword_newpassword"
+                android:padding="@dimen/padding_small"
+                android:password="true" />
+        </LinearLayout>
+        <!--Nhập lại mật khẩu mới-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/MyTextAppearance.Blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/changepassword_newpasswordconfirm" />
+
+            <EditText
+                android:id="@+id/etxt_change_password_new_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:inputType="text"
+                android:maxLines="1"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@drawable/layout_border"
+                android:hint="@string/changepassword_newpasswordconfirm"
+                android:padding="@dimen/padding_small"
+                android:password="true" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_change_password_validation"
+            style="@style/MyTextAppearance.Red"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:text="@string/validate_change_password"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btn_change_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="@dimen/margin_small"
+            android:background="@drawable/layout_border_login"
+            android:padding="@dimen/margin_small"
+            android:text="Đổi mật khẩu"
+            android:textColor="@color/colorWhite"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_change_password"
+        style="@style/MyTextAppearance.Blue.Big"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Đổi mật khẩu thành công"
+        android:visibility="gone" />
+</FrameLayout>

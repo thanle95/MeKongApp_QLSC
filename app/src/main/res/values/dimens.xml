@@ -1,0 +1,44 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_padding">16dp</dimen>
+    <dimen name="activity_vertical_margin">10dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="text_layer_margin">10dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fab_margin_top">80dp</dimen>
+    <dimen name="activity_margin">16dp</dimen>
+    <dimen name="margin_field_name">10dp</dimen>
+    <dimen name="button_horizontal_margin">8dp</dimen>
+    <dimen name="login_activity_horizontal_margin">60dp</dimen>
+    <dimen name="login_activity_vertical_margin">60dp</dimen>
+    <dimen name="login_activity_padding">60dp</dimen>
+    <dimen name="activity_vertical_padding">30dp</dimen>
+    <dimen name="fab_margin_home">145dp</dimen>
+    <dimen name="fab_margin_bottom">80dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="padding_title_popup">10dp</dimen>
+    <dimen name="margin_view_setting">1dp</dimen>
+    <dimen name="width_title_tra_cuu_su_co">110dp</dimen>
+    <dimen name="margin_popup">20dp</dimen>
+    <dimen name="padding_popup">20dp</dimen>
+    <dimen name="width_title_item_docso">100dp</dimen>
+    <dimen name="width_title_item_popup">100dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">60dp</dimen>
+    <dimen name="padding_layout">20dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="width_add_feature_spinner">150dp</dimen>
+    <dimen name="width_title_item">150dp</dimen>
+
+    <dimen name="size_capture_image">40dp</dimen>
+    <dimen name="size_image_add_attachment">50dp</dimen>
+    <dimen name="height_text_add_attachment">35dp</dimen>
+
+    <dimen name="height_item_add_attachment">200dp</dimen>
+</resources>

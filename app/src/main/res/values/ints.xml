@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="max_short">32767</integer>
+    <integer name="max_int">2147483647</integer>
+
+    <integer name="LEVEL_OF_DETAIL">12</integer>
+    <integer name="SCALE_IMAGE_WITH_LABLES">100</integer>
+    <integer name="MAX_SCALE_IMAGE_WITH_LABLES">5</integer>
+    <integer name="REQUEST_ID_IMAGE_CAPTURE_ADD_FEATURE">55</integer>
+    <integer name="REQUEST_ID_IMAGE_CAPTURE_POPUP">44</integer>
+    <integer name="size_feature_renderer">23</integer>
+    <!--MINSCALE START-->
+    <integer name="minScale_donghokhachhang">2000</integer>
+    <integer name="minScale_donghotong">1000000</integer>
+    <integer name="minScale_ongnganh">2000</integer>
+    <integer name="minScale_ongphanphoi">10000</integer>
+    <integer name="minScale_ongtruyendan">1000000</integer>
+    <integer name="minScale_moinoi">2000</integer>
+    <integer name="minScale_diemsuco">10000</integer>
+    <integer name="minScale_truhong">2000</integer>
+    <integer name="minScale_van">2000</integer>
+    <integer name="minScale_diemapluc">2000</integer>
+    <integer name="minScale_diemcuoiong">2000</integer>
+    <integer name="minScale_dma">8000</integer>
+    <integer name="MIN_SCALE_THUA_DAT">2100</integer>
+    <integer name="MIN_SCALE_SONG_HO">20000</integer>
+    <integer name="MIN_SCALE_GIAO_THONG">20000</integer>
+    <integer name="MIN_SCALE_HANH_CHINH">0</integer>
+    <integer name="minScale_diemXaCan">2000</integer>
+    <integer name="minScale_beChua">2000</integer>
+    <integer name="minScale_thapCatAp">2000</integer>
+    <integer name="minScale_thuyDai">2000</integer>
+
+    <!--MINSCALE END-->
+    <integer name="trang_thai_chua_xac_dinh">-1</integer>
+    <integer name="trang_thai_chua_sua_chua">0</integer>
+    <integer name="trang_thai_dang_sua_chua">1</integer>
+    <integer name="trang_thai_da_sua_chua">2</integer>
+    <integer name="trang_thai_hoan_thanh">3</integer>
+
+
+    <integer name="loai_su_co_ongnganh">0</integer>
+    <integer name="loai_su_co_ongchinh">1</integer>
+    <integer name="loai_su_co_chuaphanloai">2</integer>
+
+</resources>

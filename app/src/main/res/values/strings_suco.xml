@@ -1,0 +1,63 @@
+<resources>
+    <string name="suco_info_title">Thông tin liên hệ</string>
+    <string name="loaisuco_field">Loại sự cố</string>
+    <string name="noidung_field">Nội dung sự cố</string>
+    <string name="hinhanh_field">Hình ảnh đính kèm</string>
+    <string name="vitrisuco_field">Vị trí sự cố</string>
+
+    <string name="path_saveImage">.qlsc</string>
+    <string name="attachment">attachment</string>
+
+    <string name="tongloaitrangthai">tongloaitrangthai</string>
+    <string name="title_activity_tra_cuu">TraCuuActivity</string>
+    <string name="ket_qua_objectid">ket_qua_objectid</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+
+    <string name="nav_thong_ke_tong_su_co">Tổng các sự cố: </string>
+    <string name="SuCo_TrangThai_ChuaSuaChua">Chưa sửa chữa</string>
+    <string name="SuCo_TrangThai_DangSuaChua">Đang sửa chữa</string>
+    <string name="SuCo_TrangThai_DaSuaChua">Đã sửa chữa</string>
+    <string name="SuCo_TrangThai_HoanThanh">Hoàn thành</string>
+
+
+
+    <!--field sự cố begin-->
+    <string name="Field_SuCo_LoaiSuCo">LoaiSuCo</string>
+    <string name="Field_SuCo_DoiQuanLy">DoiQuanLy</string>
+    <string name="Field_SuCo_NguyenNhan">NguyenNhan</string>
+    <string name="Field_SuCo_VatLieu">VatLieu</string>
+    <string name="Field_SuCo_ViTri">ViTri</string>
+    <string name="Field_SuCo_PhuiDao1">PhuiDao1</string>
+    <string name="Field_SuCo_PhuiDao1_Dai">PhuiDao1Dai</string>
+    <string name="Field_SuCo_PhuiDao1_Rong">PhuiDao1Rong</string>
+    <string name="Field_SuCo_PhuiDao1_Sau">PhuiDao1Sau</string>
+    <string name="Field_SuCo_PhuiDao2">PhuiDao2</string>
+    <string name="Field_SuCo_PhuiDao2_Dai">PhuiDao2Dai</string>
+    <string name="Field_SuCo_PhuiDao2_Rong">PhuiDao2Rong</string>
+    <string name="Field_SuCo_PhuiDao2_Sau">PhuiDao2Sau</string>
+    <string name="Field_SuCo_PhuiDao3">PhuiDao3</string>
+    <string name="Field_SuCo_PhuiDao3_Dai">PhuiDao3Dai</string>
+    <string name="Field_SuCo_PhuiDao3_Rong">PhuiDao3Rong</string>
+    <string name="Field_SuCo_PhuiDao3_Sau">PhuiDao3Sau</string>
+    <string name="Field_OBJECTID">OBJECTID</string>
+    <string name="Field_SuCo_IDSuCo">IDSuCo</string>
+    <string name="Field_SuCo_TrangThai">TrangThai</string>
+    <string name="Field_SuCo_NgayKhacPhuc">NgayKhacPhuc</string>
+    <string name="Field_SuCo_NgayXayRa">NgayXayRa</string>
+    <string name="Field_SuCo_NgayThongBao">NgayThongBao</string>
+    <string name="Field_SuCo_MaQuan">MaQuan</string>
+    <string name="Field_SuCo_NguoiBaoSuCo">NGUOICAPNHAT</string>
+    <string name="Field_SuCo_NhanVienGiamSat">CONGNHANTHUCHIEN</string>
+    <string name="Field_SuCo_DuongKinhOng">DuongKinhOng</string>
+    <string name="Field_MADMA">MADMA</string>
+    <string name="Field_SuCo_VatTu">VatTu</string>
+
+    <!--Hồ sơ vật tư sự cố: bắt đầu-->
+    <string name="Field_HoSoVatTuSuCo_OBJECTID">@string/Field_OBJECTID</string>
+    <string name="Field_HoSoVatTuSuCo_IDSuCo">@string/Field_SuCo_IDSuCo</string>
+    <string name="Field_HoSoVatTuSuCo_SoLuong">SoLuong</string>
+    <string name="Field_HoSoVatTuSuCo_MaVatTu">MaVatTu</string>
+
+    <!--Hồ sơ vật tư sự cố: kết thúc-->
+</resources>
