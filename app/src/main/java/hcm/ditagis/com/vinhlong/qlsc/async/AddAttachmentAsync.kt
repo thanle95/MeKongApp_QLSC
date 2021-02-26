@@ -2,7 +2,6 @@ package hcm.ditagis.com.vinhlong.qlsc.async
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.graphics.Bitmap
 import android.os.AsyncTask
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import android.widget.LinearLayout
@@ -12,7 +11,6 @@ import hcm.ditagis.com.vinhlong.qlsc.R
 import hcm.ditagis.com.vinhlong.qlsc.entities.DApplication
 import hcm.ditagis.com.vinhlong.qlsc.utities.Constant
 import kotlinx.android.synthetic.main.layout_progress_dialog.view.*
-import java.util.concurrent.ExecutionException
 
 /**
  * Created by ThanLe on 4/16/2018.
@@ -44,7 +42,7 @@ class AddAttachmentAsync(private val mActivity: Activity, selectedArcGISFeature:
             publishProgress()
             return null
         }
-        val attachmentName = String.format(Constant.AttachmentName.ADD,  mApplication.user?.userName, System.currentTimeMillis())
+        val attachmentName = String.format(Constant.AttachmentName.ADD,  mApplication.user?.username, System.currentTimeMillis())
         val addResult = mSelectedArcGISFeature.addAttachmentAsync(mImage, Constant.CompressFormat.TYPE_UPDATE.toString(), attachmentName)
         addResult.addDoneListener {
             try {

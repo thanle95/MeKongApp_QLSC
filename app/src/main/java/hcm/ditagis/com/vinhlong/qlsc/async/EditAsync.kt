@@ -10,7 +10,6 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import com.esri.arcgisruntime.data.*
-import hcm.ditagis.com.vinhlong.qlsc.R
 import hcm.ditagis.com.vinhlong.qlsc.entities.DApplication
 import hcm.ditagis.com.vinhlong.qlsc.utities.Constant
 import java.util.*
@@ -120,7 +119,7 @@ class EditAsync(private val mActivity: Activity, private val mIsComplete: Boolea
                         Constant.Field.CREATED_DATE, Constant.Field.LAST_EDITED_DATE,
                         Constant.FieldSuCo.TG_PHAN_ANH -> mFeature.attributes[field.name] = Calendar.getInstance()
                         Constant.Field.CREATED_USER, Constant.Field.LAST_EDITED_USER,
-                        -> mFeature.attributes[field.name] = mApplication.user!!.userName
+                        -> mFeature.attributes[field.name] = mApplication.user!!.username
 
                     }
                 }
@@ -145,7 +144,7 @@ class EditAsync(private val mActivity: Activity, private val mIsComplete: Boolea
 
     private fun addAttachment() {
         val attachmentName = String.format(Constant.AttachmentName.UPDATE,
-                mApplication.user!!.userName, System.currentTimeMillis())
+                mApplication.user!!.username, System.currentTimeMillis())
         val addResult = mFeature.addAttachmentAsync(mImage, Constant.FileType.PNG, attachmentName)
         addResult.addDoneListener {
             try {

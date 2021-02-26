@@ -380,13 +380,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         }
                     }
                     imageLayersHanhChinh!!.loadAsync()
-                } else if (dLayerInfo.id == getString(R.string.IDLayer_DiemSuCo)) {
+                } else if (dLayerInfo.id.contains(Constant.SuCoId)) {
                     val serviceFeatureTable = ServiceFeatureTable(url)
                     mFeatureLayer = FeatureLayer(serviceFeatureTable)
                     if (dLayerInfo.definition.toLowerCase() == "null") {
                         mFeatureLayer!!.definitionExpression = Constant.DEFINITION_HIDE_COMPLETE +
                                 String.format(" and  %s = '%s'",
-                                Constant.FieldSuCo.NV_XU_LY, mApplication!!.user!!.userName)
+                                Constant.FieldSuCo.NV_XU_LY, mApplication!!.user!!.username)
                     } else mFeatureLayer!!.definitionExpression = dLayerInfo.definition
                     mFeatureLayer!!.id = dLayerInfo.id
                     mFeatureLayer!!.name = dLayerInfo.titleLayer

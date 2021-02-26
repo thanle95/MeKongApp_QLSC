@@ -150,10 +150,10 @@ class Constant {
     object URL_API {
         const val CHECK_VERSION = "$SERVER/versioning/EVN?version=%s"
         const val ADD_FEATURE = "$SERVER_API/QuanLySuCo/TiepNhanSuCo/%s"
-        const val LOGIN = "$SERVER_API/Login"
+        const val LOGIN = "$SERVER_API/Auth/Login"
         const val PROFILE = "$SERVER_API/Account/Profile"
         const val GENERATE_ID_SUCO = "$SERVER_API/QuanLySuCo/GenerateIDSuCo"
-        const val LAYER_INFO = "$SERVER_API/Account/layerinfo"
+        const val LAYER_INFO = "$SERVER_API/Auth/layerinfo"
         const val CHANGE_PASSWORD = "$SERVER_API/Account/changepass"
         const val COMPLETE = "$SERVER_API/quanlysuco/xacnhanhoanthanhnhanvien?id=%s"
         const val IS_ACCESS = "$SERVER_API/Account/IsAccess/m_qlsc"
@@ -161,13 +161,6 @@ class Constant {
         const val QUERY_HANH_CHINH = "$SERVER/hanhchinh/getbypoint"
     }
 
-    var API_LOGIN: String? = null
-    var DISPLAY_NAME: String? = null
-    @JvmField
-    var LAYER_INFO: String? = null
-    @JvmField
-    var GENERATE_ID_SUCO: String? = null
-    var IS_ACCESS: String? = null
 
     object HOSOVATTUSUCO_METHOD {
         const val FIND = 0
@@ -182,13 +175,12 @@ class Constant {
     companion object {
         @SuppressLint("SimpleDateFormat")
         val DATE_FORMAT = SimpleDateFormat("dd_MM_yyyy")
-
+        val SuCoId = "DiemSuCo"
         @SuppressLint("SimpleDateFormat")
         val DATE_FORMAT_VIEW = SimpleDateFormat("HH:mm:ss dd/MM/yyyy")
 
-//           const val SERVER = "http://vwa.ditagis.com";
-        const val SERVER = "http://vwaco.vn:9092"
-        const val SERVER_API = "$SERVER/api"
+        const val SERVER = "http://171.244.32.245:100"
+        const val SERVER_API = "http://171.244.32.245:100"
         const val NULL = ""
         val OPTION_IMAGE_LIST: List<String> = object : ArrayList<String>() {
             init {
@@ -216,23 +208,5 @@ class Constant {
             }
     }
 
-    init {
-        API_LOGIN = "$SERVER_API/Login"
-    }
 
-    init {
-        DISPLAY_NAME = "$SERVER_API/Account/Profile"
-    }
-
-    init {
-        LAYER_INFO = "$SERVER_API/layerinfo"
-    }
-
-    init {
-        GENERATE_ID_SUCO = "$SERVER_API/quanlysuco/generateidsuco/"
-    }
-
-    init {
-        IS_ACCESS = "$SERVER_API/Account/IsAccess/m_qlsc"
-    }
 }

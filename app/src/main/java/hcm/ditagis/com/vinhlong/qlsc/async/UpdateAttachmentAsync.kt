@@ -34,7 +34,7 @@ class UpdateAttachmentAsync constructor(activity: Activity, selectedArcGISFeatur
 
     override fun doInBackground(vararg params: Void?): Void? {
         val attachmentName: String = String.format(Constant.AttachmentName.UPDATE,
-                mDApplication.user!!.userName, System.currentTimeMillis())
+                mDApplication.user!!.username, System.currentTimeMillis())
         val addResult: ListenableFuture<Attachment> = mSelectedArcGISFeature!!.addAttachmentAsync(mImage, Bitmap.CompressFormat.PNG.toString(), attachmentName)
         addResult.addDoneListener {
             if (mDialog != null && mDialog.isShowing) mDialog.dismiss()

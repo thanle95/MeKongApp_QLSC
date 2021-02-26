@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.os.AsyncTask
 import android.util.Log
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import hcm.ditagis.com.vinhlong.qlsc.R
 import hcm.ditagis.com.vinhlong.qlsc.entities.DApplication
 import hcm.ditagis.com.vinhlong.qlsc.entities.entitiesDB.User
@@ -15,6 +17,7 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.ArrayList
 
 class NewLoginAsycn(private val mActivity: Activity, delegate: AsyncResponse) : AsyncTask<String?, Void?, Void?>() {
     private val exception: Exception? = null
@@ -47,8 +50,8 @@ class NewLoginAsycn(private val mActivity: Activity, delegate: AsyncResponse) : 
             conn.instanceFollowRedirects = false
             conn.requestMethod = Constant.HTTPRequest.POST_METHOD
             val cred = JSONObject()
-            cred.put("Username", userName)
-            cred.put("Password", pin)
+            cred.put("username", userName)
+            cred.put("password", pin)
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
             conn.setRequestProperty("Accept", "application/json")
             conn.useCaches = false
@@ -57,16 +60,22 @@ class NewLoginAsycn(private val mActivity: Activity, delegate: AsyncResponse) : 
             wr.flush()
             conn.connect()
             val bufferedReader = BufferedReader(InputStreamReader(conn.inputStream))
-            val builder = StringBuilder()
+            val stringBuilder = StringBuilder()
             var line: String?
-            while (bufferedReader.readLine().also { line = it } != null) {
-                builder.append(line)
+            while (true) {
+                line = bufferedReader.readLine()
+                if (line == null)
+                    break
+                stringBuilder.append(line)
+
             }
-            Preference.instance!!.savePreferences(mActivity.getString(R.string.preference_login_api), builder.toString().replace("\"", ""))
-            val user = User()
-            user.displayName = displayName
-            user.userName = userName
-            user.token = builder.toString().replace("\"", "")
+
+            bufferedReader.close()
+            conn.disconnect()
+            val user = parseUser(stringBuilder.toString())
+            Preference.instance!!.savePreferences(mActivity.getString(R.string.preference_login_api),
+                    user.accessToken!!.replace("\"", ""))
+
             mDApplication.user = user
         } catch (e: Exception) {
             Log.e("Lỗi đăng nhập", e.toString())
@@ -83,48 +92,12 @@ class NewLoginAsycn(private val mActivity: Activity, delegate: AsyncResponse) : 
         //        }
     }
 
-    private val displayName: String
-        private get() {
-            val API_URL = mActivity.getString(R.string.URL_API) + "/Account/Profile"
-            var displayName = ""
-            try {
-                val url = URL(API_URL)
-                val conn = url.openConnection() as HttpURLConnection
-                try {
-                    conn.doOutput = false
-                    conn.requestMethod = "GET"
-                    conn.setRequestProperty("Authorization", Preference.instance!!.loadPreference(mActivity.getString(R.string.preference_login_api)))
-                    conn.connect()
-                    val bufferedReader = BufferedReader(InputStreamReader(conn.inputStream))
-                    var line: String?
-                    while (bufferedReader.readLine().also { line = it } != null) {
-                        displayName = pajsonRouteeJSon(line)
-                        break
-                    }
-                } catch (e: Exception) {
-                    Log.e("error", e.toString())
-                } finally {
-                    conn.disconnect()
-                }
-            } catch (e: Exception) {
-                Log.e("error", e.toString())
-            } finally {
-                return displayName
-            }
-        }
+    private fun parseUser(data: String?): User {
+        val userType = object : TypeToken<User>() {}.type
+        val gson = Gson()
+        val user: User = gson.fromJson(data, userType)
 
-    private fun pajsonRouteeJSon(data: String?): String {
-        if (data == null) return ""
-        var displayName = ""
-        val myData = "{ \"account\": [$data]}"
-        val jsonData = JSONObject(myData)
-        val jsonRoutes = jsonData.getJSONArray("account")
-        //        jsonData.getJSONArray("account");
-        for (i in 0 until jsonRoutes.length()) {
-            val jsonRoute = jsonRoutes.getJSONObject(i)
-            displayName = jsonRoute.getString(mActivity.getString(R.string.sql_coloumn_login_displayname))
-        }
-        return displayName
+        return user
     }
 
     init {

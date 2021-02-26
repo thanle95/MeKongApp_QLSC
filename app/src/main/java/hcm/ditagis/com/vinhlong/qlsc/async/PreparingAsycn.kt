@@ -7,9 +7,12 @@ import android.os.AsyncTask
 import android.util.Log
 import com.esri.arcgisruntime.concurrent.ListenableFuture
 import com.esri.arcgisruntime.data.FeatureQueryResult
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import hcm.ditagis.com.vinhlong.qlsc.R
 import hcm.ditagis.com.vinhlong.qlsc.entities.DApplication
 import hcm.ditagis.com.vinhlong.qlsc.entities.DLayerInfo
+import hcm.ditagis.com.vinhlong.qlsc.entities.entitiesDB.User
 import hcm.ditagis.com.vinhlong.qlsc.utities.Constant
 import org.json.JSONException
 import org.json.JSONObject
@@ -58,13 +61,13 @@ class PreparingAsycn(@field:SuppressLint("StaticFieldLeak") private val mContext
     private val layerInfoAPI: List<DLayerInfo>?
         private get() {
             try {
-                val API_URL = Constant.instance!!.LAYER_INFO
+                val API_URL = Constant.URL_API.LAYER_INFO
                 val url = URL(API_URL)
                 val conn = url.openConnection() as HttpURLConnection
                 try {
                     conn.doOutput = false
                     conn.requestMethod = Constant.HTTPRequest.GET_METHOD
-                    conn.setRequestProperty(Constant.HTTPRequest.AUTHORIZATION, mDApplication.user!!.token)
+                    conn.setRequestProperty(Constant.HTTPRequest.AUTHORIZATION, mDApplication.user!!.accessToken)
                     conn.connect()
                     val bufferedReader = BufferedReader(InputStreamReader(conn.inputStream))
                     val builder = StringBuilder()
@@ -86,23 +89,26 @@ class PreparingAsycn(@field:SuppressLint("StaticFieldLeak") private val mContext
 
     @Throws(JSONException::class)
     private fun pajsonRouteeJSon(data: String?): List<DLayerInfo>? {
-        if (data == null) return null
-        val myData = "{ \"layerInfo\": $data}"
-        val jsonData = JSONObject(myData)
-        val jsonRoutes = jsonData.getJSONArray("layerInfo")
-        val layerDTGS: MutableList<DLayerInfo> = ArrayList()
-        for (i in 0 until jsonRoutes.length()) {
-            val jsonRoute = jsonRoutes.getJSONObject(i)
-            layerDTGS.add(DLayerInfo(jsonRoute.getString(mContext.getString(R.string.sql_coloumn_sys_id)),
-                    jsonRoute.getString(mContext.getString(R.string.sql_coloumn_sys_title)),
-                    jsonRoute.getString(mContext.getString(R.string.sql_coloumn_sys_url)),
-                    jsonRoute.getBoolean(mContext.getString(R.string.sql_coloumn_sys_iscreate)), jsonRoute.getBoolean(mContext.getString(R.string.sql_coloumn_sys_isdelete)),
-                    jsonRoute.getBoolean(mContext.getString(R.string.sql_coloumn_sys_isedit)), jsonRoute.getBoolean(mContext.getString(R.string.sql_coloumn_sys_isview)),
-                    jsonRoute.getString(mContext.getString(R.string.sql_column_sys_definition)),
-                    jsonRoute.getString("OutFields").split(",").toTypedArray(),
-                    jsonRoute.getString("UpdateFields").split(",").toTypedArray()))
-        }
-        return layerDTGS
+        val outputType = object : TypeToken<List<DLayerInfo>>() {}.type
+        val gson = Gson()
+        val list: List<DLayerInfo> = gson.fromJson(data, outputType)
+//        if (data == null) return null
+//        val myData = "{ \"layerInfo\": $data}"
+//        val jsonData = JSONObject(myData)
+//        val jsonRoutes = jsonData.getJSONArray("layerInfo")
+//        val layerDTGS: MutableList<DLayerInfo> = ArrayList()
+//        for (i in 0 until jsonRoutes.length()) {
+//            val jsonRoute = jsonRoutes.getJSONObject(i)
+//            layerDTGS.add(DLayerInfo(jsonRoute.getString(mContext.getString(R.string.sql_coloumn_sys_id)),
+//                    jsonRoute.getString(mContext.getString(R.string.sql_coloumn_sys_title)),
+//                    jsonRoute.getString(mContext.getString(R.string.sql_coloumn_sys_url)),
+//                    jsonRoute.getBoolean(mContext.getString(R.string.sql_coloumn_sys_iscreate)), jsonRoute.getBoolean(mContext.getString(R.string.sql_coloumn_sys_isdelete)),
+//                    jsonRoute.getBoolean(mContext.getString(R.string.sql_coloumn_sys_isedit)), jsonRoute.getBoolean(mContext.getString(R.string.sql_coloumn_sys_isview)),
+//                    jsonRoute.getString(mContext.getString(R.string.sql_column_sys_definition)),
+//                    jsonRoute.getString("OutFields").split(",").toTypedArray(),
+//                    jsonRoute.getString("UpdateFields").split(",").toTypedArray()))
+//        }
+        return list
     }
 
 }

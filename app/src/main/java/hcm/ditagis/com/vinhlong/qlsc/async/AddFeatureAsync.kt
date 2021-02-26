@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import com.esri.arcgisruntime.data.*
-import hcm.ditagis.com.vinhlong.qlsc.R
 import hcm.ditagis.com.vinhlong.qlsc.entities.DApplication
 import hcm.ditagis.com.vinhlong.qlsc.utities.Constant
 import java.util.*
@@ -65,7 +64,7 @@ class AddFeatureAsync( private val mActivity: Activity,
                 when(field.name){
                     Constant.Field.CREATED_DATE, Constant.Field.LAST_EDITED_DATE,
                     Constant.FieldSuCo.TG_PHAN_ANH -> feature.attributes[field.name] = Calendar.getInstance()
-                    Constant.Field.CREATED_USER, Constant.Field.LAST_EDITED_USER -> feature.attributes[field.name] = mApplication.user!!.userName
+                    Constant.Field.CREATED_USER, Constant.Field.LAST_EDITED_USER -> feature.attributes[field.name] = mApplication.user!!.username
                     Constant.FieldSuCo.TRANG_THAI -> feature.attributes[field.name] = Constant.TrangThaiSuCo.MOI_TIEP_NHAN
                 }
             }
@@ -218,7 +217,7 @@ class AddFeatureAsync( private val mActivity: Activity,
     private fun addAttachment(arcGISFeature: ArcGISFeature, feature: Feature) {
         for (image in mApplication.images!!) {
             val attachmentName = String.format(Constant.AttachmentName.UPDATE,
-                    mApplication.user!!.userName, System.currentTimeMillis())
+                    mApplication.user!!.username, System.currentTimeMillis())
             val addResult = arcGISFeature.addAttachmentAsync(
                     image, Constant.FileType.PNG, attachmentName)
         }

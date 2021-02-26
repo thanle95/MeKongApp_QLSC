@@ -54,7 +54,7 @@ class ViewAttachmentAsync(private val mMainActivity: MainActivity, selectedArcGI
             lstViewAttachment.onItemLongClickListener = AdapterView.OnItemLongClickListener { adapterView, view, i, l ->
                 val item = adapterView.getItemAtPosition(i) as FeatureViewMoreInfoAttachmentsAdapter.Item
                 val name = item.name!!.split("_").toTypedArray()
-                if (name.size > 1 && (name[1] == mDApplication.user!!.userName)) {
+                if (name.size > 1 && (name[1] == mDApplication.user!!.username)) {
                     val builder = android.app.AlertDialog.Builder(layout!!.getContext(), R.style.DDialogBuilder)
                     builder.setTitle("Bạn có chắc muốn xóa ảnh này?")
                             .setPositiveButton("Xoá") { dialogInterface: DialogInterface, i1: Int ->
