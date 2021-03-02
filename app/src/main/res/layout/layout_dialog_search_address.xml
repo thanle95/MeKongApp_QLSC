@@ -27,7 +27,7 @@
             android:layout_gravity="right"
             android:background="@android:color/white"
             android:contentDescription="Đóng popup"
-            android:src="@drawable/ic_cancel_popup"
+            android:src="@drawable/ic_cancel"
             tools:ignore="RtlSymmetry" />
     </FrameLayout>
 

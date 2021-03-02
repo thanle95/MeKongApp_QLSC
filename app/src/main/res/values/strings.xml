@@ -86,7 +86,7 @@
     <string name="nav_showHideComplete">Ẩn/hiện sự cố hoàn thành</string>
     <string name="nav_tra_cuu">Tra cứu</string>
     <string name="nav_find_route">Tìm đường đi</string>
-    <string name="nav_xoa_tim_kiem">Xóa các tìm kiếm</string>
+    <string name="nav_xoa_tim_kiem">Xóa các kết quả tìm kiếm</string>
     <string name="nav_an_nut_chuc_nang">Ẩn các nút chức năng</string>
     <string name="nav_hien_thi_nut_chuc_nang">Hiển thị các nút chức năng</string>
     <string name="nav_cai_dat">Cài đặt</string>

@@ -40,15 +40,6 @@ class ThongKeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_thong_ke)
-        //        for (final LayerInfoDTG layerInfoDTG : map) {
-//
-//            if (layerInfoDTG.getId().equals(getString(R.string.IDLayer_DiemSuCo))) {
-//                String url = layerInfoDTG.getUrl();
-//                if (!layerInfoDTG.getUrl().startsWith("http"))
-//                    url = "http:" + layerInfoDTG.getUrl();
-//                mServiceFeatureTable = new ServiceFeatureTable(url);
-//            }
-//        }
         val timePeriodReport = TimePeriodReport(this)
         val items = timePeriodReport.getItems()
         mThongKeAdapter = ThongKeAdapter(this, items)

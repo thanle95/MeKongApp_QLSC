@@ -3,8 +3,8 @@ package hcm.ditagis.com.vinhlong.qlsc
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import hcm.ditagis.com.vinhlong.qlsc.entities.DApplication
 import kotlinx.android.synthetic.main.activity_view_image.*
 

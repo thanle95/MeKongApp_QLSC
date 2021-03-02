@@ -3,12 +3,9 @@ package hcm.ditagis.com.vinhlong.qlsc
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -18,21 +15,13 @@ import hcm.ditagis.com.vinhlong.qlsc.async.AddFeatureAsync
 import hcm.ditagis.com.vinhlong.qlsc.async.LoadingDataFeatureAsync
 import hcm.ditagis.com.vinhlong.qlsc.entities.DApplication
 import hcm.ditagis.com.vinhlong.qlsc.utities.Constant
-import hcm.ditagis.com.vinhlong.qlsc.utities.ImageFile.getFile
 import kotlinx.android.synthetic.main.activity_add_feature.*
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.io.IOException
-import java.io.InputStream
 import java.util.*
 
 
 class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
-
-
-
-
-
     private var mApplication: DApplication? = null
     private var mImages: MutableList<ByteArray>? = null
     private var mUri: Uri? = null

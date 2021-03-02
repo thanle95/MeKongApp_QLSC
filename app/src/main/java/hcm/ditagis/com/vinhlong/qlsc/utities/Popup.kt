@@ -28,8 +28,6 @@ import hcm.ditagis.com.vinhlong.qlsc.adapter.FeatureViewInfoAdapter
 import hcm.ditagis.com.vinhlong.qlsc.async.*
 import hcm.ditagis.com.vinhlong.qlsc.entities.DAddress
 import hcm.ditagis.com.vinhlong.qlsc.entities.DApplication
-import hcm.ditagis.com.vinhlong.qlsc.entities.HoSoVatTuSuCo
-import hcm.ditagis.com.vinhlong.qlsc.entities.entitiesDB.ListObjectDB.Companion.instance
 import hcm.ditagis.com.vinhlong.qlsc.utities.Constant.RequestCode
 import hcm.ditagis.com.vinhlong.qlsc.utities.Constant.TrangThaiSuCo
 import java.util.*
@@ -39,17 +37,14 @@ import java.util.concurrent.atomic.AtomicReference
 @SuppressLint("Registered")
 class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFeatureTable: ServiceFeatureTable,
             callout: Callout?, geocoder: Geocoder?) : AppCompatActivity(), View.OnClickListener {
-    private var mListTenVatTu: MutableList<String>? = null
     private var mSelectedArcGISFeature: ArcGISFeature? = null
     private val mServiceFeatureTable: ServiceFeatureTable
     val callout: Callout?
     private var lstFeatureType: MutableList<String>? = null
     private var linearLayout: LinearLayout? = null
     private val mMapView: MapView
-    private var mListHoSoVatTuSuCo: List<HoSoVatTuSuCo>? = null
     private val mApplication: DApplication
     private var mServiceFeatureTableHanhChinh: ServiceFeatureTable? = null
-    private val mServiceFeatureTableHanhChinhHuyen: ServiceFeatureTable? = null
     private var quanhuyen_features: ArrayList<Feature>? = null
     private var quanhuyen_feature: Feature? = null
     fun setmServiceFeatureTableHanhChinh(url_HanhChinh: String?) {
@@ -62,12 +57,6 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
         }).execute()
     }
 
-    private fun initializeVatTu() {
-        if (mListTenVatTu == null) {
-            mListTenVatTu = ArrayList()
-            for (vatTu in instance!!.vatTus) (mListTenVatTu as ArrayList<String>).add(vatTu.tenVatTu)
-        }
-    }
 
     fun refreshPopup(arcGISFeature: ArcGISFeature?) {
         mSelectedArcGISFeature = arcGISFeature
@@ -124,15 +113,7 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
                     }
                     val valueDomain = getValueDomain(codedValues, value.toString())
                     if (valueDomain != null) item.value = valueDomain.toString()
-                } else if (item.fieldName == mMainActivity.getString(R.string.Field_SuCo_VatTu)) {
-                    val builder = StringBuilder()
-                    mListHoSoVatTuSuCo = instance!!.hoSoVatTuSuCos
-                    for (hoSoVatTuSuCo in mListHoSoVatTuSuCo!!) {
-                        builder.append(hoSoVatTuSuCo.tenVatTu).append(" ").append(hoSoVatTuSuCo.soLuong).append(" ").append(hoSoVatTuSuCo.donViTinh).append("\n")
-                    }
-                    if (builder.length > 0) builder.replace(builder.length - 2, builder.length, "")
-                    item.value = builder.toString()
-                } else when (field.fieldType) {
+                }  else when (field.fieldType) {
                     Field.Type.DATE -> item.value = Constant.Companion.DATE_FORMAT_VIEW.format((value as Calendar).time)
                     Field.Type.OID, Field.Type.TEXT, Field.Type.SHORT, Field.Type.DOUBLE, Field.Type.INTEGER, Field.Type.FLOAT -> item.value = value.toString()
                 }
@@ -319,7 +300,6 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
 
     @SuppressLint("InflateParams")
     fun showPopup() {
-        initializeVatTu()
         clearSelection()
         dimissCallout()
         mSelectedArcGISFeature = mApplication.selectedArcGISFeature

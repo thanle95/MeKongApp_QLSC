@@ -6,18 +6,17 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.hardware.Camera
 import android.hardware.SensorManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import hcm.ditagis.com.vinhlong.qlsc.entities.DApplication
 import hcm.ditagis.com.vinhlong.qlsc.utities.Constant
 import hcm.ditagis.com.vinhlong.qlsc.utities.DAlertDialog
 import hcm.ditagis.com.vinhlong.qlsc.utities.DBitmap
 import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.IOException
-import kotlin.jvm.Throws
 
 class CameraActivity : AppCompatActivity(), SurfaceHolder.Callback {
     private var mCamera: Camera? = null

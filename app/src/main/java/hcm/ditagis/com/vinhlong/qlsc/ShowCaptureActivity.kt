@@ -1,12 +1,12 @@
 package hcm.ditagis.com.vinhlong.qlsc
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import hcm.ditagis.com.vinhlong.qlsc.entities.DApplication
 import kotlinx.android.synthetic.main.activity_show_capture.*
 

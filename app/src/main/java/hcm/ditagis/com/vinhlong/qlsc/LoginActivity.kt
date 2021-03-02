@@ -33,8 +33,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         mTxtUsername = findViewById(R.id.txtUsername)
         mTxtPassword = findViewById(R.id.txtPassword)
 
-        mTxtUsername!!.setText("tiwamythoxulysuco");
-        mTxtPassword!!.setText("tiwamythoxulysuco");
+//        mTxtUsername!!.setText("tiwamythoxulysuco");
+//        mTxtPassword!!.setText("tiwamythoxulysuco");
         mTxtValidation = findViewById(R.id.txt_login_validation)
         txt_version.setText("v" + packageManager.getPackageInfo(packageName, 0).versionName)
         create()
@@ -46,15 +46,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
         //nếu chưa từng đăng nhập thành công trước đó
         //nhập username và password bình thường
-        if (preference_userName == null || preference_userName.isEmpty()) {
-            findViewById<View>(R.id.layout_login_tool).visibility = View.GONE
-            findViewById<View>(R.id.layout_login_username).visibility = View.VISIBLE
-            isLastLogin = false
-        } else {
-            isLastLogin = true
-            findViewById<View>(R.id.layout_login_tool).visibility = View.VISIBLE
-            findViewById<View>(R.id.layout_login_username).visibility = View.GONE
-        }
+        isLastLogin = !(preference_userName == null || preference_userName.isEmpty())
         try {
             if (!mApplication!!.isCheckedVersion) {
                 mApplication!!.isCheckedVersion = true
