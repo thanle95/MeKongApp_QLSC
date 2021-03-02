@@ -153,7 +153,7 @@ class Constant {
         const val LOGIN = "$SERVER_API/Auth/Login"
         const val PROFILE = "$SERVER_API/Account/Profile"
         const val GENERATE_ID_SUCO = "$SERVER_API/QuanLySuCo/GenerateIDSuCo"
-        const val LAYER_INFO = "$SERVER_API/Auth/layerinfo"
+        const val LAYER_INFO = "$SERVER_API/auth/layerinfos"
         const val CHANGE_PASSWORD = "$SERVER_API/Account/changepass"
         const val COMPLETE = "$SERVER_API/quanlysuco/xacnhanhoanthanhnhanvien?id=%s"
         const val IS_ACCESS = "$SERVER_API/Account/IsAccess/m_qlsc"
@@ -181,6 +181,7 @@ class Constant {
 
         const val SERVER = "http://171.244.32.245:100"
         const val SERVER_API = "http://171.244.32.245:100"
+//        const val SERVER_API = "http://vwaco.vn:9092/api"
         const val NULL = ""
         val OPTION_IMAGE_LIST: List<String> = object : ArrayList<String>() {
             init {

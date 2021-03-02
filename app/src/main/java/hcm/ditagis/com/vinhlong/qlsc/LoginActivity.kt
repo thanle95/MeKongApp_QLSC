@@ -32,8 +32,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         mTxtUsername = findViewById(R.id.txtUsername)
         mTxtPassword = findViewById(R.id.txtPassword)
 
-//        mTxtUsername!!.setText("quanlysuco");
-//        mTxtPassword!!.setText("quanlysuco");
+        mTxtUsername!!.setText("tiwamythoxulysuco");
+        mTxtPassword!!.setText("tiwamythoxulysuco");
         mTxtValidation = findViewById(R.id.txt_login_validation)
         create()
     }
