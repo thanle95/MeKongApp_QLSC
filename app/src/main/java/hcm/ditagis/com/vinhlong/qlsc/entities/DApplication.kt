@@ -27,7 +27,7 @@ class DApplication : Application() {
     var selectedArcGISFeature: ArcGISFeature? = null
 
     var user: User? = null
-
+    var appInfo: DAppInfo? = null
     var addFeaturePoint: Point? = null
 
     var layerInfos: List<DLayerInfo>? = null

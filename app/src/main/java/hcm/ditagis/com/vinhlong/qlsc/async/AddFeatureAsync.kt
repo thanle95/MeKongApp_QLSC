@@ -79,8 +79,10 @@ class AddFeatureAsync( private val mActivity: Activity,
 
                     while (iterator.hasNext()) {
                         val featureHanhChinh = iterator.next() as Feature
-                        feature.attributes[Constant.FieldSuCo.MA_QUAN] = featureHanhChinh.attributes[Constant.FieldHanhChinh.MA_HUYEN]
-                        feature.attributes[Constant.FieldSuCo.MA_PHUONG] = featureHanhChinh.attributes[Constant.FieldHanhChinh.ID_HANH_CHINH]
+                        feature.attributes[Constant.FieldSuCo.MA_QUAN] = featureHanhChinh.attributes[
+                                mApplication.appInfo!!.config.MaHuyen]
+                        feature.attributes[Constant.FieldSuCo.MA_PHUONG] = featureHanhChinh.attributes[
+                                mApplication.appInfo!!.config.IDHanhChinh]
                     }
                     addFeatureAsync(feature)
                 }

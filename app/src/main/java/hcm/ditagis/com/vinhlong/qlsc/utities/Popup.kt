@@ -107,9 +107,13 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
                 item.alias = field.alias
                 item.fieldName = field.name
                 if (item.fieldName == Constant.FieldSuCo.MA_PHUONG) {
-                    if (quanhuyen_feature != null) item.value = quanhuyen_feature!!.attributes[Constant.FieldHanhChinh.TEN_HANH_CHINH].toString() else item.value = value.toString()
+                    if (quanhuyen_feature != null) item.value =
+                            quanhuyen_feature!!.attributes[mApplication.appInfo!!.config.TenHanhChinh].toString()
+                    else item.value = value.toString()
                 } else if (item.fieldName == Constant.FieldSuCo.MA_QUAN) {
-                    if (quanhuyen_feature != null) item.value = quanhuyen_feature!!.attributes[Constant.FieldHanhChinh.TEN_HUYEN].toString() else {
+                    if (quanhuyen_feature != null) item.value =
+                            quanhuyen_feature!!.attributes[mApplication.appInfo!!.config.TenHuyen].toString()
+                    else {
                         item.value = value.toString()
                     }
                 } else if (field.domain != null) {
@@ -303,8 +307,8 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
         quanhuyen_feature = null
         if (quanhuyen_features != null) {
             for (feature in quanhuyen_features!!) {
-                val maDonViHanhChinh = feature.attributes[Constant.FieldHanhChinh.ID_HANH_CHINH]
-                val maHuyen = feature.attributes[Constant.FieldHanhChinh.MA_HUYEN]
+                val maDonViHanhChinh = feature.attributes[mApplication.appInfo!!.config.IDHanhChinh]
+                val maHuyen = feature.attributes[mApplication.appInfo!!.config.MaHuyen]
                 if (maDonViHanhChinh != null && maDonViHanhChinh == idHanhChinh && maHuyen != null && maHuyen == maHuyenInput ) {
                     quanhuyen_feature = feature
                     return

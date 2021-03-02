@@ -103,7 +103,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var isChangingGeometry = false
     private var mFeatureLayer: FeatureLayer? = null
     private var mURL_HanhChinh: String? = null
-    private var mURL_HanhChinhHuyen: String? = null
     fun setChangingGeometry(changingGeometry: Boolean) {
         isChangingGeometry = changingGeometry
     }
@@ -362,16 +361,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (url == null) continue
                 if (dLayerInfo.layerId.toUpperCase().contains( Constant.LAYER_ID.BASEMAP) && imageLayersHanhChinh == null) {
                     if (mPopUp != null) {
-                        mURL_HanhChinh = "$url/16"
-                        mURL_HanhChinhHuyen = "$url/0"
+                        mURL_HanhChinh = "$url/${mApplication!!.appInfo!!.config.hanhChinhID}"
                         mPopUp!!.setmServiceFeatureTableHanhChinh(mURL_HanhChinh)
                     }
                     imageLayersHanhChinh = ArcGISMapImageLayer(url)
                     imageLayersHanhChinh!!.id = dLayerInfo.layerId
                     mapView!!.map.operationalLayers.add(imageLayersHanhChinh)
                     val finalUrl = url
-                    mURL_HanhChinh = "$finalUrl/6"
+                    mURL_HanhChinh = "$url/${mApplication!!.appInfo!!.config.hanhChinhID}"
                     imageLayersHanhChinh!!.addDoneLoadingListener {
+                        for (layer in mapView.map.operationalLayers) {
+                            val fullExtent = layer.fullExtent
+                            if (fullExtent != null && fullExtent.xMin > 0 && fullExtent.yMin > 0 && fullExtent.xMax > 0
+                                    && fullExtent.yMax > 0) {
+                                try {
+                                    mapView.setViewpointGeometryAsync(fullExtent, 50.0)
+
+                                    break
+                                } catch (e: Exception) {
+                                    DAlertDialog().show(this@MainActivity, "Thông báo", layer.name + ": " + e.toString())
+                                }
+                            }
+                        }
                         if (imageLayersHanhChinh!!.loadStatus == LoadStatus.LOADED) {
                             val sublayerList: ListenableList<ArcGISSublayer> = imageLayersHanhChinh!!.sublayers
                             for (sublayer in sublayerList) {
@@ -390,9 +401,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     } else mFeatureLayer!!.definitionExpression = dLayerInfo.definition
                     mFeatureLayer!!.id = dLayerInfo.layerId
                     mFeatureLayer!!.name = dLayerInfo.layerName
-                    mFeatureLayer!!.id = dLayerInfo.layerId
                     mFeatureLayer!!.isPopupEnabled = true
-                    mFeatureLayer!!.minScale = 0.0
+//                    mFeatureLayer!!.minScale = 0.0
                     mFeatureLayer!!.addDoneLoadingListener {
 //                        setRendererSuCoFeatureLayer(mFeatureLayer!!)
                         mDFeatureLayer = DFeatureLayer(serviceFeatureTable, mFeatureLayer!!, dLayerInfo)
