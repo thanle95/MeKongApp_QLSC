@@ -15,6 +15,7 @@ import hcm.ditagis.com.vinhlong.qlsc.async.NewLoginAsycn
 import hcm.ditagis.com.vinhlong.qlsc.entities.DApplication
 import hcm.ditagis.com.vinhlong.qlsc.utities.CheckConnectInternet.isOnline
 import hcm.ditagis.com.vinhlong.qlsc.utities.Preference.Companion.instance
+import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private var mTxtUsername: TextView? = null
@@ -35,6 +36,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         mTxtUsername!!.setText("tiwamythoxulysuco");
         mTxtPassword!!.setText("tiwamythoxulysuco");
         mTxtValidation = findViewById(R.id.txt_login_validation)
+        txt_version.setText("v" + packageManager.getPackageInfo(packageName, 0).versionName)
         create()
     }
 

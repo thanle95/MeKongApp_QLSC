@@ -262,7 +262,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val displayName = mApplication!!.user!!.displayName
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
-        navigationView.menu.add(1, 1, 1, Constant.SERVER_API.replace("/api", ""))
+//        navigationView.menu.add(1, 1, 1, Constant.SERVER_API.replace("/api", ""))
         try {
             navigationView.menu.add(1, 1, 1, "v" + packageManager.getPackageInfo(packageName, 0).versionName)
         } catch (e: PackageManager.NameNotFoundException) {
