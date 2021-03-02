@@ -75,7 +75,7 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
         val listView = linearLayout!!.findViewById<ListView>(R.id.lstview_thongtinsuco)
         val featureViewInfoAdapter = FeatureViewInfoAdapter(mMainActivity, ArrayList())
         listView.adapter = featureViewInfoAdapter
-        val outFields = mApplication.dFeatureLayer!!.getdLayerInfo().outFieldsArr
+//        val outFields = mApplication.dFeatureLayer!!.getdLayerInfo().outFieldsArr
         val hiddenFields = mMainActivity.resources.getStringArray(R.array.hidden_Fields)
         var isHiddenField: Boolean
         var isOutField: Boolean
@@ -92,15 +92,15 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
                     break
                 }
             }
-            if (outFields.size > 0 && outFields[0] != "*" && outFields[0] != "") {
-                isOutField = false
-                for (outField in outFields) {
-                    if (outField == field.name) {
+//            if (outFields.size > 0 && outFields[0] != "*" && outFields[0] != "") {
+//                isOutField = false
+//                for (outField in outFields) {
+//                    if (outField == field.name) {
                         isOutField = true
-                        break
-                    }
-                }
-            }
+//                        break
+//                    }
+//                }
+//            }
             val value = attributes[field.name]
             if (value != null && isOutField && !isHiddenField) {
                 val item = FeatureViewInfoAdapter.Item()

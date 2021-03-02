@@ -171,11 +171,13 @@ class Constant {
         const val QLCN1 = "qlcn1"
         const val QLCN2 = "qlcn2"
     }
-
+    object LAYER_ID{
+        const val SU_CO = "DiemSuCo"
+        const val BASEMAP = "BASEMAP"
+    }
     companion object {
         @SuppressLint("SimpleDateFormat")
         val DATE_FORMAT = SimpleDateFormat("dd_MM_yyyy")
-        val SuCoId = "DiemSuCo"
         @SuppressLint("SimpleDateFormat")
         val DATE_FORMAT_VIEW = SimpleDateFormat("HH:mm:ss dd/MM/yyyy")
 

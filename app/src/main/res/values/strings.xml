@@ -229,7 +229,6 @@
     <string name="message_number_format_exception">Số liệu nhập vào không đúng định dạng</string>
     <string name="btnRight_editItemViewMoreInfo">Cập nhật</string>
     <string name="btnLeft_editItemViewMoreInfo">Hủy</string>
-    <string name="IDLayer_Basemap">BASEMAP</string>
     <string name="LayerInfo_vatTu">vattuTBL</string>
     <string name="LayerInfo_DMA">dmaLYR</string>
     <string name="LayerInfo_vatTuOngNganh">vattuongnganhTBL</string>

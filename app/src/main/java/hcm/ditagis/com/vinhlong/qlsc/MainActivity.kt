@@ -356,18 +356,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             // config feature layer service
             mDFeatureLayers = ArrayList()
             for (dLayerInfo in mApplication!!.layerInfos!!) {
-                if (dLayerInfo.id.substring(dLayerInfo.id.length - 3) == "TBL" || !dLayerInfo.isView) continue
+                if (dLayerInfo.layerId.substring(dLayerInfo.layerId.length - 3) == "TBL" || !dLayerInfo.isView) continue
                 var url = dLayerInfo.url
                 if (!dLayerInfo.url.startsWith("http")) url = "http:" + dLayerInfo.url
                 if (url == null) continue
-                if (dLayerInfo.id.toUpperCase() == getString(R.string.IDLayer_Basemap) && imageLayersHanhChinh == null) {
+                if (dLayerInfo.layerId.toUpperCase().contains( Constant.LAYER_ID.BASEMAP) && imageLayersHanhChinh == null) {
                     if (mPopUp != null) {
-                        mURL_HanhChinh = "$url/6"
+                        mURL_HanhChinh = "$url/16"
                         mURL_HanhChinhHuyen = "$url/0"
                         mPopUp!!.setmServiceFeatureTableHanhChinh(mURL_HanhChinh)
                     }
                     imageLayersHanhChinh = ArcGISMapImageLayer(url)
-                    imageLayersHanhChinh!!.id = dLayerInfo.id
+                    imageLayersHanhChinh!!.id = dLayerInfo.layerId
                     mapView!!.map.operationalLayers.add(imageLayersHanhChinh)
                     val finalUrl = url
                     mURL_HanhChinh = "$finalUrl/6"
@@ -380,7 +380,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         }
                     }
                     imageLayersHanhChinh!!.loadAsync()
-                } else if (dLayerInfo.id.contains(Constant.SuCoId)) {
+                } else if (dLayerInfo.layerId.contains(Constant.LAYER_ID.SU_CO)) {
                     val serviceFeatureTable = ServiceFeatureTable(url)
                     mFeatureLayer = FeatureLayer(serviceFeatureTable)
                     if (dLayerInfo.definition.toLowerCase() == "null") {
@@ -388,13 +388,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 String.format(" and  %s = '%s'",
                                 Constant.FieldSuCo.NV_XU_LY, mApplication!!.user!!.username)
                     } else mFeatureLayer!!.definitionExpression = dLayerInfo.definition
-                    mFeatureLayer!!.id = dLayerInfo.id
-                    mFeatureLayer!!.name = dLayerInfo.titleLayer
-                    mFeatureLayer!!.id = dLayerInfo.id
+                    mFeatureLayer!!.id = dLayerInfo.layerId
+                    mFeatureLayer!!.name = dLayerInfo.layerName
+                    mFeatureLayer!!.id = dLayerInfo.layerId
                     mFeatureLayer!!.isPopupEnabled = true
                     mFeatureLayer!!.minScale = 0.0
                     mFeatureLayer!!.addDoneLoadingListener {
-                        setRendererSuCoFeatureLayer(mFeatureLayer!!)
+//                        setRendererSuCoFeatureLayer(mFeatureLayer!!)
                         mDFeatureLayer = DFeatureLayer(serviceFeatureTable, mFeatureLayer!!, dLayerInfo)
                         mApplication!!.dFeatureLayer = mDFeatureLayer
                         mDFeatureLayers!!.add(mDFeatureLayer!!)
@@ -407,10 +407,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         if (mURL_HanhChinh != null) mPopUp!!.setmServiceFeatureTableHanhChinh(mURL_HanhChinh)
                     }
                     mapView!!.map.operationalLayers.add(mFeatureLayer)
-                } else if (dLayerInfo.id != "diemdanhgiaLYR" && imageLayersChuyenDe == null) {
+                } else if (dLayerInfo.layerId != "diemdanhgiaLYR" && imageLayersChuyenDe == null) {
                     imageLayersChuyenDe = ArcGISMapImageLayer(url.replaceFirst("FeatureServer(.*)".toRegex(), "MapServer"))
-                    imageLayersChuyenDe!!.name = dLayerInfo.titleLayer
-                    imageLayersChuyenDe!!.id = dLayerInfo.id
+                    imageLayersChuyenDe!!.name = dLayerInfo.layerName
+                    imageLayersChuyenDe!!.id = dLayerInfo.layerId
                     mapView!!.map.operationalLayers.add(imageLayersChuyenDe)
                     imageLayersChuyenDe!!.addDoneLoadingListener {
                         if (imageLayersChuyenDe!!.loadStatus == LoadStatus.LOADED) {

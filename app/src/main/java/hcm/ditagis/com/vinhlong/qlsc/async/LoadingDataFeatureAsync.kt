@@ -40,16 +40,12 @@ open class LoadingDataFeatureAsync constructor(context: Activity, fields: List<F
         val layoutManager = LinearLayoutManager(mActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         val addFields: Array<String> = mActivity.getResources().getStringArray(R.array.add_Fields)
-        val updateFields: Array<String> = mApplication.dFeatureLayer!!.getdLayerInfo().updateFieldsArr
+//        val updateFields: Array<String> = mApplication.dFeatureLayer!!.getdLayerInfo().updateFieldsArr
         if (isAdd) {
             for (fieldName: String in addFields) {
                 if (fieldName.trim { it <= ' ' }.isNotEmpty()) for (field: Field in mFields) if ((field.name == fieldName)) views.add(getView(field, isAdd))
             }
-        } else if (updateFields.isNotEmpty() && updateFields[0].trim { it <= ' ' }.isNotEmpty()) {
-            for (fieldName: String in updateFields) {
-                if (fieldName.trim { it <= ' ' }.isNotEmpty()) views.add(getView(mArcGISFeature!!.featureTable.getField(fieldName), isAdd))
-            }
-        } else {
+        }else {
             for (field: Field in mArcGISFeature!!.featureTable.fields) {
                 views.add(getView(field, isAdd))
             }
