@@ -18,6 +18,10 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import hcm.ditagis.com.mekong.qlsc.adapter.ThongKeAdapter
+import hcm.ditagis.com.mekong.qlsc.databinding.ActivityThongKeBinding
+import hcm.ditagis.com.mekong.qlsc.databinding.DateTimePickerBinding
+import hcm.ditagis.com.mekong.qlsc.databinding.LayoutListviewThongketheothoigianBinding
+import hcm.ditagis.com.mekong.qlsc.databinding.LayoutThongkeThoigiantuychinhBinding
 import hcm.ditagis.com.mekong.qlsc.utities.TimePeriodReport
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -37,29 +41,31 @@ class ThongKeActivity : AppCompatActivity() {
     private var mChuaSuaChua = 0
     private var mDangSuaChua = 0
     private var mHoanThanh = 0
+    private lateinit var mBinding: ActivityThongKeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_thong_ke)
+        mBinding = ActivityThongKeBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
         val timePeriodReport = TimePeriodReport(this)
         val items = timePeriodReport.getItems()
         mThongKeAdapter = ThongKeAdapter(this, items)
-        mTxtTongSuCo = findViewById(R.id.txtTongSuCo)
-        mTxtChuaSua = findViewById(R.id.txtChuaSua)
-        mTxtDangSua = findViewById(R.id.txtDangSua)
-        mTxtHoanThanh = findViewById(R.id.txtHoanThanh)
-        mTxtPhanTramChuaSua = findViewById(R.id.txtPhanTramChuaSua)
-        mTxtPhanTramDangSua = findViewById(R.id.txtPhanTramDangSua)
-        mTxtPhanTramHoanThanh = findViewById(R.id.txtPhanTramHoanThanh)
-        findViewById<View>(R.id.layout_thongke_thoigian).setOnClickListener { v: View? -> showDialogSelectTime() }
+        mTxtTongSuCo = mBinding.txtTongSuCo
+        mTxtChuaSua = mBinding.txtChuaSua
+        mTxtDangSua = mBinding.txtDangSua
+        mTxtHoanThanh = mBinding.txtHoanThanh
+        mTxtPhanTramChuaSua = mBinding.txtPhanTramChuaSua
+        mTxtPhanTramDangSua = mBinding.txtPhanTramDangSua
+        mTxtPhanTramHoanThanh = mBinding.txtPhanTramHoanThanh
+        mBinding.layoutThongkeThoigian.setOnClickListener { v: View? -> showDialogSelectTime() }
         query(items[0])
     }
 
     private fun showDialogSelectTime() {
         val builder = AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_NoActionBar_Fullscreen)
-        @SuppressLint("InflateParams") val layout = layoutInflater.inflate(R.layout.layout_listview_thongketheothoigian, null)
-        val listView = layout.findViewById<ListView>(R.id.lstView_thongketheothoigian)
+        @SuppressLint("InflateParams") val bindingLayout = LayoutListviewThongketheothoigianBinding.inflate(layoutInflater)
+        val listView = bindingLayout.lstViewThongketheothoigian
         listView.adapter = mThongKeAdapter
-        builder.setView(layout)
+        builder.setView(bindingLayout.root)
         val selectTimeDialog = builder.create()
         selectTimeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         selectTimeDialog.show()
@@ -69,13 +75,13 @@ class ThongKeActivity : AppCompatActivity() {
             selectTimeDialog.dismiss()
             if (itemAtPosition.id == finalItems.size) {
                 val builder1 = AlertDialog.Builder(this@ThongKeActivity, android.R.style.Theme_Holo_Light_NoActionBar_Fullscreen)
-                @SuppressLint("InflateParams") val layout1 = layoutInflater.inflate(R.layout.layout_thongke_thoigiantuychinh, null)
-                builder1.setView(layout1)
+                @SuppressLint("InflateParams") val bindingLayout1 = LayoutThongkeThoigiantuychinhBinding.inflate(layoutInflater)
+                builder1.setView(bindingLayout1.root)
                 val tuychinhDateDialog = builder1.create()
                 tuychinhDateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 tuychinhDateDialog.show()
-                val edit_thongke_tuychinh_ngaybatdau = layout1.findViewById<EditText>(R.id.edit_thongke_tuychinh_ngaybatdau)
-                val edit_thongke_tuychinh_ngayketthuc = layout1.findViewById<EditText>(R.id.edit_thongke_tuychinh_ngayketthuc)
+                val edit_thongke_tuychinh_ngaybatdau = bindingLayout1.editThongkeTuychinhNgaybatdau
+                val edit_thongke_tuychinh_ngayketthuc = bindingLayout1.editThongkeTuychinhNgayketthuc
                 if (itemAtPosition.thoigianbatdau != null) edit_thongke_tuychinh_ngaybatdau.setText(itemAtPosition.thoigianbatdau)
                 if (itemAtPosition.thoigianketthuc != null) edit_thongke_tuychinh_ngayketthuc.setText(itemAtPosition.thoigianketthuc)
                 val finalThoigianbatdau = StringBuilder()
@@ -84,7 +90,7 @@ class ThongKeActivity : AppCompatActivity() {
                 val finalThoigianketthuc = StringBuilder()
                 finalThoigianketthuc.append(itemAtPosition.thoigianketthuc)
                 edit_thongke_tuychinh_ngayketthuc.setOnClickListener { v: View? -> showDateTimePicker(edit_thongke_tuychinh_ngayketthuc, finalThoigianketthuc, "FINISH") }
-                layout1.findViewById<View>(R.id.btn_layngaythongke).setOnClickListener { v: View? ->
+                bindingLayout1.btnLayngaythongke.setOnClickListener { v: View? ->
                     if (kiemTraThoiGianNhapVao(finalThoigianbatdau.toString(), finalThoigianketthuc.toString())) {
                         tuychinhDateDialog.dismiss()
                         itemAtPosition.thoigianbatdau = finalThoigianbatdau.toString()
@@ -115,10 +121,10 @@ class ThongKeActivity : AppCompatActivity() {
 
     fun showDateTimePicker(editText: EditText, output: StringBuilder, typeInput: String) {
         output.delete(0, output.length)
-        val dialogView = View.inflate(this, R.layout.date_time_picker, null)
+        val bindingView = DateTimePickerBinding.inflate(layoutInflater)
         val alertDialog = android.app.AlertDialog.Builder(this).create()
-        dialogView.findViewById<View>(R.id.date_time_set).setOnClickListener { view: View? ->
-            val datePicker = dialogView.findViewById<DatePicker>(R.id.date_picker)
+        bindingView.dateTimeSet.setOnClickListener { view: View? ->
+            val datePicker = bindingView.datePicker
             val calendar: Calendar = GregorianCalendar(datePicker.year, datePicker.month, datePicker.dayOfMonth)
             val displaytime = DateFormat.format(getString(R.string.format_time_day_month_year), calendar.time) as String
             val format: String
@@ -140,7 +146,7 @@ class ThongKeActivity : AppCompatActivity() {
             output.append(format)
             alertDialog.dismiss()
         }
-        alertDialog.setView(dialogView)
+        alertDialog.setView(bindingView.root)
         alertDialog.show()
     }
 
@@ -148,8 +154,8 @@ class ThongKeActivity : AppCompatActivity() {
         mHoanThanh = 0
         mDangSuaChua = mHoanThanh
         mChuaSuaChua = mDangSuaChua
-        (findViewById<View>(R.id.txt_thongke_mota) as TextView).text = item.mota
-        val txtThoiGian = findViewById<TextView>(R.id.txt_thongke_thoigian)
+        mBinding.txtThongkeMota.text = item.mota
+        val txtThoiGian = mBinding.txtThongkeThoigian
         if (item.thoigianhienthi == null) txtThoiGian.visibility = View.GONE else {
             txtThoiGian.text = item.thoigianhienthi
             txtThoiGian.visibility = View.VISIBLE
@@ -224,7 +230,7 @@ class ThongKeActivity : AppCompatActivity() {
         mTxtPhanTramChuaSua!!.text = "$percentChuaSua%"
         mTxtPhanTramDangSua!!.text = "$percentDangSua%"
         mTxtPhanTramHoanThanh!!.text = "$percentHoanThanh%"
-        var mChart = findViewById<PieChart>(R.id.piechart)
+        var mChart = mBinding.piechart
         mChart = configureChart(mChart)
         mChart = setData(mChart)
         mChart.animateXY(1500, 1500)

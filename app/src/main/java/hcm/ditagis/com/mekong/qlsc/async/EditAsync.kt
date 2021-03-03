@@ -5,208 +5,148 @@ import android.app.Activity
 import android.os.AsyncTask
 import android.util.Log
 import android.view.View
-import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.Spinner
-import android.widget.TextView
 import com.esri.arcgisruntime.data.*
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
+import hcm.ditagis.com.mekong.qlsc.R
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import hcm.ditagis.com.mekong.qlsc.utities.Constant
+import kotlinx.android.synthetic.main.layout_progress_dialog.view.*
 import java.util.*
 import java.util.concurrent.ExecutionException
-
 /**
  * Created by ThanLe on 4/16/2018.
  */
-class EditAsync(private val mActivity: Activity, private val mIsComplete: Boolean,
-                selectedArcGISFeature: ArcGISFeature, private val mLLayoutField: LinearLayout, image: ByteArray?,
-                delegate: AsyncResponse) : AsyncTask<Void?, ArcGISFeature?, Void?>() {
-    @SuppressLint("StaticFieldLeak")
-    private val mServiceFeatureTable: ServiceFeatureTable
-    private val mFeature: ArcGISFeature
-    private val mImage: ByteArray?
-    private val mDelegate: AsyncResponse
-    private val mApplication: DApplication
-    private var mAttributes: HashMap<String, Any?>? = null
+@SuppressLint("StaticFieldLeak")
+class EditAsync(private val mView: View, private val mainActivity: Activity,
+                private val mServiceFeatureTable: ServiceFeatureTable,
+                selectedArcGISFeature: ArcGISFeature,
+                private val mDelegate: AsyncResponse) : AsyncTask<HashMap<String, Any>, Boolean, Void>() {
+    private lateinit var mDialog: BottomSheetDialog
+    private var mSelectedArcGISFeature: ArcGISFeature = selectedArcGISFeature
+    private val mApplication: DApplication = mainActivity.application as DApplication
 
     interface AsyncResponse {
-        fun processFinish(feature: ArcGISFeature?)
+        fun processFinish(feature: Boolean?)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onPreExecute() {
         super.onPreExecute()
-        if (mImage == null) mAttributes = attributes
+        mDialog = BottomSheetDialog(this.mainActivity)
+        val view = mainActivity.layoutInflater.inflate(R.layout.layout_progress_dialog, null, false) as LinearLayout
+        view.txt_progress_dialog_title.text = "Đang cập nhật thông tin..."
+        mDialog.setContentView(view)
+        mDialog.setCancelable(false)
+
+        mDialog.show()
+
     }
 
-    //        try {
-
-    //        } catch (Exception e) {
-//            Log.e("Lỗi lấy attributes", e.toString());
-//        }
-    private val attributes: HashMap<String, Any?>
-        private get() {
-            val attributes = HashMap<String, Any?>()
-            //        try {
-            var currentAlias = ""
-            for (i in 0 until mLLayoutField.childCount) {
-                val itemAddFeature = mLLayoutField.getChildAt(i) as LinearLayout
-                for (j in 0 until itemAddFeature.childCount) {
-                    val typeInput_itemAddFeature = itemAddFeature.getChildAt(j) as LinearLayout
-                    for (k in 0 until typeInput_itemAddFeature.childCount) {
-                        val view = typeInput_itemAddFeature.getChildAt(k)
-                        if (view.visibility == View.VISIBLE) {
-                            if (view is EditText && !currentAlias.isEmpty()) {
-                                for (field in mServiceFeatureTable.fields) {
-                                    if (field.alias == currentAlias) {
-                                        if (field.domain != null) {
-                                            val codedValues = (field.domain as CodedValueDomain).codedValues
-                                            val valueDomain = getCodeDomain(codedValues, view.text.toString())
-                                            if (valueDomain != null) attributes[currentAlias] = valueDomain.toString()
-                                        } else {
-                                            attributes[currentAlias] = view.text.toString()
-                                        }
-                                        break
-                                    }
-                                }
-                            } else if (view is Spinner && !currentAlias.isEmpty()) {
-                                for (field in mServiceFeatureTable.fields) {
-                                    if (field.alias == currentAlias) {
-                                        if (field.domain != null) {
-                                            val codedValues = (field.domain as CodedValueDomain).codedValues
-                                            val valueDomain = getCodeDomain(codedValues, view.selectedItem.toString())
-                                            if (valueDomain != null) attributes[currentAlias] = valueDomain.toString()
-                                        } else {
-                                        }
-                                        break
-                                    }
-                                }
-                            } else if (view is TextView) {
-                                currentAlias = view.text.toString()
-                                attributes[currentAlias] = null
+    override fun doInBackground(vararg params: HashMap<String, Any>): Void? {
+        if (params.isNotEmpty()) {
+            val attributes = params[0]
+            for (fieldName in attributes.keys) {
+                try {
+                    val value = attributes[fieldName]
+                    if (value == null)
+                        mSelectedArcGISFeature.attributes[fieldName] = null
+                    else {
+                        val valueString = value.toString().trim { it <= ' ' }
+                        val field = mServiceFeatureTable.getField(fieldName)
+                        when (field.fieldType) {
+                            Field.Type.TEXT -> mSelectedArcGISFeature.attributes[fieldName] = valueString
+                            Field.Type.DOUBLE -> {
+                                mSelectedArcGISFeature.attributes[fieldName] = java.lang.Double.parseDouble(valueString)
+                            }
+                            Field.Type.FLOAT -> {
+                                mSelectedArcGISFeature.attributes[fieldName] = java.lang.Float.parseFloat(valueString)
+                            }
+                            Field.Type.INTEGER -> {
+                                mSelectedArcGISFeature.attributes[fieldName] = Integer.parseInt(valueString)
+                            }
+                            Field.Type.SHORT -> mSelectedArcGISFeature.attributes[fieldName] = java.lang.Short.parseShort(valueString)
+                            Field.Type.DATE -> {
+                                val calendar = Calendar.getInstance()
+                                calendar.time = Constant.DATE_FORMAT.parse(valueString)
+                                mSelectedArcGISFeature.attributes[fieldName] = calendar
+                            }
+                            else -> {
                             }
                         }
                     }
-                }
-            }
-
-//        } catch (Exception e) {
-//            Log.e("Lỗi lấy attributes", e.toString());
-//        }
-            return attributes
-        }
-
-     override fun doInBackground(vararg params: Void?): Void? {
-        if (mImage == null) {
-            for (alias in mAttributes!!.keys) {
-                for (field in mServiceFeatureTable.fields) {
-                    if (field.alias == alias) {
-                        try {
-                            val value = mAttributes!![alias].toString().trim { it <= ' ' }
-                            when (field.fieldType) {
-                                Field.Type.TEXT -> mFeature.attributes[field.name] = value
-                                Field.Type.DOUBLE -> mFeature.attributes[field.name] = value.toDouble()
-                                Field.Type.FLOAT -> mFeature.attributes[field.name] = value.toFloat()
-                                Field.Type.INTEGER -> mFeature.attributes[field.name] = value.toInt()
-                                Field.Type.SHORT -> mFeature.attributes[field.name] = value.toShort()
-                            }
-                        } catch (e: Exception) {
-                            mFeature.attributes[field.name] = null
-                            Log.e("Lỗi thêm điểm", e.toString())
-                        }
-                        break
-                    }
-                    when(field.name){
+                    when(fieldName){
                         Constant.Field.CREATED_DATE, Constant.Field.LAST_EDITED_DATE,
-                        Constant.FieldSuCo.TG_PHAN_ANH -> mFeature.attributes[field.name] = Calendar.getInstance()
+                        Constant.FieldSuCo.TG_PHAN_ANH -> mSelectedArcGISFeature.attributes[fieldName] = Calendar.getInstance()
                         Constant.Field.CREATED_USER, Constant.Field.LAST_EDITED_USER,
-                        -> mFeature.attributes[field.name] = mApplication.user!!.username
+                        -> mSelectedArcGISFeature.attributes[fieldName] = mApplication.user!!.username
 
                     }
+
+                } catch (e: Exception) {
+                    mSelectedArcGISFeature.attributes[fieldName] = null
+                    Log.e("Lỗi thêm điểm", e.toString())
+
                 }
             }
         }
-        if (mIsComplete) mFeature.attributes[Constant.FieldSuCo.TRANG_THAI] = Constant.TrangThaiSuCo.HOAN_THANH
-        mServiceFeatureTable.loadAsync()
-        mServiceFeatureTable.addDoneLoadingListener {
-            // update feature in the feature table
-            mServiceFeatureTable.updateFeatureAsync(mFeature).addDoneListener {
-                mServiceFeatureTable.applyEditsAsync().addDoneListener {
-                    if (mImage != null) {
-                        if (mFeature.canEditAttachments()) addAttachment() else applyEdit()
-                    } else {
-                        applyEdit()
+        val voidListenableFuture = mServiceFeatureTable.updateFeatureAsync(mSelectedArcGISFeature)
+        voidListenableFuture.addDoneListener {
+            try {
+                voidListenableFuture.get()
+                val listListenableFuture = mServiceFeatureTable.applyEditsAsync()
+                listListenableFuture.addDoneListener {
+                    try {
+                        val featureEditResults = listListenableFuture.get()
+                        if (featureEditResults.size > 0) {
+                            if (!featureEditResults[0].hasCompletedWithErrors()) {
+                                publishProgress(true)
+                            } else {
+                                publishProgress()
+                            }
+                        } else {
+                            publishProgress()
+                        }
+                    } catch (e: InterruptedException) {
+                        publishProgress()
+                        e.printStackTrace()
+                    } catch (e: ExecutionException) {
+                        publishProgress()
+                        e.printStackTrace()
                     }
+
+
                 }
+            } catch (e: InterruptedException) {
+                publishProgress()
+                e.printStackTrace()
+            } catch (e: ExecutionException) {
+                publishProgress()
+                e.printStackTrace()
             }
         }
         return null
     }
 
-    private fun addAttachment() {
-        val attachmentName = String.format(Constant.AttachmentName.UPDATE,
-                mApplication.user!!.username, System.currentTimeMillis())
-        val addResult = mFeature.addAttachmentAsync(mImage, Constant.FileType.PNG, attachmentName)
-        addResult.addDoneListener {
-            try {
-                val attachment = addResult.get()
-                if (attachment.size > 0) {
-                    val tableResult = mServiceFeatureTable.updateFeatureAsync(mFeature)
-                    tableResult.addDoneListener { applyEdit() }
-                }
-            } catch (ignored: Exception) {
-                publishProgress()
-            }
-        }
+    private fun notifyError() {
+        publishProgress()
+        Snackbar.make(mView, "Đã xảy ra lỗi", Snackbar.LENGTH_SHORT).show()
     }
 
-    private fun applyEdit() {
-        val updatedServerResult = mServiceFeatureTable.applyEditsAsync()
-        updatedServerResult.addDoneListener {
-            try {
-                updatedServerResult.get()
-                publishProgress(mFeature)
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-                publishProgress()
-            } catch (e: ExecutionException) {
-                e.printStackTrace()
-                publishProgress()
-            }
-        }
-    }
 
-    private fun getIdFeatureTypes(featureTypes: List<FeatureType>, value: String): Any? {
-        var code: Any? = null
-        for (featureType in featureTypes) {
-            if (featureType.name == value) {
-                code = featureType.id
-                break
-            }
-        }
-        return code
-    }
-
-    private fun getCodeDomain(codedValues: List<CodedValue>, value: String): Any? {
-        var code: Any? = null
-        for (codedValue in codedValues) {
-            if (codedValue.name == value) {
-                code = codedValue.code
-                break
-            }
-        }
-        return code
-    }
-
-    override fun onProgressUpdate(vararg values: ArcGISFeature?) {
+    override fun onProgressUpdate(vararg values: Boolean?) {
         super.onProgressUpdate(*values)
-        if (values.isNotEmpty()) mDelegate.processFinish(values[0]) else mDelegate.processFinish(null)
+        if (values[0] != null) {
+            mDelegate.processFinish(true)
+        } else {
+            notifyError()
+            mDelegate.processFinish(false)
+        }
+        if (mDialog.isShowing) {
+            mDialog.dismiss()
+        }
     }
 
-    init {
-        mApplication = mActivity.application as DApplication
-        mServiceFeatureTable = selectedArcGISFeature.featureTable as ServiceFeatureTable
-        mDelegate = delegate
-        mFeature = selectedArcGISFeature
-        mImage = image
-    }
+
 }

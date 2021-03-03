@@ -74,6 +74,8 @@ class Constant {
         const val CREATED_DATE = "created_date"
         const val LAST_EDITED_USER = "last_edited_user"
         const val LAST_EDITED_DATE = "last_edited_date"
+        val NONE_UPDATE_FIELDS = arrayOf(CREATED_DATE, CREATED_USER, LAST_EDITED_DATE, LAST_EDITED_USER, OBJECTID,
+        FieldSuCo.TG_PHAN_ANH)
     }
 
     object OptionAddImage {
@@ -163,6 +165,7 @@ class Constant {
         const val BASEMAP = "BASEMAP"
     }
     companion object {
+        const val EMPTY = ""
         @SuppressLint("SimpleDateFormat")
         val DATE_FORMAT = SimpleDateFormat("dd_MM_yyyy")
         @SuppressLint("SimpleDateFormat")

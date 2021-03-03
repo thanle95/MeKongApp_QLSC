@@ -1,4 +1,29 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="MyTextAppearance.Prime" parent="@android:style/TextAppearance">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="MyTextAppearance.Prime.Small" parent="MyTextAppearance.Prime">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="MyTextAppearance.Prime.Big" parent="MyTextAppearance.Prime">
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="MyTextAppearance.Prime.Big.Bold" parent="MyTextAppearance.Prime.Big">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MyTextAppearance.Gray" parent="@android:style/TextAppearance">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+
+    <style name="MyTextAppearance.Gray.Big" parent="MyTextAppearance.Gray">
+        <item name="android:textSize">20sp</item>
+    </style>
+
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -114,5 +139,9 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
     <!--textview end-->
-
+    <style name="InputLabel" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:paddingBottom">@dimen/input_label_vertical_spacing</item>
+        <item name="android:paddingLeft">@dimen/input_label_horizontal_spacing</item>
+        <item name="android:paddingRight">@dimen/input_label_horizontal_spacing</item>
+    </style>
 </resources>

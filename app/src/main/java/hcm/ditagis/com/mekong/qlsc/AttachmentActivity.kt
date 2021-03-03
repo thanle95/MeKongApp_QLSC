@@ -9,8 +9,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.widget.AdapterView
-import android.widget.GridView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +22,8 @@ import hcm.ditagis.com.mekong.qlsc.async.AddAttachmentAsync
 import hcm.ditagis.com.mekong.qlsc.async.DeleteAttachmentAsync
 import hcm.ditagis.com.mekong.qlsc.async.FetchAttachmentAsync
 import hcm.ditagis.com.mekong.qlsc.async.FetchDataAsync
+import hcm.ditagis.com.mekong.qlsc.databinding.ActivityAttachmentBinding
+import hcm.ditagis.com.mekong.qlsc.databinding.LayoutHandleAddAttachmentBinding
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import hcm.ditagis.com.mekong.qlsc.entities.DAttachment
 import hcm.ditagis.com.mekong.qlsc.utities.Constant
@@ -33,13 +33,13 @@ import java.io.IOException
 import java.util.*
 
 class AttachmentActivity : AppCompatActivity() {
-    private lateinit var mGridView: GridView
     private lateinit var mAdapter: AttachmentAdapter
-    private lateinit var mLayoutDialog: LinearLayout
+    private lateinit var mLayoutDialog: LayoutHandleAddAttachmentBinding
     private lateinit var mApplication: DApplication
     private lateinit var mDialog: BottomSheetDialog
     private var mSelectedItem: DAttachment? = null
     private var mAttachments: List<Attachment>? = null
+    private lateinit var mBinding: ActivityAttachmentBinding
 
     private//        for (String key : Constant.AttachmentName.codeValues.keySet()) {
     //            if (mSelectedItem.getName().contains(key)) {
@@ -53,7 +53,8 @@ class AttachmentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_attachment)
+        mBinding = ActivityAttachmentBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
 
         mApplication = application as DApplication
         initDialog()
@@ -63,10 +64,9 @@ class AttachmentActivity : AppCompatActivity() {
     }
 
     private fun initGridView() {
-        mGridView = findViewById(R.id.grid_add_attachment)
-        mGridView.adapter = mAdapter
+        mBinding.gridAddAttachment.adapter = mAdapter
 
-        mGridView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ -> this.onGridViewItemClick(parent, position) }
+        mBinding.gridAddAttachment.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ -> this.onGridViewItemClick(parent, position) }
 
 
         reload()
@@ -126,8 +126,8 @@ class AttachmentActivity : AppCompatActivity() {
 
     private fun initDialog() {
         mDialog = BottomSheetDialog(this@AttachmentActivity)
-        mLayoutDialog = this@AttachmentActivity.layoutInflater.inflate(R.layout.layout_handle_add_attachment, null, false) as LinearLayout
-        mDialog.setContentView(mLayoutDialog)
+        mLayoutDialog = LayoutHandleAddAttachmentBinding.inflate(layoutInflater)
+        mDialog.setContentView(mLayoutDialog.root)
 
 
     }
@@ -157,10 +157,10 @@ class AttachmentActivity : AppCompatActivity() {
 
         mSelectedItem = parent.getItemAtPosition(position) as DAttachment
         mDialog.show()
-        mLayoutDialog.findViewById<View>(R.id.llayout__handle_image__view).setOnClickListener { this.onLayoutDialogItemClick(it) }
-        mLayoutDialog.findViewById<View>(R.id.llayout__handle_image__capture).setOnClickListener { this.onLayoutDialogItemClick(it) }
-        mLayoutDialog.findViewById<View>(R.id.llayout__handle_image__pick).setOnClickListener { this.onLayoutDialogItemClick(it) }
-        mLayoutDialog.findViewById<View>(R.id.llayout__handle_image__delete).setOnClickListener { this.onLayoutDialogItemClick(it) }
+        mLayoutDialog.llayoutHandleImageView.setOnClickListener { this.onLayoutDialogItemClick(it) }
+        mLayoutDialog.llayoutHandleImageCapture.setOnClickListener { this.onLayoutDialogItemClick(it) }
+        mLayoutDialog.llayoutHandleImagePick.setOnClickListener { this.onLayoutDialogItemClick(it) }
+        mLayoutDialog.llayoutHandleImageDelete.setOnClickListener { this.onLayoutDialogItemClick(it) }
     }
 
     private fun onLayoutDialogItemClick(v: View) {
@@ -214,7 +214,7 @@ class AttachmentActivity : AppCompatActivity() {
                             reload()
 
                         } ?: run {
-                            val snackbar = Snackbar.make(mGridView, "Không xóa được ảnh!", 2000)
+                            val snackbar = Snackbar.make(mBinding.gridAddAttachment, "Không xóa được ảnh!", 2000)
                             snackbar.show()
                         }
                     }
@@ -247,14 +247,14 @@ class AttachmentActivity : AppCompatActivity() {
                 override fun processFinish(success: Boolean?) {
                     success?.let {
                         if (it) {
-                            Toast.makeText(mGridView.context, "Thêm ảnh thành công", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(mBinding.gridAddAttachment.context, "Thêm ảnh thành công", Toast.LENGTH_SHORT).show()
                             reload()
                         } else {
-                            val snackBar = Snackbar.make(mGridView, "Không thêm được ảnh!", 2000)
+                            val snackBar = Snackbar.make(mBinding.gridAddAttachment, "Không thêm được ảnh!", 2000)
                             snackBar.show()
                         }
                     } ?: run {
-                        val snackBar = Snackbar.make(mGridView, "Không thêm được ảnh!", 2000)
+                        val snackBar = Snackbar.make(mBinding.gridAddAttachment, "Không thêm được ảnh!", 2000)
                         //                                    snackbar.setAction("Thử lại", new View.OnClickListener() {
                         //                                        @Override
                         //                                        public void onClick(View v) {

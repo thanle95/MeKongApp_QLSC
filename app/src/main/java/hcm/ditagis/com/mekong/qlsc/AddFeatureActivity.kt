@@ -12,10 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.esri.arcgisruntime.data.Feature
 import com.esri.arcgisruntime.layers.FeatureLayer
 import hcm.ditagis.com.mekong.qlsc.async.AddFeatureAsync
-import hcm.ditagis.com.mekong.qlsc.async.LoadingDataFeatureAsync
+import hcm.ditagis.com.mekong.qlsc.databinding.ActivityAddFeatureBinding
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import hcm.ditagis.com.mekong.qlsc.utities.Constant
-import kotlinx.android.synthetic.main.activity_add_feature.*
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.util.*
@@ -26,36 +25,38 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
     private var mImages: MutableList<ByteArray>? = null
     private var mUri: Uri? = null
     private val mAdapterLayer: ArrayAdapter<String>? = null
+    private lateinit var mBinding: ActivityAddFeatureBinding
     private var mFeatureLayer: FeatureLayer? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_feature)
+        mBinding = ActivityAddFeatureBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
         mApplication = application as DApplication
         initViews()
     }
 
     private fun initViews() {
         mImages = ArrayList()
-        btn_add_feature_capture!!.setOnClickListener { view: View -> onClick(view) }
-        btn_add_feature_add!!.setOnClickListener { view: View -> onClick(view) }
-        btn_add_feature_pick_photo!!.setOnClickListener { view: View -> onClick(view) }
+        mBinding.btnAddFeatureCapture.setOnClickListener { view: View -> onClick(view) }
+        mBinding.btnAddFeatureAdd.setOnClickListener { view: View -> onClick(view) }
+        mBinding.btnAddFeaturePickPhoto.setOnClickListener { view: View -> onClick(view) }
         Objects.requireNonNull(supportActionBar)?.setDisplayHomeAsUpEnabled(true)
         Objects.requireNonNull(supportActionBar)?.setDisplayShowHomeEnabled(true)
-        txt_add_feature_progress!!.text = "Đang khởi tạo thuộc tính..."
-        llayout_add_feature_progress!!.visibility = View.VISIBLE
-        llayout_add_feature_main!!.visibility = View.GONE
+        mBinding.txtAddFeatureProgress.text = "Đang khởi tạo thuộc tính..."
+        mBinding.llayoutAddFeatureProgress.visibility = View.VISIBLE
+        mBinding.llayoutAddFeatureMain.visibility = View.GONE
         mFeatureLayer = mApplication!!.dFeatureLayer!!.layer
-        LoadingDataFeatureAsync(this@AddFeatureActivity, mFeatureLayer!!.featureTable.fields,
-                object : LoadingDataFeatureAsync.AsyncResponse {
-                    override fun processFinish(views: List<View?>?) {
-                        if (views != null) for (view1 in views) {
-                            llayout_add_feature_field!!.addView(view1)
-                        }
-                        llayout_add_feature_progress!!.visibility = View.GONE
-                        llayout_add_feature_main!!.visibility = View.VISIBLE
-                    }
-
-                }).execute(true)
+//        LoadingDataFeatureAsync(this@AddFeatureActivity, mFeatureLayer!!.featureTable.fields,
+//                object : LoadingDataFeatureAsync.AsyncResponse {
+//                    override fun processFinish(views: List<View?>?) {
+//                        if (views != null) for (view1 in views) {
+//                            llayout_add_feature_field!!.addView(view1)
+//                        }
+//                        llayout_add_feature_progress!!.visibility = View.GONE
+//                        llayout_add_feature_main!!.visibility = View.VISIBLE
+//                    }
+//
+//                }).execute(true)
 
     }
 
@@ -95,18 +96,19 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
             } else if (mFeatureLayer == null) {
                 Toast.makeText(this@AddFeatureActivity, R.string.message_add_feature_had_not_feature, Toast.LENGTH_LONG).show()
             } else {
-                llayout_add_feature_progress!!.visibility = View.VISIBLE
-                llayout_add_feature_main!!.visibility = View.GONE
-                txt_add_feature_progress!!.text = "Đang lưu..."
-                AddFeatureAsync(this@AddFeatureActivity, mApplication!!.dFeatureLayer!!.serviceFeatureTable, llayout_add_feature_field!!,
+                mBinding.llayoutAddFeatureProgress.visibility = View.VISIBLE
+                mBinding.llayoutAddFeatureMain.visibility = View.GONE
+                mBinding.txtAddFeatureProgress.text = "Đang lưu..."
+                AddFeatureAsync(this@AddFeatureActivity, mApplication!!.dFeatureLayer!!.serviceFeatureTable,
+                        mBinding.llayoutAddFeatureField,
                         object : AddFeatureAsync.AsyncResponse {
                             override fun processFinish(output: Feature?) {
 
                                 if (output != null) {
                                     goHome()
                                 }
-                                llayout_add_feature_progress!!.visibility = View.GONE
-                                llayout_add_feature_main!!.visibility = View.VISIBLE
+                                mBinding.llayoutAddFeatureProgress.visibility = View.GONE
+                                mBinding.llayoutAddFeatureMain.visibility = View.VISIBLE
                             }
 
                         }).execute()
@@ -123,17 +125,17 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
         try {
             if (bitmap != null) {
                 val outputStream = ByteArrayOutputStream()
-                val imageView = ImageView(llayout_add_feature_image!!.context)
+                val imageView = ImageView(mBinding.llayoutAddFeatureImage.context)
                 imageView.setPadding(0, 0, 0, 10)
                 if (isFromCamera) {
-                 imageView.setImageBitmap(bitmap)
+                    imageView.setImageBitmap(bitmap)
                 } else {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
                     imageView.setImageBitmap(bitmap)
                 }
                 val image = getByteArrayFromBitmap(bitmap)
                 Toast.makeText(this, "Đã lưu ảnh", Toast.LENGTH_SHORT).show()
-                llayout_add_feature_image!!.addView(imageView)
+                mBinding.llayoutAddFeatureImage.addView(imageView)
                 mImages!!.add(image)
                 mApplication!!.images = mImages
             }

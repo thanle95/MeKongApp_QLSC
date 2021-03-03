@@ -7,20 +7,21 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import hcm.ditagis.com.mekong.qlsc.databinding.ActivityShowCaptureBinding
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
-import kotlinx.android.synthetic.main.activity_show_capture.*
 
 class ShowCaptureActivity : AppCompatActivity() {
     private var mApplication: DApplication? = null
-
+    private lateinit var mBinding: ActivityShowCaptureBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        setContentView(R.layout.activity_show_capture)
+        mBinding = ActivityShowCaptureBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
         mApplication = application as DApplication
-        show_capture_imageView.setImageBitmap(mApplication!!.bitmaps!!.first())
+        mBinding.showCaptureImageView.setImageBitmap(mApplication!!.bitmaps!!.first())
     }
 
     fun onClick(view: View) {

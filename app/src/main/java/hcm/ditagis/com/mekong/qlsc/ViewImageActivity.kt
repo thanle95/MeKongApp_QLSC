@@ -5,44 +5,43 @@ import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import hcm.ditagis.com.mekong.qlsc.databinding.ActivityViewImageBinding
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
-import kotlinx.android.synthetic.main.activity_view_image.*
 
 class ViewImageActivity : AppCompatActivity() {
     private lateinit var mApplication: DApplication
-
+    private lateinit var mBinding: ActivityViewImageBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_view_image)
+        mBinding = ActivityViewImageBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
 
         mApplication = application as DApplication
         var bitmap = mApplication.selectedBitmap
         title = mApplication.selectedAttachment!!.name
-        img_view_attachment.setImageBitmap(bitmap)
-
-
-        btn_rorate_left.setOnClickListener {
+        mBinding.imgViewAttachment.setImageBitmap(bitmap)
+        mBinding.btnRorateLeft.setOnClickListener {
             runOnUiThread {
                 val matrix = Matrix()
 
                 matrix.postRotate(-90F)
-                val bitmap = (img_view_attachment.drawable as BitmapDrawable).bitmap
+                val bitmap = (mBinding.imgViewAttachment.drawable as BitmapDrawable).bitmap
                 val scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.width, bitmap.height, true)
 
                 val rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.width, scaledBitmap.height, matrix, true)
-                img_view_attachment.setImageBitmap(rotatedBitmap)
+                mBinding.imgViewAttachment.setImageBitmap(rotatedBitmap)
             }
         }
-        btn_rorate_right.setOnClickListener {
+        mBinding.btnRorateRight.setOnClickListener {
             runOnUiThread {
                 val matrix = Matrix()
 
                 matrix.postRotate(90F)
-                val bitmap = (img_view_attachment.drawable as BitmapDrawable).bitmap
+                val bitmap = (mBinding.imgViewAttachment.drawable as BitmapDrawable).bitmap
                 val scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.width, bitmap.height, true)
 
                 val rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.width, scaledBitmap.height, matrix, true)
-                img_view_attachment.setImageBitmap(rotatedBitmap)
+                mBinding.imgViewAttachment.setImageBitmap(rotatedBitmap)
             }
         }
 

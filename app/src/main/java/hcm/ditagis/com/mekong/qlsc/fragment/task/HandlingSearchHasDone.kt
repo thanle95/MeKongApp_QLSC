@@ -5,7 +5,6 @@ import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.esri.arcgisruntime.data.CodedValue
@@ -13,15 +12,15 @@ import com.esri.arcgisruntime.data.CodedValueDomain
 import com.esri.arcgisruntime.data.Feature
 import com.esri.arcgisruntime.data.ServiceFeatureTable
 import hcm.ditagis.com.mekong.qlsc.R
+import hcm.ditagis.com.mekong.qlsc.databinding.ItemTracuuBinding
 import hcm.ditagis.com.mekong.qlsc.utities.Constant
-import kotlinx.android.synthetic.main.item_tracuu.view.*
 import java.util.*
 
 object HandlingSearchHasDone {
     @JvmStatic
     @RequiresApi(api = Build.VERSION_CODES.N)
-    fun handleFromItems(context: Context?, items: List<Feature>, serviceFeatureTable: ServiceFeatureTable): List<View> {
-        val views: MutableList<View> = ArrayList()
+    fun handleFromItems(context: Context?, items: List<Feature>, serviceFeatureTable: ServiceFeatureTable): List<ItemTracuuBinding> {
+        val views: MutableList<ItemTracuuBinding> = ArrayList()
         try {
 
 //            Comparator<Feature> comparator = (Item o1, Item o2) -> {
@@ -42,29 +41,29 @@ object HandlingSearchHasDone {
 //            list.sort(comparator);
             val thongTinPhanAnhDomain = serviceFeatureTable.getField(Constant.FieldSuCo.THONG_TIN_PHAN_ANH).domain as CodedValueDomain
             for (item in items) {
-                val layout = LayoutInflater.from(context).inflate(R.layout.item_tracuu, null) as LinearLayout
-                val txtThongTinPhanAnh = layout.txt_info
-                val txtDiaChi = layout.txt_location
-                val txtID = layout.txt_id
-                val txtNgayCapNhat = layout.txt_time
+                val bindingLayout = ItemTracuuBinding.inflate(LayoutInflater.from(context))
+                val txtThongTinPhanAnh = bindingLayout.txtInfo
+                val txtDiaChi = bindingLayout.txtLocation
+                val txtID = bindingLayout.txtId
+                val txtNgayCapNhat = bindingLayout.txtTime
                 val trangThaiObject = item.attributes[Constant.FieldSuCo.TRANG_THAI]
                 var trangThai = Constant.TrangThaiSuCo.MOI_TIEP_NHAN
                 if (trangThaiObject != null) trangThai = trangThaiObject as Short
 
-                layout.txt_objectid.setTextColor(ContextCompat.getColor(context!!, R.color.colorWhite))
+                bindingLayout.txtObjectid.setTextColor(ContextCompat.getColor(context!!, R.color.colorWhite))
                 txtDiaChi.setTextColor(ContextCompat.getColor(context!!, R.color.colorWhite))
                 txtID.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
                 txtNgayCapNhat.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
                 txtThongTinPhanAnh.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
                 when (trangThai) {
                     Constant.TrangThaiSuCo.MOI_TIEP_NHAN -> {
-                        layout.setBackgroundColor(ContextCompat.getColor(context!!, R.color.color_chua_sua_chua))
+                        bindingLayout.root.setBackgroundColor(ContextCompat.getColor(context!!, R.color.color_chua_sua_chua))
                     }
                     Constant.TrangThaiSuCo.DANG_SUA -> {
-                        layout.setBackgroundColor(ContextCompat.getColor(context!!, R.color.color_dang_sua_chua))
+                        bindingLayout.root.setBackgroundColor(ContextCompat.getColor(context!!, R.color.color_dang_sua_chua))
                     }
                     Constant.TrangThaiSuCo.HOAN_THANH -> {
-                        layout.setBackgroundColor(ContextCompat.getColor(context!!, R.color.color_da_sua_chua))
+                        bindingLayout.root.setBackgroundColor(ContextCompat.getColor(context!!, R.color.color_da_sua_chua))
                     }
                     else -> {
                     }
@@ -77,8 +76,8 @@ object HandlingSearchHasDone {
                 if (diaChi == null) txtDiaChi.visibility = View.GONE else txtDiaChi.text = diaChi as String?
                 if (ngayThongBao == null) txtNgayCapNhat.visibility = View.GONE else txtNgayCapNhat.text = Constant.DateFormat.DATE_FORMAT_VIEW.format((ngayThongBao as Calendar).time)
                 if (thongTinPhanAnh == null) txtThongTinPhanAnh.visibility = View.GONE else txtThongTinPhanAnh.text = thongTinPhanAnh as String?
-                layout.txt_objectid.text = item.attributes[Constant.Field.OBJECTID].toString()
-                views.add(layout)
+                bindingLayout.txtObjectid.text = item.attributes[Constant.Field.OBJECTID].toString()
+                views.add(bindingLayout)
             }
         } catch (e: Exception) {
             Log.e("Lỗi lấy ds công việc", e.toString())

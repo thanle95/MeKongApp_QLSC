@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import hcm.ditagis.com.mekong.qlsc.R
 import hcm.ditagis.com.mekong.qlsc.entities.DAttachment
-import kotlinx.android.synthetic.main.item_add_attachment.view.*
 
 
 class AttachmentAdapter(private val mContext: Context, private var items: MutableList<DAttachment>) : ArrayAdapter<DAttachment>(mContext, 0, items) {

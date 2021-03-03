@@ -22,7 +22,7 @@ class GetAttachmentsAsync(private val mDelegate: AsyncResponse) : AsyncTask<ArcG
                     val attachments = attachmentResults.get()
                     publishProgress(attachments)
                 } catch (e: Exception) {
-                    Log.e("Lỗi attachment", e.message)
+                    Log.e("Lỗi attachment", e.toString())
                     publishProgress()
                 }
             }

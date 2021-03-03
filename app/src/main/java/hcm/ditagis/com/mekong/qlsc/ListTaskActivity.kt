@@ -5,18 +5,16 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import com.google.android.material.tabs.TabLayout.ViewPagerOnTabSelectedListener
+import hcm.ditagis.com.mekong.qlsc.databinding.ActivityListTaskBinding
+import hcm.ditagis.com.mekong.qlsc.databinding.LayoutDialogBinding
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import hcm.ditagis.com.mekong.qlsc.fragment.task.ListTaskFragment
 import hcm.ditagis.com.mekong.qlsc.fragment.task.SearchFragment
@@ -26,23 +24,24 @@ class ListTaskActivity : AppCompatActivity() {
     private var mListTaskFragment: ListTaskFragment? = null
     private var mSearchFragment: SearchFragment? = null
     private var mApplication: DApplication? = null
+    private lateinit var mBinding: ActivityListTaskBinding
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_list_task)
+        mBinding = ActivityListTaskBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
         mApplication = application as DApplication
         Objects.requireNonNull(supportActionBar)?.setDisplayHomeAsUpEnabled(true)
         Objects.requireNonNull(supportActionBar)?.setDisplayShowHomeEnabled(true)
         val sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
-        val viewPager = findViewById<ViewPager>(R.id.container_basemap)
-        viewPager.adapter = sectionsPagerAdapter
-        val tabLayout = findViewById<TabLayout>(R.id.tabs_basemap)
-        viewPager.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabLayout))
-        tabLayout.addOnTabSelectedListener(ViewPagerOnTabSelectedListener(viewPager))
+        mBinding.containerBasemap
+        mBinding.containerBasemap.adapter = sectionsPagerAdapter
+        mBinding.containerBasemap.addOnPageChangeListener(TabLayoutOnPageChangeListener(mBinding.tabsBasemap))
+        mBinding.tabsBasemap.addOnTabSelectedListener(ViewPagerOnTabSelectedListener(mBinding.containerBasemap))
         mListTaskFragment = ListTaskFragment(this@ListTaskActivity, layoutInflater)
         mSearchFragment = SearchFragment(this@ListTaskActivity, layoutInflater)
-        viewPager.setCurrentItem(0, true)
+        mBinding.containerBasemap.setCurrentItem(0, true)
     }
 
     inner class SectionsPagerAdapter internal constructor(fm: FragmentManager) : FragmentPagerAdapter(fm) {
@@ -59,37 +58,15 @@ class ListTaskActivity : AppCompatActivity() {
         }
     }
 
-    //    public void itemClick(AdapterView<?> adapter, int position) {
-    //        HandlingSearchHasDone.Item item = (HandlingSearchHasDone.Item) adapter.getItemAtPosition(position);
-    //        LinearLayout layout = (LinearLayout) getLayoutInflater().inflate(R.layout.layout_dialog, null);
-    //        TextView txtTitle = layout.findViewById(R.id.txt_dialog_title);
-    //        TextView txtMessage = layout.findViewById(R.id.txt_dialog_message);
-    //        txtTitle.setText(getString(R.string.message_title_confirm));
-    //        txtMessage.setText(getString(R.string.message_click_list_task, item.getId()));
-    //
-    //        AlertDialog.Builder builder = new AlertDialog.Builder(ListTaskActivity.this);
-    //        builder.setView(layout);
-    //        builder.setCancelable(false)
-    //                .setPositiveButton(R.string.message_btn_ok, (dialog, i) -> {
-    //                    mApplication.getDiemSuCo().setIdSuCo(item.getId());
-    //                    goHome();
-    //                }).setNegativeButton(R.string.message_btn_cancel, (dialog, i) -> {
-    //        });
-    //
-    //        AlertDialog dialog = builder.create();
-    //        dialog.show();
-    //    }
     fun itemClick(id: String?, objectID: String?) {
-        val layout = layoutInflater.inflate(R.layout.layout_dialog, null) as LinearLayout
-        val txtTitle = layout.findViewById<TextView>(R.id.txt_dialog_title)
-        val txtMessage = layout.findViewById<TextView>(R.id.txt_dialog_message)
-        txtTitle.text = getString(R.string.message_title_confirm)
+        val layout =LayoutDialogBinding.inflate(layoutInflater)
+        layout.txtDialogTitle.text = getString(R.string.message_title_confirm)
         var xID = id
         if(id.isNullOrEmpty())
             xID = objectID
-        txtMessage.text = getString(R.string.message_click_list_task, xID)
+        layout.txtDialogMessage.text = getString(R.string.message_click_list_task, xID)
         val builder = AlertDialog.Builder(this@ListTaskActivity)
-        builder.setView(layout)
+        builder.setView(layout.root)
         builder.setCancelable(false)
                 .setPositiveButton(R.string.message_btn_ok) { dialog: DialogInterface?, i: Int ->
                     mApplication!!.diemSuCo!!.objectID = objectID!!.toLong()

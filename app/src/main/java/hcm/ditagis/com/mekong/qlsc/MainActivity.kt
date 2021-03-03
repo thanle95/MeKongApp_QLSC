@@ -23,7 +23,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -54,6 +53,7 @@ import hcm.ditagis.com.mekong.qlsc.async.FindLocationAsycn
 import hcm.ditagis.com.mekong.qlsc.async.PreparingAsycn
 import hcm.ditagis.com.mekong.qlsc.async.QueryServiceFeatureTableGetListAsync
 import hcm.ditagis.com.mekong.qlsc.async.UpdateAttachmentAsync
+import hcm.ditagis.com.mekong.qlsc.databinding.*
 import hcm.ditagis.com.mekong.qlsc.entities.DAddress
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import hcm.ditagis.com.mekong.qlsc.entities.DLayerInfo
@@ -65,9 +65,6 @@ import hcm.ditagis.com.mekong.qlsc.utities.DAlertDialog
 import hcm.ditagis.com.mekong.qlsc.utities.MapViewHandler
 import hcm.ditagis.com.mekong.qlsc.utities.MySnackBar.make
 import hcm.ditagis.com.mekong.qlsc.utities.Popup
-import kotlinx.android.synthetic.main.app_bar_quan_ly_su_co.*
-import kotlinx.android.synthetic.main.content_quan_ly_su_co.*
-import kotlinx.android.synthetic.main.item_tracuu.view.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -103,6 +100,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var isChangingGeometry = false
     private var mFeatureLayer: FeatureLayer? = null
     private var mURL_HanhChinh: String? = null
+    private lateinit var mBinding: ActivityQuanLySuCoBinding
+    private lateinit var mBindingAppBar: AppBarQuanLySuCoBinding
+    private lateinit var mBindingContent: ContentQuanLySuCoBinding
     fun setChangingGeometry(changingGeometry: Boolean) {
         isChangingGeometry = changingGeometry
     }
@@ -111,7 +111,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_quan_ly_su_co)
+        mBinding = ActivityQuanLySuCoBinding.inflate(layoutInflater)
+        mBindingAppBar = AppBarQuanLySuCoBinding.inflate(layoutInflater)
+        mBindingContent = ContentQuanLySuCoBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
         mListLayerID = ArrayList()
         mApplication = application as DApplication
         mApplication!!.alertDialog = DAlertDialog()
@@ -181,11 +184,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         imageLayersHanhChinh = imageLayersChuyenDe
         states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf())
         colors = intArrayOf(R.color.colorTextColor_1, R.color.colorTextColor_1)
-        findViewById<View>(R.id.layout_layer).visibility = View.INVISIBLE
+
+        mBindingAppBar.layoutLayer.visibility = View.INVISIBLE
         setLicense()
         mGeocoder = Geocoder(this.applicationContext, Locale.getDefault())
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(mBindingAppBar.toolbar)
 
 
         //for camera begin
@@ -193,14 +196,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         StrictMode.setVmPolicy(builder.build())
         //for camera end
         //đưa listview search ra phía sau
-        llayout_main_search!!.invalidate()
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+        mBindingContent.llayoutMainSearch.invalidate()
         val toggle = ActionBarDrawerToggle(this@MainActivity,
-                drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer.addDrawerListener(toggle)
+                mBinding.drawerLayout, mBindingAppBar.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        mBinding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         mapViewEvent()
-        skbr_hanhchinh_app_bar_quan_ly_su_co!!.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+        mBindingAppBar.skbrHanhchinh.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 imageLayersHanhChinh!!.opacity = i.toFloat() / 100
             }
@@ -208,7 +210,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
-        skbr_chuyende_app_bar_quan_ly_su_co!!.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+        mBindingAppBar.skbrChuyende.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 imageLayersChuyenDe!!.opacity = i.toFloat() / 100
             }
@@ -223,10 +225,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun mapViewEvent() {
-        mapView.map = ArcGISMap(Basemap.Type.OPEN_STREET_MAP, 10.23851, 105.94032, 12)
-        mapView.map.addDoneLoadingListener { handlingMapViewDoneLoading() }
-        val txtToaDo = findViewById<View>(R.id.txt_toado) as TextView
-        mapView.onTouchListener = object : DefaultMapViewOnTouchListener(this, mapView) {
+        mBindingContent.mapView.map = ArcGISMap(Basemap.Type.OPEN_STREET_MAP, 10.23851, 105.94032, 12)
+        mBindingContent.mapView.map.addDoneLoadingListener { handlingMapViewDoneLoading() }
+        mBindingContent.mapView.onTouchListener = object : DefaultMapViewOnTouchListener(this, mBindingContent.mapView) {
             override fun onLongPress(e: MotionEvent) {
                 addGraphicsAddFeature(e)
                 super.onLongPress(e)
@@ -247,7 +248,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     val location = mapViewHandler!!.onScroll()
                     val log = (location!![0] * 100000).roundToInt().toFloat() / 100000
                     val lat = (location[1] * 100000).roundToInt().toFloat() / 100000
-                    txtToaDo.text = "$lat, $log"
+                    mBindingContent.txtToado.text = "$lat, $log"
                 }
                 mGraphicsOverlay!!.graphics.clear()
                 return super.onScroll(e1, e2, distanceX, distanceY)
@@ -255,43 +256,45 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
         mGraphicsOverlay = GraphicsOverlay()
-        mapView.graphicsOverlays.add(mGraphicsOverlay)
+        mBindingContent.mapView.graphicsOverlays.add(mGraphicsOverlay)
     }
 
     private fun setLoginInfos() {
         val displayName = mApplication!!.user!!.displayName
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
+        mBinding.navView.setNavigationItemSelectedListener(this)
 //        navigationView.menu.add(1, 1, 1, Constant.SERVER_API.replace("/api", ""))
         try {
-            navigationView.menu.add(1, 1, 1, "v" + packageManager.getPackageInfo(packageName, 0).versionName)
+            mBinding.navView.menu.add(1, 1, 1, "v" + packageManager.getPackageInfo(packageName, 0).versionName)
         } catch (e: PackageManager.NameNotFoundException) {
         }
-        val headerLayout = navigationView.getHeaderView(0)
-        val nav_name_nv = headerLayout.findViewById<TextView>(R.id.nav_name_nv)
-        nav_name_nv.text = displayName
+        val bindingHeaderNavigation = NavHeaderQuanLySuCoBinding.inflate(layoutInflater)
+        bindingHeaderNavigation.navNameNv.text = displayName
+//        val headerLayout = mBinding.navView.getHeaderView(0)
+//        val nav_name_nv = headerLayout.findViewById<TextView>(R.id.nav_name_nv)
+//
+//        nav_name_nv.text = displayName
     }
 
     private fun findViewById() {
-        mTxtOpenStreetMap = findViewById(R.id.txt_layer_open_street_map)
-        mTxtStreetMap = findViewById(R.id.txt_layer_street_map)
-        mTxtImageWithLabel = findViewById(R.id.txt_layer_image)
-        mImageOpenStreetMap = findViewById(R.id.img_layer_open_street_map)
-        mImageStreetMap = findViewById(R.id.img_layer_street_map)
-        mImageImageWithLabel = findViewById(R.id.img_layer_image)
-        linearDisplayLayerFeature.removeAllViews()
-        linearDisplayLayerAdministration.removeAllViews()
+        mTxtOpenStreetMap = mBindingAppBar.txtLayerOpenStreetMap
+        mTxtStreetMap = mBindingAppBar.txtLayerStreetMap
+        mTxtImageWithLabel = mBindingAppBar.txtLayerImage
+        mImageOpenStreetMap = mBindingAppBar.imgLayerOpenStreetMap
+        mImageStreetMap = mBindingAppBar.imgLayerStreetMap
+        mImageImageWithLabel = mBindingAppBar.imgLayerImage
+        mBindingAppBar.linearDisplayLayerFeature.removeAllViews()
+        mBindingAppBar.linearDisplayLayerAdministration.removeAllViews()
     }
 
     private fun setOnClickListener() {
-        findViewById<View>(R.id.layout_layer_open_street_map).setOnClickListener(this)
-        findViewById<View>(R.id.layout_layer_street_map).setOnClickListener(this)
-        findViewById<View>(R.id.layout_layer_image).setOnClickListener(this)
-        findViewById<View>(R.id.btn_layer_close).setOnClickListener(this)
-        findViewById<View>(R.id.layout_tim_su_co).setOnClickListener(this)
-        findViewById<View>(R.id.layout_tim_dia_chi).setOnClickListener(this)
-        floatBtnLayer.setOnClickListener(this)
-        floatBtnLocation.setOnClickListener(this)
+        mBindingAppBar.layoutLayerOpenStreetMap.setOnClickListener(this)
+        mBindingAppBar.layoutLayerStreetMap.setOnClickListener(this)
+        mBindingAppBar.layoutLayerImage.setOnClickListener(this)
+        mBindingAppBar.btnLayerClose.setOnClickListener(this)
+        mBindingContent.layoutTimSuCo.setOnClickListener(this)
+        mBindingContent.layoutTimDiaChi.setOnClickListener(this)
+        mBindingAppBar.floatBtnLayer.setOnClickListener(this)
+        mBindingAppBar.floatBtnLocation.setOnClickListener(this)
     }
 
     fun addFeature() {
@@ -314,9 +317,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun addGraphicsAddFeature(vararg e: MotionEvent) {
         val center: Point
-        if (e.size == 0) center = mapView!!.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center else {
-            center = mapView!!.screenToLocation(android.graphics.Point(Math.round(e[0].x), Math.round(e[0].y)))
-            mapView!!.setViewpointCenterAsync(center)
+        if (e.isEmpty()) center = mBindingContent.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center else {
+            center = mBindingContent.mapView.screenToLocation(android.graphics.Point(Math.round(e[0].x), Math.round(e[0].y)))
+            mBindingContent.mapView.setViewpointCenterAsync(center)
         }
         val symbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CROSS, Color.YELLOW, 20F)
         val graphic = Graphic(center, symbol)
@@ -337,13 +340,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             mapIntent.setPackage("com.google.android.apps.maps")
             startActivity(mapIntent)
         } else {
-            Snackbar.make(mapView!!, "Đối tượng được chọn chưa có thông tin vị trí", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(mBindingContent.mapView, "Đối tượng được chọn chưa có thông tin vị trí", Snackbar.LENGTH_SHORT).show()
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun handlingMapViewDoneLoading() {
-        mLocationDisplay = mapView!!.locationDisplay
+        mLocationDisplay = mBindingContent.mapView.locationDisplay
         mLocationDisplay!!.startAsync()
 
 //        loginWithPortal1();
@@ -359,23 +362,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 var url = dLayerInfo.url
                 if (!dLayerInfo.url.startsWith("http")) url = "http:" + dLayerInfo.url
                 if (url == null) continue
-                if (dLayerInfo.layerId.toUpperCase().contains( Constant.LAYER_ID.BASEMAP) && imageLayersHanhChinh == null) {
+                if (dLayerInfo.layerId.toUpperCase().contains(Constant.LAYER_ID.BASEMAP) && imageLayersHanhChinh == null) {
                     if (mPopUp != null) {
                         mURL_HanhChinh = "$url/${mApplication!!.appInfo!!.config.hanhChinhID}"
                         mPopUp!!.setmServiceFeatureTableHanhChinh(mURL_HanhChinh)
                     }
                     imageLayersHanhChinh = ArcGISMapImageLayer(url)
                     imageLayersHanhChinh!!.id = dLayerInfo.layerId
-                    mapView!!.map.operationalLayers.add(imageLayersHanhChinh)
+                    mBindingContent.mapView.map.operationalLayers.add(imageLayersHanhChinh)
                     val finalUrl = url
                     mURL_HanhChinh = "$url/${mApplication!!.appInfo!!.config.hanhChinhID}"
                     imageLayersHanhChinh!!.addDoneLoadingListener {
-                        for (layer in mapView.map.operationalLayers) {
+                        for (layer in mBindingContent.mapView.map.operationalLayers) {
                             val fullExtent = layer.fullExtent
                             if (fullExtent != null && fullExtent.xMin > 0 && fullExtent.yMin > 0 && fullExtent.xMax > 0
                                     && fullExtent.yMax > 0) {
                                 try {
-                                    mapView.setViewpointGeometryAsync(fullExtent, 50.0)
+                                    mBindingContent.mapView.setViewpointGeometryAsync(fullExtent, 50.0)
 
                                     break
                                 } catch (e: Exception) {
@@ -397,7 +400,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     if (dLayerInfo.definition.toLowerCase() == "null") {
                         mFeatureLayer!!.definitionExpression = Constant.DEFINITION_HIDE_COMPLETE +
                                 String.format(" and  %s = '%s'",
-                                Constant.FieldSuCo.NV_XU_LY, mApplication!!.user!!.username)
+                                        Constant.FieldSuCo.NV_XU_LY, mApplication!!.user!!.username)
                     } else mFeatureLayer!!.definitionExpression = dLayerInfo.definition
                     mFeatureLayer!!.id = dLayerInfo.layerId
                     mFeatureLayer!!.name = dLayerInfo.layerName
@@ -408,20 +411,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         mDFeatureLayer = DFeatureLayer(serviceFeatureTable, mFeatureLayer!!, dLayerInfo)
                         mApplication!!.dFeatureLayer = mDFeatureLayer
                         mDFeatureLayers!!.add(mDFeatureLayer!!)
-                        val callout = mapView!!.callout
-                        mPopUp = Popup(this@MainActivity, mapView!!, serviceFeatureTable, callout, mGeocoder)
+                        val callout = mBindingContent.mapView.callout
+                        mPopUp = Popup(this@MainActivity, mBindingContent.mapView, serviceFeatureTable, callout, mGeocoder)
                         DFeatureLayerDiemSuCo = mDFeatureLayer
-                        mapViewHandler = MapViewHandler(this, mDFeatureLayer!!, callout, mapView!!, mPopUp!!,
+                        mapViewHandler = MapViewHandler(this, mDFeatureLayer!!, callout, mBindingContent.mapView, mPopUp!!,
                                 this@MainActivity, mGeocoder!!)
                         mapViewHandler!!.setFeatureLayerDTGs(mDFeatureLayers)
                         if (mURL_HanhChinh != null) mPopUp!!.setmServiceFeatureTableHanhChinh(mURL_HanhChinh)
                     }
-                    mapView!!.map.operationalLayers.add(mFeatureLayer)
+                    mBindingContent.mapView.map.operationalLayers.add(mFeatureLayer)
                 } else if (dLayerInfo.layerId != "diemdanhgiaLYR" && imageLayersChuyenDe == null) {
                     imageLayersChuyenDe = ArcGISMapImageLayer(url.replaceFirst("FeatureServer(.*)".toRegex(), "MapServer"))
                     imageLayersChuyenDe!!.name = dLayerInfo.layerName
                     imageLayersChuyenDe!!.id = dLayerInfo.layerId
-                    mapView!!.map.operationalLayers.add(imageLayersChuyenDe)
+                    mBindingContent.mapView.map.operationalLayers.add(imageLayersChuyenDe)
                     imageLayersChuyenDe!!.addDoneLoadingListener {
                         if (imageLayersChuyenDe!!.loadStatus == LoadStatus.LOADED) {
                             val sublayerList: ListenableList<ArcGISSublayer> = imageLayersChuyenDe!!.sublayers
@@ -441,23 +444,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun addCheckBox(layer: ArcGISMapImageSublayer, states: Array<IntArray>, colors: IntArray, isHanhChinh: Boolean) {
-        @SuppressLint("InflateParams") val layoutFeature = layoutInflater.inflate(R.layout.layout_feature, null) as LinearLayout
-        val checkBox = layoutFeature.findViewById<CheckBox>(R.id.ckb_layout_feature)
-        val textView = layoutFeature.findViewById<TextView>(R.id.txt_layout_feature)
-        textView.setTextColor(resources.getColor(android.R.color.black))
-        textView.text = layer.name
-        checkBox.isChecked = false
+        @SuppressLint("InflateParams") val bindingLayoutFeature = LayoutFeatureBinding.inflate(layoutInflater)
+        bindingLayoutFeature.txtLayoutFeature.setTextColor(resources.getColor(android.R.color.black))
+        bindingLayoutFeature.txtLayoutFeature.text = layer.name
+        bindingLayoutFeature.ckbLayoutFeature.isChecked = false
         layer.isVisible = false
-        CompoundButtonCompat.setButtonTintList(checkBox, ColorStateList(states, colors))
-        checkBox.setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
+        CompoundButtonCompat.setButtonTintList(bindingLayoutFeature.ckbLayoutFeature, ColorStateList(states, colors))
+        bindingLayoutFeature.ckbLayoutFeature.setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
             if (buttonView.isChecked) {
-                if (textView.text == layer.name) layer.isVisible = true
+                if (bindingLayoutFeature.txtLayoutFeature.text == layer.name) layer.isVisible = true
             } else {
-                if (textView.text == layer.name) layer.isVisible = false
+                if (bindingLayoutFeature.txtLayoutFeature.text == layer.name) layer.isVisible = false
             }
         }
         if (!mListLayerID!!.contains(layer.name)) {
-            if (isHanhChinh) linearDisplayLayerAdministration!!.addView(layoutFeature) else linearDisplayLayerFeature!!.addView(layoutFeature)
+            if (isHanhChinh) mBindingAppBar.linearDisplayLayerAdministration.addView(bindingLayoutFeature.root)
+            else mBindingAppBar.linearDisplayLayerFeature.addView(bindingLayoutFeature.root)
             mListLayerID!!.add(layer.name)
         }
     }
@@ -591,7 +593,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setViewPointCenterLongLat(position: Point, location: String) {
         if (mPopUp == null) {
-            make(mapView, getString(R.string.message_unloaded_map), true)
+            make(mBindingContent.mapView, getString(R.string.message_unloaded_map), true)
         } else {
             val geometry = GeometryEngine.project(position, SpatialReferences.getWgs84())
             val geometry1 = GeometryEngine.project(geometry, SpatialReferences.getWebMercator())
@@ -599,46 +601,46 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val symbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CROSS, Color.RED, 20F)
             val graphic = Graphic(point, symbol)
             mGraphicsOverlay!!.graphics.add(graphic)
-            mapView!!.setViewpointCenterAsync(point, resources.getInteger(R.integer.SCALE_IMAGE_WITH_LABLES).toDouble())
+            mBindingContent.mapView.setViewpointCenterAsync(point, resources.getInteger(R.integer.SCALE_IMAGE_WITH_LABLES).toDouble())
         }
     }
 
     private fun optionSearchFeature() {
         mIsSearchingFeature = true
-        findViewById<View>(R.id.layout_tim_su_co).setBackgroundResource(R.drawable.layout_border_bottom)
-        findViewById<View>(R.id.layout_tim_dia_chi).setBackgroundResource(R.drawable.layout_shape_basemap_none)
+        mBindingContent.layoutTimSuCo.setBackgroundResource(R.drawable.layout_border_bottom)
+        mBindingContent.layoutTimDiaChi.setBackgroundResource(R.drawable.layout_shape_basemap_none)
     }
 
     private fun optionFindRoute() {
         mIsSearchingFeature = false
-        findViewById<View>(R.id.layout_tim_dia_chi).setBackgroundResource(R.drawable.layout_border_bottom)
-        findViewById<View>(R.id.layout_tim_su_co).setBackgroundResource(R.drawable.layout_shape_basemap_none)
+        mBindingContent.layoutTimDiaChi.setBackgroundResource(R.drawable.layout_border_bottom)
+        mBindingContent.layoutTimSuCo.setBackgroundResource(R.drawable.layout_shape_basemap_none)
     }
 
     private fun deleteSearching() {
         mGraphicsOverlay!!.graphics.clear()
-        llayout_main_search!!.removeAllViews()
+        mBindingContent.llayoutMainSearch.removeAllViews()
     }
 
 
     private fun visibleFloatActionButton() {
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        val navigationView = mBinding.navView
         val menuItem = navigationView.menu.findItem(R.id.nav_visible_float_button)
-        if (floatBtnLayer!!.isShown) {
-            floatBtnLayer!!.hide()
-            floatBtnLocation!!.hide()
+        if (mBindingAppBar.floatBtnLayer.isShown) {
+            mBindingAppBar.floatBtnLayer.hide()
+            mBindingAppBar.floatBtnLocation.hide()
             menuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_action_visible)
             menuItem.setTitle(R.string.nav_hien_thi_nut_chuc_nang)
         } else {
-            floatBtnLayer!!.show()
-            floatBtnLocation!!.show()
+            mBindingAppBar.floatBtnLayer.show()
+            mBindingAppBar.floatBtnLocation.show()
             menuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_action_visible_off)
             menuItem.setTitle(R.string.nav_an_nut_chuc_nang)
         }
     }
 
     override fun onBackPressed() {
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+        val drawer = mBinding.drawerLayout
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } //            super.onBackPressed();
@@ -653,7 +655,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             @RequiresApi(api = Build.VERSION_CODES.N)
             override fun onQueryTextSubmit(query: String): Boolean {
                 try {
-                    llayout_main_search!!.removeAllViews()
+                    mBindingContent.llayoutMainSearch.removeAllViews()
                     if (mIsSearchingFeature && mapViewHandler != null) {
                         mPopUp!!.callout!!.dismiss()
                         mFeatureLayer!!.clearSelection()
@@ -683,22 +685,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         queryParameters.whereClause = builder.toString()
                         QueryServiceFeatureTableGetListAsync(this@MainActivity,
                                 mApplication!!.dFeatureLayer!!.serviceFeatureTable,
-                                object: QueryServiceFeatureTableGetListAsync.AsyncResponse {
+                                object : QueryServiceFeatureTableGetListAsync.AsyncResponse {
                                     override fun processFinish(output: List<Feature>?) {
                                         if (output != null && output.isNotEmpty()) {
-                                            val views = handleFromItems(this@MainActivity, output, mApplication!!.dFeatureLayer!!.serviceFeatureTable)
-                                            for (view in views) {
-                                                val txtID = view.findViewById<TextView>(R.id.txt_id)
-                                                view.setOnClickListener {
+                                            val bindingViews = handleFromItems(this@MainActivity, output, mApplication!!.dFeatureLayer!!.serviceFeatureTable)
+                                            for (view in bindingViews) {
+                                                val txtID = view.txtId
+                                                view.root.setOnClickListener {
                                                     if (mapViewHandler != null) {
                                                         mapViewHandler!!.query(String.format(Constant.QUERY_BY_SUCOID, txtID.text.toString()))
-                                                        llayout_main_search!!.removeAllViews()
+                                                        mBindingContent.llayoutMainSearch.removeAllViews()
                                                     }
                                                 }
-                                                llayout_main_search!!.addView(view)
+                                                mBindingContent.llayoutMainSearch.addView(view.root)
                                             }
                                         } else {
-                                            Snackbar.make(mapView!!, "Không tìm thấy sự cố", Snackbar.LENGTH_LONG).show()
+                                            Snackbar.make(mBindingContent.mapView, "Không tìm thấy sự cố", Snackbar.LENGTH_LONG).show()
                                         }
                                     }
                                 }).execute(queryParameters)
@@ -707,7 +709,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         deleteSearching()
                         val findLocationAsycn = FindLocationAsycn(this@MainActivity,
                                 true,
-                                object: FindLocationAsycn.AsyncResponse {
+                                object : FindLocationAsycn.AsyncResponse {
                                     override fun processFinish(output: List<DAddress>?) {
                                         if (output != null) {
                                             if (output.size > 0) {
@@ -717,18 +719,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //                                        item.getAttributes().put(Constant.LocationField.LOCATION, address.getLocation());
 //                                        item.getAttributes().put(Constant.LocationField.LONGTITUDE, address.getLongtitude());
 //                                        item.getAttributes().put(Constant.LocationField.LATITUDE, address.getLatitude());
-                                                    val layout = this@MainActivity.layoutInflater.inflate(R.layout.item_tracuu, null) as LinearLayout
-                                                    val txtThongTinPhanAnh = layout.txt_info
-                                                    val txtDiaChi = layout.txt_location
-                                                    val txtID = layout.txt_id
-                                                    val txtNgayCapNhat = layout.txt_time
-                                                    txtID.visibility = View.GONE
-                                                    txtDiaChi.text = address.location
-                                                    txtNgayCapNhat.visibility = View.GONE
-                                                    txtThongTinPhanAnh.visibility = View.GONE
-                                                    layout.txt_objectid.visibility =  View.GONE
-                                                    layout.setOnClickListener { v: View? -> setViewPointCenterLongLat(Point(address.longtitude, address.latitude), address.location) }
-                                                    llayout_main_search!!.addView(layout)
+                                                    val layout = ItemTracuuBinding.inflate(layoutInflater)
+                                                    layout.txtId.visibility = View.GONE
+                                                    layout.txtLocation.text = address.location
+                                                    layout.txtTime.visibility = View.GONE
+                                                    layout.txtInfo.visibility = View.GONE
+                                                    layout.txtObjectid.visibility = View.GONE
+                                                    layout.root.setOnClickListener { v: View? -> setViewPointCenterLongLat(Point(address.longtitude, address.latitude), address.location) }
+                                                    mBindingContent.llayoutMainSearch.addView(layout.root)
                                                 }
 
                                                 //                                    }
@@ -745,15 +743,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                if (newText.trim { it <= ' ' }.length > 0 && !mIsSearchingFeature) {
+                if (newText.trim { it <= ' ' }.isNotEmpty() && !mIsSearchingFeature) {
                 } else {
-                    llayout_main_search!!.removeAllViews()
+                    mBindingContent.llayoutMainSearch.removeAllViews()
                     mGraphicsOverlay!!.graphics.clear()
                 }
                 return false
             }
         })
-        val mLayoutTimKiem = findViewById<LinearLayout>(R.id.layout_tim_kiem)
+        val mLayoutTimKiem = mBindingContent.layoutTimKiem
         menu.findItem(R.id.action_search).setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 visibleFloatActionButton()
@@ -815,26 +813,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             else -> {
             }
         }
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        drawer.closeDrawer(GravityCompat.START)
+        mBinding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
     fun onClickTextView(v: View) {
         when (v.id) {
-            R.id.txt_quanlysuco_hanhchinh -> if (linearDisplayLayerAdministration!!.visibility == View.VISIBLE) {
-                skbr_hanhchinh_app_bar_quan_ly_su_co!!.visibility = View.GONE
-                linearDisplayLayerAdministration!!.visibility = View.GONE
+            R.id.txt_quanlysuco_hanhchinh -> if (mBindingAppBar.linearDisplayLayerAdministration!!.visibility == View.VISIBLE) {
+                mBindingAppBar.skbrHanhchinh!!.visibility = View.GONE
+                mBindingAppBar.linearDisplayLayerAdministration!!.visibility = View.GONE
             } else {
-                skbr_hanhchinh_app_bar_quan_ly_su_co!!.visibility = View.VISIBLE
-                linearDisplayLayerAdministration!!.visibility = View.VISIBLE
+                mBindingAppBar.skbrHanhchinh!!.visibility = View.VISIBLE
+                mBindingAppBar.linearDisplayLayerAdministration!!.visibility = View.VISIBLE
             }
-            R.id.txt_quanlysuco_dulieu -> if (linearDisplayLayerFeature!!.visibility == View.VISIBLE) {
-                linearDisplayLayerFeature!!.visibility = View.GONE
-                skbr_chuyende_app_bar_quan_ly_su_co!!.visibility = View.GONE
+            R.id.txt_quanlysuco_dulieu -> if (mBindingAppBar.linearDisplayLayerFeature!!.visibility == View.VISIBLE) {
+                mBindingAppBar.linearDisplayLayerFeature!!.visibility = View.GONE
+                mBindingAppBar.skbrChuyende!!.visibility = View.GONE
             } else {
-                linearDisplayLayerFeature!!.visibility = View.VISIBLE
-                skbr_chuyende_app_bar_quan_ly_su_co!!.visibility = View.VISIBLE
+                mBindingAppBar.linearDisplayLayerFeature!!.visibility = View.VISIBLE
+                mBindingAppBar.skbrChuyende!!.visibility = View.VISIBLE
             }
         }
     }
@@ -845,8 +842,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             when (v.getId()) {
                 R.id.ckb_quanlysuco_hanhchinh -> {
                     var i = 0
-                    while (i < linearDisplayLayerAdministration!!.childCount) {
-                        val view = linearDisplayLayerAdministration!!.getChildAt(i)
+                    while (i < mBindingAppBar.linearDisplayLayerAdministration!!.childCount) {
+                        val view = mBindingAppBar.linearDisplayLayerAdministration!!.getChildAt(i)
                         if (view is LinearLayout) {
                             val layoutFeature = view
                             var j = 0
@@ -872,8 +869,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
                 R.id.ckb_quanlysuco_dulieu -> {
                     var i = 0
-                    while (i < linearDisplayLayerFeature!!.childCount) {
-                        val view = linearDisplayLayerFeature!!.getChildAt(i)
+                    while (i < mBindingAppBar.linearDisplayLayerFeature!!.childCount) {
+                        val view = mBindingAppBar.linearDisplayLayerFeature!!.getChildAt(i)
                         if (view is LinearLayout) {
                             val layoutFeature = view
                             var j = 0
@@ -886,7 +883,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                         val view2 = layoutCheckBox.getChildAt(k)
                                         if (view2 is CheckBox) {
                                             val checkBoxK = view2
-                                            if (checkBox.isChecked) checkBoxK.isChecked = true else checkBoxK.isChecked = false
+                                            checkBoxK.isChecked = checkBox.isChecked
                                         }
                                         k++
                                     }
@@ -930,27 +927,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.layout_tim_dia_chi -> optionFindRoute()
             R.id.floatBtnLayer -> {
                 v.visibility = View.INVISIBLE
-                findViewById<View>(R.id.layout_layer).visibility = View.VISIBLE
+                mBindingAppBar.layoutLayer.visibility = View.VISIBLE
             }
             R.id.layout_layer_open_street_map -> {
-                mapView!!.map.maxScale = 1128.497175
-                mapView!!.map.basemap = Basemap.createOpenStreetMap()
+                mBindingContent.mapView.map.maxScale = 1128.497175
+                mBindingContent.mapView.map.basemap = Basemap.createOpenStreetMap()
                 handlingColorBackgroundLayerSelected(R.id.layout_layer_open_street_map)
-                mapView!!.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE)
+                mBindingContent.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE)
             }
             R.id.layout_layer_street_map -> {
-                mapView!!.map.maxScale = 1128.497176
-                mapView!!.map.basemap = Basemap.createStreets()
+                mBindingContent.mapView.map.maxScale = 1128.497176
+                mBindingContent.mapView.map.basemap = Basemap.createStreets()
                 handlingColorBackgroundLayerSelected(R.id.layout_layer_street_map)
             }
             R.id.layout_layer_image -> {
-                mapView!!.map.maxScale = resources.getInteger(R.integer.MAX_SCALE_IMAGE_WITH_LABLES).toDouble()
-                mapView!!.map.basemap = Basemap.createImageryWithLabels()
+                mBindingContent.mapView.map.maxScale = resources.getInteger(R.integer.MAX_SCALE_IMAGE_WITH_LABLES).toDouble()
+                mBindingContent.mapView.map.basemap = Basemap.createImageryWithLabels()
                 handlingColorBackgroundLayerSelected(R.id.layout_layer_image)
             }
             R.id.btn_layer_close -> {
-                findViewById<View>(R.id.layout_layer).visibility = View.INVISIBLE
-                findViewById<View>(R.id.floatBtnLayer).visibility = View.VISIBLE
+                mBindingAppBar.layoutLayer.visibility = View.INVISIBLE
+                mBindingAppBar.floatBtnLayer.visibility = View.VISIBLE
             }
             R.id.floatBtnLocation -> handlingLocation()
             R.id.imgBtn_timkiemdiachi_themdiemsuco -> {
@@ -1081,9 +1078,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         }
                     }
                 } else if (resultCode == Activity.RESULT_CANCELED) {
-                    make(mapView, "Hủy chụp ảnh", false)
+                    make(mBindingContent.mapView, "Hủy chụp ảnh", false)
                 } else {
-                    make(mapView, "Lỗi khi chụp ảnh", false)
+                    make(mBindingContent.mapView, "Lỗi khi chụp ảnh", false)
                 }
                 else -> {
                 }

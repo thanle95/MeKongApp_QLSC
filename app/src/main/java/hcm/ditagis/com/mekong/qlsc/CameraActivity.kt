@@ -11,14 +11,15 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import hcm.ditagis.com.mekong.qlsc.databinding.ActivityCameraBinding
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import hcm.ditagis.com.mekong.qlsc.utities.Constant
 import hcm.ditagis.com.mekong.qlsc.utities.DAlertDialog
 import hcm.ditagis.com.mekong.qlsc.utities.DBitmap
-import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.IOException
 
 class CameraActivity : AppCompatActivity(), SurfaceHolder.Callback {
+    private lateinit var mBinding: ActivityCameraBinding
     private var mCamera: Camera? = null
     private var mPictureCallback: Camera.PictureCallback? = null
     private var mParameters: Camera.Parameters? = null
@@ -31,8 +32,10 @@ class CameraActivity : AppCompatActivity(), SurfaceHolder.Callback {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        setContentView(R.layout.activity_camera)
-        mSurfaceHolder = this@CameraActivity.surfaceView_fragment_camera!!.holder
+        mBinding = ActivityCameraBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
+
+        mSurfaceHolder = mBinding.surfaceViewFragmentCamera.holder
         mSurfaceHolder!!.addCallback(this)
         mApplication = application as DApplication
         val DEBUG_TAG = "orientationp-----"
@@ -134,7 +137,7 @@ class CameraActivity : AppCompatActivity(), SurfaceHolder.Callback {
     private fun turnOnOffFlashCamera() {
         //auto
         if (mCamera!!.parameters.flashMode == Camera.Parameters.FLASH_MODE_OFF) {
-            camera_flash!!.setImageResource(R.drawable.ic_flash_auto)
+            mBinding.cameraFlash.setImageResource(R.drawable.ic_flash_auto)
             mCamera = Camera.open()
             getParameters()
             mParameters!!.flashMode = Camera.Parameters.FLASH_MODE_AUTO
@@ -142,7 +145,7 @@ class CameraActivity : AppCompatActivity(), SurfaceHolder.Callback {
             mCamera!!.setPreviewDisplay(mSurfaceHolder)
             mCamera!!.startPreview()
         } else if (mCamera!!.parameters.flashMode == Camera.Parameters.FLASH_MODE_AUTO) {
-            camera_flash!!.setImageResource(R.drawable.ic_flash_on)
+            mBinding.cameraFlash.setImageResource(R.drawable.ic_flash_on)
             mCamera = Camera.open()
             getParameters()
             mParameters!!.flashMode = Camera.Parameters.FLASH_MODE_TORCH
@@ -150,7 +153,7 @@ class CameraActivity : AppCompatActivity(), SurfaceHolder.Callback {
             mCamera!!.setPreviewDisplay(mSurfaceHolder)
             mCamera!!.startPreview()
         } else if (mCamera!!.parameters.flashMode == Camera.Parameters.FLASH_MODE_TORCH) {
-            camera_flash!!.setImageResource(R.drawable.ic_flash_off)
+            mBinding.cameraFlash.setImageResource(R.drawable.ic_flash_off)
             mCamera = Camera.open()
             getParameters()
             mParameters!!.flashMode = Camera.Parameters.FLASH_MODE_OFF

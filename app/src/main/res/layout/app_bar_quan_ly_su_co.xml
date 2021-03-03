@@ -25,7 +25,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
-
+        android:id="@+id/content"
         layout="@layout/content_quan_ly_su_co" />
 
     <LinearLayout
@@ -199,7 +199,7 @@
                 </LinearLayout>
 
                 <SeekBar
-                    android:id="@+id/skbr_hanhchinh_app_bar_quan_ly_su_co"
+                    android:id="@+id/skbr_hanhchinh"
                     style="@style/MySeekBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -247,7 +247,7 @@
                 </LinearLayout>
 
                 <SeekBar
-                    android:id="@+id/skbr_chuyende_app_bar_quan_ly_su_co"
+                    android:id="@+id/skbr_chuyende"
                     style="@style/MySeekBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
