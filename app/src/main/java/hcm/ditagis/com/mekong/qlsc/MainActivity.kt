@@ -101,8 +101,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var mFeatureLayer: FeatureLayer? = null
     private var mURL_HanhChinh: String? = null
     private lateinit var mBinding: ActivityQuanLySuCoBinding
-    private lateinit var mBindingAppBar: AppBarQuanLySuCoBinding
-    private lateinit var mBindingContent: ContentQuanLySuCoBinding
     fun setChangingGeometry(changingGeometry: Boolean) {
         isChangingGeometry = changingGeometry
     }
@@ -112,8 +110,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityQuanLySuCoBinding.inflate(layoutInflater)
-        mBindingAppBar = AppBarQuanLySuCoBinding.inflate(layoutInflater)
-        mBindingContent = ContentQuanLySuCoBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         mListLayerID = ArrayList()
         mApplication = application as DApplication
@@ -185,10 +181,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf())
         colors = intArrayOf(R.color.colorTextColor_1, R.color.colorTextColor_1)
 
-        mBindingAppBar.layoutLayer.visibility = View.INVISIBLE
+       mBinding.appBar.layoutLayer.visibility = View.INVISIBLE
         setLicense()
         mGeocoder = Geocoder(this.applicationContext, Locale.getDefault())
-        setSupportActionBar(mBindingAppBar.toolbar)
+        setSupportActionBar(mBinding.appBar.toolbar)
 
 
         //for camera begin
@@ -196,13 +192,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         StrictMode.setVmPolicy(builder.build())
         //for camera end
         //đưa listview search ra phía sau
-        mBindingContent.llayoutMainSearch.invalidate()
+        mBinding.appBar.content.llayoutMainSearch.invalidate()
         val toggle = ActionBarDrawerToggle(this@MainActivity,
-                mBinding.drawerLayout, mBindingAppBar.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+                mBinding.drawerLayout, mBinding.appBar.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         mBinding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         mapViewEvent()
-        mBindingAppBar.skbrHanhchinh.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+        mBinding.appBar.skbrHanhchinh.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 imageLayersHanhChinh!!.opacity = i.toFloat() / 100
             }
@@ -210,7 +206,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
-        mBindingAppBar.skbrChuyende.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+        mBinding.appBar.skbrChuyende.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 imageLayersChuyenDe!!.opacity = i.toFloat() / 100
             }
@@ -225,9 +221,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun mapViewEvent() {
-        mBindingContent.mapView.map = ArcGISMap(Basemap.Type.OPEN_STREET_MAP, 10.23851, 105.94032, 12)
-        mBindingContent.mapView.map.addDoneLoadingListener { handlingMapViewDoneLoading() }
-        mBindingContent.mapView.onTouchListener = object : DefaultMapViewOnTouchListener(this, mBindingContent.mapView) {
+        mBinding.appBar.content.mapView.map = ArcGISMap(Basemap.Type.OPEN_STREET_MAP, 10.23851, 105.94032, 12)
+        mBinding.appBar.content.mapView.map.addDoneLoadingListener { handlingMapViewDoneLoading() }
+        mBinding.appBar.content.mapView.onTouchListener = object : DefaultMapViewOnTouchListener(this, mBinding.appBar.content.mapView) {
             override fun onLongPress(e: MotionEvent) {
                 addGraphicsAddFeature(e)
                 super.onLongPress(e)
@@ -248,7 +244,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     val location = mapViewHandler!!.onScroll()
                     val log = (location!![0] * 100000).roundToInt().toFloat() / 100000
                     val lat = (location[1] * 100000).roundToInt().toFloat() / 100000
-                    mBindingContent.txtToado.text = "$lat, $log"
+                    mBinding.appBar.content.txtToado.text = "$lat, $log"
                 }
                 mGraphicsOverlay!!.graphics.clear()
                 return super.onScroll(e1, e2, distanceX, distanceY)
@@ -256,7 +252,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
         mGraphicsOverlay = GraphicsOverlay()
-        mBindingContent.mapView.graphicsOverlays.add(mGraphicsOverlay)
+        mBinding.appBar.content.mapView.graphicsOverlays.add(mGraphicsOverlay)
     }
 
     private fun setLoginInfos() {
@@ -276,25 +272,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun findViewById() {
-        mTxtOpenStreetMap = mBindingAppBar.txtLayerOpenStreetMap
-        mTxtStreetMap = mBindingAppBar.txtLayerStreetMap
-        mTxtImageWithLabel = mBindingAppBar.txtLayerImage
-        mImageOpenStreetMap = mBindingAppBar.imgLayerOpenStreetMap
-        mImageStreetMap = mBindingAppBar.imgLayerStreetMap
-        mImageImageWithLabel = mBindingAppBar.imgLayerImage
-        mBindingAppBar.linearDisplayLayerFeature.removeAllViews()
-        mBindingAppBar.linearDisplayLayerAdministration.removeAllViews()
+        mTxtOpenStreetMap = mBinding.appBar.txtLayerOpenStreetMap
+        mTxtStreetMap = mBinding.appBar.txtLayerStreetMap
+        mTxtImageWithLabel = mBinding.appBar.txtLayerImage
+        mImageOpenStreetMap = mBinding.appBar.imgLayerOpenStreetMap
+        mImageStreetMap = mBinding.appBar.imgLayerStreetMap
+        mImageImageWithLabel = mBinding.appBar.imgLayerImage
+        mBinding.appBar.linearDisplayLayerFeature.removeAllViews()
+        mBinding.appBar.linearDisplayLayerAdministration.removeAllViews()
     }
 
     private fun setOnClickListener() {
-        mBindingAppBar.layoutLayerOpenStreetMap.setOnClickListener(this)
-        mBindingAppBar.layoutLayerStreetMap.setOnClickListener(this)
-        mBindingAppBar.layoutLayerImage.setOnClickListener(this)
-        mBindingAppBar.btnLayerClose.setOnClickListener(this)
-        mBindingContent.layoutTimSuCo.setOnClickListener(this)
-        mBindingContent.layoutTimDiaChi.setOnClickListener(this)
-        mBindingAppBar.floatBtnLayer.setOnClickListener(this)
-        mBindingAppBar.floatBtnLocation.setOnClickListener(this)
+        mBinding.appBar.layoutLayerOpenStreetMap.setOnClickListener(this)
+        mBinding.appBar.layoutLayerStreetMap.setOnClickListener(this)
+        mBinding.appBar.layoutLayerImage.setOnClickListener(this)
+        mBinding.appBar.btnLayerClose.setOnClickListener(this)
+        mBinding.appBar.content.layoutTimSuCo.setOnClickListener(this)
+        mBinding.appBar.content.layoutTimDiaChi.setOnClickListener(this)
+        mBinding.appBar.floatBtnLayer.setOnClickListener(this)
+        mBinding.appBar.floatBtnLocation.setOnClickListener(this)
     }
 
     fun addFeature() {
@@ -317,9 +313,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun addGraphicsAddFeature(vararg e: MotionEvent) {
         val center: Point
-        if (e.isEmpty()) center = mBindingContent.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center else {
-            center = mBindingContent.mapView.screenToLocation(android.graphics.Point(Math.round(e[0].x), Math.round(e[0].y)))
-            mBindingContent.mapView.setViewpointCenterAsync(center)
+        if (e.isEmpty()) center = mBinding.appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center else {
+            center = mBinding.appBar.content.mapView.screenToLocation(android.graphics.Point(Math.round(e[0].x), Math.round(e[0].y)))
+            mBinding.appBar.content.mapView.setViewpointCenterAsync(center)
         }
         val symbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CROSS, Color.YELLOW, 20F)
         val graphic = Graphic(center, symbol)
@@ -340,13 +336,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             mapIntent.setPackage("com.google.android.apps.maps")
             startActivity(mapIntent)
         } else {
-            Snackbar.make(mBindingContent.mapView, "Đối tượng được chọn chưa có thông tin vị trí", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(mBinding.appBar.content.mapView, "Đối tượng được chọn chưa có thông tin vị trí", Snackbar.LENGTH_SHORT).show()
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun handlingMapViewDoneLoading() {
-        mLocationDisplay = mBindingContent.mapView.locationDisplay
+        mLocationDisplay = mBinding.appBar.content.mapView.locationDisplay
         mLocationDisplay!!.startAsync()
 
 //        loginWithPortal1();
@@ -369,16 +365,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                     imageLayersHanhChinh = ArcGISMapImageLayer(url)
                     imageLayersHanhChinh!!.id = dLayerInfo.layerId
-                    mBindingContent.mapView.map.operationalLayers.add(imageLayersHanhChinh)
+                    mBinding.appBar.content.mapView.map.operationalLayers.add(imageLayersHanhChinh)
                     val finalUrl = url
                     mURL_HanhChinh = "$url/${mApplication!!.appInfo!!.config.hanhChinhID}"
                     imageLayersHanhChinh!!.addDoneLoadingListener {
-                        for (layer in mBindingContent.mapView.map.operationalLayers) {
+                        for (layer in mBinding.appBar.content.mapView.map.operationalLayers) {
                             val fullExtent = layer.fullExtent
                             if (fullExtent != null && fullExtent.xMin > 0 && fullExtent.yMin > 0 && fullExtent.xMax > 0
                                     && fullExtent.yMax > 0) {
                                 try {
-                                    mBindingContent.mapView.setViewpointGeometryAsync(fullExtent, 50.0)
+                                    mBinding.appBar.content.mapView.setViewpointGeometryAsync(fullExtent, 50.0)
 
                                     break
                                 } catch (e: Exception) {
@@ -411,20 +407,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         mDFeatureLayer = DFeatureLayer(serviceFeatureTable, mFeatureLayer!!, dLayerInfo)
                         mApplication!!.dFeatureLayer = mDFeatureLayer
                         mDFeatureLayers!!.add(mDFeatureLayer!!)
-                        val callout = mBindingContent.mapView.callout
-                        mPopUp = Popup(this@MainActivity, mBindingContent.mapView, serviceFeatureTable, callout, mGeocoder)
+                        val callout = mBinding.appBar.content.mapView.callout
+                        mPopUp = Popup(this@MainActivity, mBinding.appBar.content.mapView, serviceFeatureTable, callout, mGeocoder)
                         DFeatureLayerDiemSuCo = mDFeatureLayer
-                        mapViewHandler = MapViewHandler(this, mDFeatureLayer!!, callout, mBindingContent.mapView, mPopUp!!,
+                        mapViewHandler = MapViewHandler(this, mDFeatureLayer!!, callout, mBinding.appBar.content.mapView, mPopUp!!,
                                 this@MainActivity, mGeocoder!!)
                         mapViewHandler!!.setFeatureLayerDTGs(mDFeatureLayers)
                         if (mURL_HanhChinh != null) mPopUp!!.setmServiceFeatureTableHanhChinh(mURL_HanhChinh)
                     }
-                    mBindingContent.mapView.map.operationalLayers.add(mFeatureLayer)
+                    mBinding.appBar.content.mapView.map.operationalLayers.add(mFeatureLayer)
                 } else if (dLayerInfo.layerId != "diemdanhgiaLYR" && imageLayersChuyenDe == null) {
                     imageLayersChuyenDe = ArcGISMapImageLayer(url.replaceFirst("FeatureServer(.*)".toRegex(), "MapServer"))
                     imageLayersChuyenDe!!.name = dLayerInfo.layerName
                     imageLayersChuyenDe!!.id = dLayerInfo.layerId
-                    mBindingContent.mapView.map.operationalLayers.add(imageLayersChuyenDe)
+                    mBinding.appBar.content.mapView.map.operationalLayers.add(imageLayersChuyenDe)
                     imageLayersChuyenDe!!.addDoneLoadingListener {
                         if (imageLayersChuyenDe!!.loadStatus == LoadStatus.LOADED) {
                             val sublayerList: ListenableList<ArcGISSublayer> = imageLayersChuyenDe!!.sublayers
@@ -458,8 +454,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
         if (!mListLayerID!!.contains(layer.name)) {
-            if (isHanhChinh) mBindingAppBar.linearDisplayLayerAdministration.addView(bindingLayoutFeature.root)
-            else mBindingAppBar.linearDisplayLayerFeature.addView(bindingLayoutFeature.root)
+            if (isHanhChinh) mBinding.appBar.linearDisplayLayerAdministration.addView(bindingLayoutFeature.root)
+            else mBinding.appBar.linearDisplayLayerFeature.addView(bindingLayoutFeature.root)
             mListLayerID!!.add(layer.name)
         }
     }
@@ -593,7 +589,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setViewPointCenterLongLat(position: Point, location: String) {
         if (mPopUp == null) {
-            make(mBindingContent.mapView, getString(R.string.message_unloaded_map), true)
+            make(mBinding.appBar.content.mapView, getString(R.string.message_unloaded_map), true)
         } else {
             val geometry = GeometryEngine.project(position, SpatialReferences.getWgs84())
             val geometry1 = GeometryEngine.project(geometry, SpatialReferences.getWebMercator())
@@ -601,39 +597,39 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val symbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CROSS, Color.RED, 20F)
             val graphic = Graphic(point, symbol)
             mGraphicsOverlay!!.graphics.add(graphic)
-            mBindingContent.mapView.setViewpointCenterAsync(point, resources.getInteger(R.integer.SCALE_IMAGE_WITH_LABLES).toDouble())
+            mBinding.appBar.content.mapView.setViewpointCenterAsync(point, resources.getInteger(R.integer.SCALE_IMAGE_WITH_LABLES).toDouble())
         }
     }
 
     private fun optionSearchFeature() {
         mIsSearchingFeature = true
-        mBindingContent.layoutTimSuCo.setBackgroundResource(R.drawable.layout_border_bottom)
-        mBindingContent.layoutTimDiaChi.setBackgroundResource(R.drawable.layout_shape_basemap_none)
+        mBinding.appBar.content.layoutTimSuCo.setBackgroundResource(R.drawable.layout_border_bottom)
+        mBinding.appBar.content.layoutTimDiaChi.setBackgroundResource(R.drawable.layout_shape_basemap_none)
     }
 
     private fun optionFindRoute() {
         mIsSearchingFeature = false
-        mBindingContent.layoutTimDiaChi.setBackgroundResource(R.drawable.layout_border_bottom)
-        mBindingContent.layoutTimSuCo.setBackgroundResource(R.drawable.layout_shape_basemap_none)
+        mBinding.appBar.content.layoutTimDiaChi.setBackgroundResource(R.drawable.layout_border_bottom)
+        mBinding.appBar.content.layoutTimSuCo.setBackgroundResource(R.drawable.layout_shape_basemap_none)
     }
 
     private fun deleteSearching() {
         mGraphicsOverlay!!.graphics.clear()
-        mBindingContent.llayoutMainSearch.removeAllViews()
+        mBinding.appBar.content.llayoutMainSearch.removeAllViews()
     }
 
 
     private fun visibleFloatActionButton() {
         val navigationView = mBinding.navView
         val menuItem = navigationView.menu.findItem(R.id.nav_visible_float_button)
-        if (mBindingAppBar.floatBtnLayer.isShown) {
-            mBindingAppBar.floatBtnLayer.hide()
-            mBindingAppBar.floatBtnLocation.hide()
+        if (mBinding.appBar.floatBtnLayer.isShown) {
+            mBinding.appBar.floatBtnLayer.hide()
+            mBinding.appBar.floatBtnLocation.hide()
             menuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_action_visible)
             menuItem.setTitle(R.string.nav_hien_thi_nut_chuc_nang)
         } else {
-            mBindingAppBar.floatBtnLayer.show()
-            mBindingAppBar.floatBtnLocation.show()
+            mBinding.appBar.floatBtnLayer.show()
+            mBinding.appBar.floatBtnLocation.show()
             menuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_action_visible_off)
             menuItem.setTitle(R.string.nav_an_nut_chuc_nang)
         }
@@ -655,7 +651,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             @RequiresApi(api = Build.VERSION_CODES.N)
             override fun onQueryTextSubmit(query: String): Boolean {
                 try {
-                    mBindingContent.llayoutMainSearch.removeAllViews()
+                    mBinding.appBar.content.llayoutMainSearch.removeAllViews()
                     if (mIsSearchingFeature && mapViewHandler != null) {
                         mPopUp!!.callout!!.dismiss()
                         mFeatureLayer!!.clearSelection()
@@ -694,13 +690,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                                 view.root.setOnClickListener {
                                                     if (mapViewHandler != null) {
                                                         mapViewHandler!!.query(String.format(Constant.QUERY_BY_SUCOID, txtID.text.toString()))
-                                                        mBindingContent.llayoutMainSearch.removeAllViews()
+                                                        mBinding.appBar.content.llayoutMainSearch.removeAllViews()
                                                     }
                                                 }
-                                                mBindingContent.llayoutMainSearch.addView(view.root)
+                                                mBinding.appBar.content.llayoutMainSearch.addView(view.root)
                                             }
                                         } else {
-                                            Snackbar.make(mBindingContent.mapView, "Không tìm thấy sự cố", Snackbar.LENGTH_LONG).show()
+                                            Snackbar.make(mBinding.appBar.content.mapView, "Không tìm thấy sự cố", Snackbar.LENGTH_LONG).show()
                                         }
                                     }
                                 }).execute(queryParameters)
@@ -726,7 +722,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                                     layout.txtInfo.visibility = View.GONE
                                                     layout.txtObjectid.visibility = View.GONE
                                                     layout.root.setOnClickListener { v: View? -> setViewPointCenterLongLat(Point(address.longtitude, address.latitude), address.location) }
-                                                    mBindingContent.llayoutMainSearch.addView(layout.root)
+                                                    mBinding.appBar.content.llayoutMainSearch.addView(layout.root)
                                                 }
 
                                                 //                                    }
@@ -745,13 +741,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.trim { it <= ' ' }.isNotEmpty() && !mIsSearchingFeature) {
                 } else {
-                    mBindingContent.llayoutMainSearch.removeAllViews()
+                    mBinding.appBar.content.llayoutMainSearch.removeAllViews()
                     mGraphicsOverlay!!.graphics.clear()
                 }
                 return false
             }
         })
-        val mLayoutTimKiem = mBindingContent.layoutTimKiem
+        val mLayoutTimKiem = mBinding.appBar.content.layoutTimKiem
         menu.findItem(R.id.action_search).setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 visibleFloatActionButton()
@@ -819,19 +815,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun onClickTextView(v: View) {
         when (v.id) {
-            R.id.txt_quanlysuco_hanhchinh -> if (mBindingAppBar.linearDisplayLayerAdministration!!.visibility == View.VISIBLE) {
-                mBindingAppBar.skbrHanhchinh!!.visibility = View.GONE
-                mBindingAppBar.linearDisplayLayerAdministration!!.visibility = View.GONE
+            R.id.txt_quanlysuco_hanhchinh -> if (mBinding.appBar.linearDisplayLayerAdministration!!.visibility == View.VISIBLE) {
+                mBinding.appBar.skbrHanhchinh!!.visibility = View.GONE
+                mBinding.appBar.linearDisplayLayerAdministration!!.visibility = View.GONE
             } else {
-                mBindingAppBar.skbrHanhchinh!!.visibility = View.VISIBLE
-                mBindingAppBar.linearDisplayLayerAdministration!!.visibility = View.VISIBLE
+                mBinding.appBar.skbrHanhchinh!!.visibility = View.VISIBLE
+                mBinding.appBar.linearDisplayLayerAdministration!!.visibility = View.VISIBLE
             }
-            R.id.txt_quanlysuco_dulieu -> if (mBindingAppBar.linearDisplayLayerFeature!!.visibility == View.VISIBLE) {
-                mBindingAppBar.linearDisplayLayerFeature!!.visibility = View.GONE
-                mBindingAppBar.skbrChuyende!!.visibility = View.GONE
+            R.id.txt_quanlysuco_dulieu -> if (mBinding.appBar.linearDisplayLayerFeature!!.visibility == View.VISIBLE) {
+                mBinding.appBar.linearDisplayLayerFeature!!.visibility = View.GONE
+                mBinding.appBar.skbrChuyende!!.visibility = View.GONE
             } else {
-                mBindingAppBar.linearDisplayLayerFeature!!.visibility = View.VISIBLE
-                mBindingAppBar.skbrChuyende!!.visibility = View.VISIBLE
+                mBinding.appBar.linearDisplayLayerFeature!!.visibility = View.VISIBLE
+                mBinding.appBar.skbrChuyende!!.visibility = View.VISIBLE
             }
         }
     }
@@ -842,8 +838,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             when (v.getId()) {
                 R.id.ckb_quanlysuco_hanhchinh -> {
                     var i = 0
-                    while (i < mBindingAppBar.linearDisplayLayerAdministration!!.childCount) {
-                        val view = mBindingAppBar.linearDisplayLayerAdministration!!.getChildAt(i)
+                    while (i < mBinding.appBar.linearDisplayLayerAdministration!!.childCount) {
+                        val view = mBinding.appBar.linearDisplayLayerAdministration!!.getChildAt(i)
                         if (view is LinearLayout) {
                             val layoutFeature = view
                             var j = 0
@@ -869,8 +865,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
                 R.id.ckb_quanlysuco_dulieu -> {
                     var i = 0
-                    while (i < mBindingAppBar.linearDisplayLayerFeature!!.childCount) {
-                        val view = mBindingAppBar.linearDisplayLayerFeature!!.getChildAt(i)
+                    while (i < mBinding.appBar.linearDisplayLayerFeature!!.childCount) {
+                        val view = mBinding.appBar.linearDisplayLayerFeature!!.getChildAt(i)
                         if (view is LinearLayout) {
                             val layoutFeature = view
                             var j = 0
@@ -927,27 +923,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.layout_tim_dia_chi -> optionFindRoute()
             R.id.floatBtnLayer -> {
                 v.visibility = View.INVISIBLE
-                mBindingAppBar.layoutLayer.visibility = View.VISIBLE
+                mBinding.appBar.layoutLayer.visibility = View.VISIBLE
             }
             R.id.layout_layer_open_street_map -> {
-                mBindingContent.mapView.map.maxScale = 1128.497175
-                mBindingContent.mapView.map.basemap = Basemap.createOpenStreetMap()
+                mBinding.appBar.content.mapView.map.maxScale = 1128.497175
+                mBinding.appBar.content.mapView.map.basemap = Basemap.createOpenStreetMap()
                 handlingColorBackgroundLayerSelected(R.id.layout_layer_open_street_map)
-                mBindingContent.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE)
+                mBinding.appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE)
             }
             R.id.layout_layer_street_map -> {
-                mBindingContent.mapView.map.maxScale = 1128.497176
-                mBindingContent.mapView.map.basemap = Basemap.createStreets()
+                mBinding.appBar.content.mapView.map.maxScale = 1128.497176
+                mBinding.appBar.content.mapView.map.basemap = Basemap.createStreets()
                 handlingColorBackgroundLayerSelected(R.id.layout_layer_street_map)
             }
             R.id.layout_layer_image -> {
-                mBindingContent.mapView.map.maxScale = resources.getInteger(R.integer.MAX_SCALE_IMAGE_WITH_LABLES).toDouble()
-                mBindingContent.mapView.map.basemap = Basemap.createImageryWithLabels()
+                mBinding.appBar.content.mapView.map.maxScale = resources.getInteger(R.integer.MAX_SCALE_IMAGE_WITH_LABLES).toDouble()
+                mBinding.appBar.content.mapView.map.basemap = Basemap.createImageryWithLabels()
                 handlingColorBackgroundLayerSelected(R.id.layout_layer_image)
             }
             R.id.btn_layer_close -> {
-                mBindingAppBar.layoutLayer.visibility = View.INVISIBLE
-                mBindingAppBar.floatBtnLayer.visibility = View.VISIBLE
+                mBinding.appBar.layoutLayer.visibility = View.INVISIBLE
+                mBinding.appBar.floatBtnLayer.visibility = View.VISIBLE
             }
             R.id.floatBtnLocation -> handlingLocation()
             R.id.imgBtn_timkiemdiachi_themdiemsuco -> {
@@ -1078,9 +1074,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         }
                     }
                 } else if (resultCode == Activity.RESULT_CANCELED) {
-                    make(mBindingContent.mapView, "Hủy chụp ảnh", false)
+                    make(mBinding.appBar.content.mapView, "Hủy chụp ảnh", false)
                 } else {
-                    make(mBindingContent.mapView, "Lỗi khi chụp ảnh", false)
+                    make(mBinding.appBar.content.mapView, "Lỗi khi chụp ảnh", false)
                 }
                 else -> {
                 }

@@ -12,6 +12,7 @@ import com.esri.arcgisruntime.data.FeatureQueryResult
 import com.esri.arcgisruntime.data.QueryParameters
 import com.esri.arcgisruntime.data.ServiceFeatureTable
 import hcm.ditagis.com.mekong.qlsc.R
+import hcm.ditagis.com.mekong.qlsc.databinding.LayoutProgressDialogBinding
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import java.util.*
 import java.util.concurrent.ExecutionException
@@ -35,14 +36,12 @@ open class QueryServiceFeatureTableGetListAsync constructor(private val mActivit
 
     override fun onPreExecute() {
         super.onPreExecute()
-        val layout: LinearLayout = mActivity.getLayoutInflater().inflate(R.layout.layout_progress_dialog, null) as LinearLayout
-        val txtTitle: TextView = layout.findViewById(R.id.txt_progress_dialog_title)
-        val txtMessage: TextView = layout.findViewById(R.id.txt_progress_dialog_message)
-        txtTitle.setText(mActivity.getApplicationContext().getString(R.string.message_list_task_title))
-        txtMessage.setText(mActivity.getApplicationContext().getString(R.string.message_list_task_message))
+        val bindingLayout = LayoutProgressDialogBinding.inflate(mActivity.layoutInflater)
+        bindingLayout.txtProgressDialogTitle.setText(mActivity.getApplicationContext().getString(R.string.message_list_task_title))
+        bindingLayout.txtProgressDialogMessage.setText(mActivity.getApplicationContext().getString(R.string.message_list_task_message))
         val builder: AlertDialog.Builder = AlertDialog.Builder(mActivity)
         builder.setCancelable(false)
-        builder.setView(layout)
+        builder.setView(bindingLayout.root)
         mDialog = builder.create()
         mDialog!!.show()
         //        Window window = mDialog.getWindow();

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import hcm.ditagis.com.mekong.qlsc.R
+import hcm.ditagis.com.mekong.qlsc.databinding.ItemAddAttachmentBinding
 import hcm.ditagis.com.mekong.qlsc.entities.DAttachment
 
 
@@ -31,29 +32,31 @@ class AttachmentAdapter(private val mContext: Context, private var items: Mutabl
 
     @SuppressLint("ResourceAsColor")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var tmpView = convertView
-        if (tmpView == null) {
+        val holder: DHolder
+        if (convertView == null) {
             val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            tmpView = inflater.inflate(R.layout.item_add_attachment, null)
+            holder = DHolder(ItemAddAttachmentBinding.inflate(inflater))
+            holder.view.tag = holder
         }
-        if (tmpView != null) {
+        else{
+            holder = convertView.tag as DHolder
+        }
             val item = items[position]
-            if (item.image != null)
-                {
-                    tmpView.img_add_attachment.visibility = View.INVISIBLE
-                    val background = BitmapDrawable(mContext.resources, item.image)
-                    tmpView.layout_add_attachment.background = background
-                } else {
-                tmpView.img_add_attachment.visibility = View.VISIBLE
-                tmpView.layout_add_attachment.background = mContext.getDrawable(R.drawable.layout_border_dashed)
+            if (item.image != null) {
+                holder.binding.imgAddAttachment.visibility = View.INVISIBLE
+                val background = BitmapDrawable(mContext.resources, item.image)
+                holder.binding.layoutAddAttachment.background = background
+            } else {
+                holder.binding.imgAddAttachment.visibility = View.VISIBLE
+                holder.binding.layoutAddAttachment.background = mContext.getDrawable(R.drawable.layout_border_dashed)
             }
-            tmpView.txt_add_attachment__title.text = item.title
-            return tmpView
-        } else {
-                    val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                    return inflater.inflate(R.layout.item_add_attachment, null)
-                }
+            holder.binding.txtAddAttachmentTitle.text = item.title
+            return holder.view
 
     }
 
+    private class DHolder( var binding: ItemAddAttachmentBinding) {
+        var view: View = binding.root
+    }
 }
+

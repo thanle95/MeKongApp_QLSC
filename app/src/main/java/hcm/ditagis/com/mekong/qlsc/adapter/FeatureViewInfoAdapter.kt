@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.TextView
-import hcm.ditagis.com.mekong.qlsc.R
+import hcm.ditagis.com.mekong.qlsc.databinding.ItemViewinfoBinding
 
 /**
  * Created by ThanLe on 04/10/2017.
@@ -31,18 +30,21 @@ class FeatureViewInfoAdapter(private val mContext: Context, private val items: M
 
     @SuppressLint("InflateParams")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var convertView = convertView
+        val holder: DHolder
         if (convertView == null) {
             val inflater = (mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-            convertView = inflater.inflate(R.layout.item_viewinfo, null)
+            holder = DHolder(ItemViewinfoBinding.inflate(inflater))
+            holder.view.tag = holder
+        }
+        else{
+            holder = convertView.tag as DHolder
         }
         val item = items[position]
-        val txtAlias = convertView!!.findViewById<TextView>(R.id.txt_viewinfo_alias)
-        txtAlias.setText(item.alias)
-        val txtValue = convertView.findViewById<TextView>(R.id.txt_viewinfo_value)
+        holder.binding.txtViewinfoAlias.text = item.alias
+        val txtValue = holder.binding.txtViewinfoValue
         txtValue.text = item.value
         if (item.value == null) txtValue.visibility = View.GONE else txtValue.visibility = View.VISIBLE
-        return convertView
+        return holder.view
     }
 
     class Item {
@@ -53,4 +55,7 @@ class FeatureViewInfoAdapter(private val mContext: Context, private val items: M
 
     }
 
+    private class DHolder(var binding: ItemViewinfoBinding){
+        var view: View = binding.root
+    }
 }

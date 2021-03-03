@@ -10,7 +10,8 @@ import android.widget.LinearLayout
 import com.esri.arcgisruntime.data.ArcGISFeature
 import com.esri.arcgisruntime.data.Attachment
 import hcm.ditagis.com.mekong.qlsc.R
-import kotlinx.android.synthetic.main.layout_progress_dialog.view.*
+import hcm.ditagis.com.mekong.qlsc.databinding.LayoutProgressDialogBinding
+
 /**
  * Created by ThanLe on 4/16/2018.
  */
@@ -33,9 +34,9 @@ class FetchAttachmentAsync(@field:SuppressLint("StaticFieldLeak") private val mA
 
 
         mDialog = BottomSheetDialog(this.mActivity)
-        val view = mActivity.layoutInflater.inflate(R.layout.layout_progress_dialog, null, false) as LinearLayout
-        view.txt_progress_dialog_title.text = mTitle
-        mDialog!!.setContentView(view)
+        val bindingView = LayoutProgressDialogBinding.inflate(mActivity.layoutInflater)
+        bindingView.txtProgressDialogTitle.text = mTitle
+        mDialog!!.setContentView(bindingView.root)
         mDialog!!.setCancelable(false)
 
         mDialog!!.show()

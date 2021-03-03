@@ -4,12 +4,10 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.AsyncTask
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import android.widget.LinearLayout
 import com.esri.arcgisruntime.data.ArcGISFeature
 import com.esri.arcgisruntime.data.Attachment
 import com.esri.arcgisruntime.data.ServiceFeatureTable
-import hcm.ditagis.com.mekong.qlsc.R
-import kotlinx.android.synthetic.main.layout_progress_dialog.view.*
+import hcm.ditagis.com.mekong.qlsc.databinding.LayoutProgressDialogBinding
 import java.util.concurrent.ExecutionException
 
 /**
@@ -35,9 +33,9 @@ class DeleteAttachmentAsync(private val mActivity: Activity, selectedArcGISFeatu
   override fun onPreExecute() {
     super.onPreExecute()
     mDialog = BottomSheetDialog(this.mActivity)
-    val view = mActivity.layoutInflater.inflate(R.layout.layout_progress_dialog, null, false) as LinearLayout
-    view.txt_progress_dialog_title.text= "Đang xóa ảnh..."
-    mDialog!!.setContentView(view)
+    val bindingView = LayoutProgressDialogBinding.inflate(mActivity.layoutInflater)
+    bindingView.txtProgressDialogTitle.text= "Đang xóa ảnh..."
+    mDialog!!.setContentView(bindingView.root)
     mDialog!!.setCancelable(false)
 
     mDialog!!.show()

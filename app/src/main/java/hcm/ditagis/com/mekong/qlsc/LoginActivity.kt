@@ -1,5 +1,6 @@
 package hcm.ditagis.com.mekong.qlsc
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,6 +21,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private var mApplication: DApplication? = null
     private lateinit var mBinding: ActivityLoginBinding
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityLoginBinding.inflate(layoutInflater)
@@ -28,9 +30,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         mBinding.btnLogin.setOnClickListener(this)
         mBinding.txtLoginChangeAccount.setOnClickListener(this)
 
-//        txtUsername!!.setText("tiwamythoxulysuco");
-//        txtPassword!!.setText("tiwamythoxulysuco");
-        mBinding.txtVersion.setText("v" + packageManager.getPackageInfo(packageName, 0).versionName)
+        mBinding.txtUsername.setText("tiwamythoxulysuco")
+        mBinding.txtPassword.setText("tiwamythoxulysuco")
+        mBinding.txtVersion.text = "v" + packageManager.getPackageInfo(packageName, 0).versionName
         create()
     }
 

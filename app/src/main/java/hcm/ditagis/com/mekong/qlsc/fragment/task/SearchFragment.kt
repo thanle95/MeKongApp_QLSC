@@ -18,36 +18,26 @@ import com.esri.arcgisruntime.data.QueryParameters
 import hcm.ditagis.com.mekong.qlsc.ListTaskActivity
 import hcm.ditagis.com.mekong.qlsc.R
 import hcm.ditagis.com.mekong.qlsc.async.QueryServiceFeatureTableGetListAsync
+import hcm.ditagis.com.mekong.qlsc.databinding.DateTimePickerBinding
+import hcm.ditagis.com.mekong.qlsc.databinding.FragmentListTaskSearchBinding
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import hcm.ditagis.com.mekong.qlsc.utities.Constant
-import kotlinx.android.synthetic.main.fragment_list_task_search.view.*
-import kotlinx.android.synthetic.main.item_tracuu.view.*
 import java.text.ParseException
 import java.util.*
 
 @SuppressLint("ValidFragment")
 class SearchFragment @SuppressLint("ValidFragment") constructor(activity: ListTaskActivity, inflater: LayoutInflater) : Fragment() {
-    private val mRootView: View
-    private val mActivity: ListTaskActivity
+    private val mActivity: ListTaskActivity = activity
     private var mEtxtAddress: EditText? = null
     private var mSpinTrangThai: Spinner? = null
     private var mTxtThoiGian: TextView? = null
     private var mBtnSearch: Button? = null
     private var mTxtKetQua: TextView? = null
     private var mLLayoutKetQua: LinearLayout? = null
-    private val mApplication: DApplication
+    private lateinit var mApplication: DApplication
     private var mCodeValues: List<CodedValue>? = null
-    private fun init() {
-        mEtxtAddress = mRootView.findViewById(R.id.etxt_list_task_search_address)
-        mSpinTrangThai = mRootView.findViewById(R.id.spin_list_task_search_trang_thai)
-        mTxtThoiGian = mRootView.findViewById(R.id.txt_list_task_search_thoi_gian)
-        mBtnSearch = mRootView.btn_list_task_search
-        mLLayoutKetQua = mRootView.findViewById(R.id.llayout_list_task_search_ket_qua)
-        mTxtKetQua = mRootView.findViewById(R.id.txt_list_task_ket_qua)
-        mBtnSearch!!.setOnClickListener(View.OnClickListener { view: View -> onClick(view) })
-        mTxtThoiGian!!.setOnClickListener(View.OnClickListener { view: View -> onClick(view) })
-        initSpinTrangThai()
-    }
+    private var _mBinding: FragmentListTaskSearchBinding? = null
+    private val mBinding get() = _mBinding
 
     private fun initSpinTrangThai() {
         val domain = mApplication.dFeatureLayer!!.layer.featureTable.getField(Constant.FieldSuCo.TRANG_THAI).domain
@@ -66,17 +56,17 @@ class SearchFragment @SuppressLint("ValidFragment") constructor(activity: ListTa
                     //ngược lại thì add
                     codes.add(codedValue.name)
                 }
-                val adapter = ArrayAdapter(mRootView.context, android.R.layout.simple_list_item_1, codes)
+                val adapter = ArrayAdapter(mBinding!!.root.context, android.R.layout.simple_list_item_1, codes)
                 mSpinTrangThai!!.adapter = adapter
             }
         }
     }
 
     private fun showDateTimePicker() {
-        val dialogView = View.inflate(mRootView.context, R.layout.date_time_picker, null)
-        val alertDialog = AlertDialog.Builder(mRootView.context).create()
-        dialogView.findViewById<View>(R.id.date_time_set).setOnClickListener { view: View? ->
-            val datePicker = dialogView.findViewById<DatePicker>(R.id.date_picker)
+        val bindingView = DateTimePickerBinding.inflate(LayoutInflater.from(mBinding!!.root.context))
+        val alertDialog = AlertDialog.Builder(mBinding!!.root.context).create()
+        bindingView.dateTimeSet.setOnClickListener { view: View? ->
+            val datePicker = bindingView.datePicker
             val calendar: Calendar = GregorianCalendar(datePicker.year, datePicker.month, datePicker.dayOfMonth)
             val displaytime = DateFormat.format(Constant.DateFormat.DATE_FORMAT_STRING, calendar.time) as String
             @SuppressLint("SimpleDateFormat") val dateFormatGmt = Constant.DateFormat.DATE_FORMAT_YEAR_FIRST
@@ -84,7 +74,7 @@ class SearchFragment @SuppressLint("ValidFragment") constructor(activity: ListTa
             mTxtThoiGian!!.text = displaytime
             alertDialog.dismiss()
         }
-        alertDialog.setView(dialogView)
+        alertDialog.setView(bindingView.root)
         alertDialog.show()
     }
 
@@ -116,17 +106,17 @@ class SearchFragment @SuppressLint("ValidFragment") constructor(activity: ListTa
                 object : QueryServiceFeatureTableGetListAsync.AsyncResponse {
                     override fun processFinish(output: List<Feature>?) {
                         if (output != null && output.size > 0) {
-                            val views = HandlingSearchHasDone.handleFromItems(mRootView.context, output, mApplication.dFeatureLayer!!.serviceFeatureTable)
-                            for (view in views!!) {
-                                val txtID = view!!.findViewById<TextView>(R.id.txt_id)
-                                view.setOnClickListener { v: View? -> mActivity.itemClick(txtID.text.toString(), view.txt_objectid.text.toString()) }
-                                mLLayoutKetQua!!.addView(view)
+                            val bindingViews = HandlingSearchHasDone.handleFromItems(mBinding!!.root.context, output, mApplication.dFeatureLayer!!.serviceFeatureTable)
+                            for (bindingView in bindingViews!!) {
+                                bindingView.root.setOnClickListener { v: View? -> mActivity.itemClick(bindingView.txtId.text.toString(),
+                                        bindingView.txtObjectid.text.toString()) }
+                                mLLayoutKetQua!!.addView(bindingView.root)
                             }
                             mTxtKetQua!!.visibility = View.VISIBLE
                             mTxtKetQua!!.text = String.format("Kết quả tra cứu: %d sự cố", mLLayoutKetQua!!.childCount)
                         } else {
                             mTxtKetQua!!.visibility = View.INVISIBLE
-                            Toast.makeText(mRootView.context, "Không có kết quả", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(mBinding!!.root.context, "Không có kết quả", Toast.LENGTH_SHORT).show()
                         }
                     }
 
@@ -140,7 +130,20 @@ class SearchFragment @SuppressLint("ValidFragment") constructor(activity: ListTa
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return mRootView
+        _mBinding = FragmentListTaskSearchBinding.inflate(inflater, container, false)
+        mEtxtAddress = mBinding!!.etxtListTaskSearchAddress
+        mSpinTrangThai = mBinding!!.spinListTaskSearchTrangThai
+        mTxtThoiGian = mBinding!!.txtListTaskSearchThoiGian
+        mBtnSearch = mBinding!!.btnListTaskSearch
+        mLLayoutKetQua = mBinding!!.llayoutListTaskSearchKetQua
+        mTxtKetQua = mBinding!!.txtListTaskKetQua
+        mBtnSearch!!.setOnClickListener { view: View -> onClick(view) }
+        mTxtThoiGian!!.setOnClickListener { view: View -> onClick(view) }
+
+        mApplication = mActivity.application as DApplication
+
+        initSpinTrangThai()
+        return mBinding!!.root
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -151,10 +154,9 @@ class SearchFragment @SuppressLint("ValidFragment") constructor(activity: ListTa
         }
     }
 
-    init {
-        mRootView = inflater.inflate(R.layout.fragment_list_task_search, null)
-        mActivity = activity
-        mApplication = activity.application as DApplication
-        init()
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _mBinding = null
     }
 }

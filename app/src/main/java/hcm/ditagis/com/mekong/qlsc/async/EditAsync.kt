@@ -5,27 +5,25 @@ import android.app.Activity
 import android.os.AsyncTask
 import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import com.esri.arcgisruntime.data.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
-import hcm.ditagis.com.mekong.qlsc.R
+import hcm.ditagis.com.mekong.qlsc.databinding.LayoutProgressDialogBinding
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import hcm.ditagis.com.mekong.qlsc.utities.Constant
-import kotlinx.android.synthetic.main.layout_progress_dialog.view.*
 import java.util.*
 import java.util.concurrent.ExecutionException
 /**
  * Created by ThanLe on 4/16/2018.
  */
 @SuppressLint("StaticFieldLeak")
-class EditAsync(private val mView: View, private val mainActivity: Activity,
+class EditAsync(private val mView: View, private val mActivity: Activity,
                 private val mServiceFeatureTable: ServiceFeatureTable,
                 selectedArcGISFeature: ArcGISFeature,
                 private val mDelegate: AsyncResponse) : AsyncTask<HashMap<String, Any>, Boolean, Void>() {
     private lateinit var mDialog: BottomSheetDialog
     private var mSelectedArcGISFeature: ArcGISFeature = selectedArcGISFeature
-    private val mApplication: DApplication = mainActivity.application as DApplication
+    private val mApplication: DApplication = mActivity.application as DApplication
 
     interface AsyncResponse {
         fun processFinish(feature: Boolean?)
@@ -34,10 +32,10 @@ class EditAsync(private val mView: View, private val mainActivity: Activity,
     @SuppressLint("SetTextI18n")
     override fun onPreExecute() {
         super.onPreExecute()
-        mDialog = BottomSheetDialog(this.mainActivity)
-        val view = mainActivity.layoutInflater.inflate(R.layout.layout_progress_dialog, null, false) as LinearLayout
-        view.txt_progress_dialog_title.text = "Đang cập nhật thông tin..."
-        mDialog.setContentView(view)
+        mDialog = BottomSheetDialog(this.mActivity)
+        val bindingView = LayoutProgressDialogBinding.inflate(mActivity.layoutInflater)
+        bindingView.txtProgressDialogTitle.text = "Đang cập nhật thông tin..."
+        mDialog.setContentView(bindingView.root)
         mDialog.setCancelable(false)
 
         mDialog.show()

@@ -9,32 +9,38 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import hcm.ditagis.com.mekong.qlsc.R
+import hcm.ditagis.com.mekong.qlsc.databinding.ItemThoigianThongkeBinding
 
 /**
  * Created by ThanLe on 04/10/2017.
  */
 class ThongKeAdapter(private val mContext: Context, private val items: MutableList<Item>) : ArrayAdapter<ThongKeAdapter.Item>(mContext, 0, items) {
+    private class DHolder(var binding: ItemThoigianThongkeBinding){
+        var view: View = binding.root
+    }
     @SuppressLint("InflateParams")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var convertView = convertView
+        val holder: DHolder
         if (convertView == null) {
             val inflater = (mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-            convertView = inflater.inflate(R.layout.item_thoigian_thongke, null)
+            holder = DHolder(ItemThoigianThongkeBinding.inflate(inflater))
+            holder.view.tag = holder
+        }
+        else{
+            holder = convertView.tag as DHolder
         }
         val item = items[position]
-        val txt_thongke_mota = convertView!!.findViewById<TextView>(R.id.txt_thongke_mota)
-        txt_thongke_mota.text = item.mota
-        val txt_thongke_thoigian = convertView.findViewById<TextView>(R.id.txt_thongke_thoigian)
+        holder.binding.txtThongkeMota.text = item.mota
         if (item.thoigianhienthi != null) {
-            txt_thongke_thoigian.text = item.thoigianhienthi
+            holder.binding.txtThongkeThoigian.text = item.thoigianhienthi
         }
-        val imageView = convertView.findViewById<ImageView>(R.id.img_selectTime)
+        val imageView = holder.binding.imgSelectTime
         if (item.isChecked) {
             imageView.visibility = View.VISIBLE
         } else {
             imageView.visibility = View.INVISIBLE
         }
-        return convertView
+        return holder.view
     }
 
     fun getItems(): List<Item> {
@@ -61,7 +67,6 @@ class ThongKeAdapter(private val mContext: Context, private val items: MutableLi
         var thoigianhienthi: String? = null
         var isChecked = false
 
-        constructor() {}
         constructor(id: Int, mota: String?, thoigianbatdau: String?, thoigianketthuc: String?, thoigianhienthi: String?) {
             this.id = id
             this.mota = mota

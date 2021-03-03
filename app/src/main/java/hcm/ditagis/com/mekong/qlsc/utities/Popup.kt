@@ -26,6 +26,8 @@ import hcm.ditagis.com.mekong.qlsc.R
 import hcm.ditagis.com.mekong.qlsc.UpdateActivity
 import hcm.ditagis.com.mekong.qlsc.adapter.FeatureViewInfoAdapter
 import hcm.ditagis.com.mekong.qlsc.async.*
+import hcm.ditagis.com.mekong.qlsc.databinding.LayoutDialogSearchAddressBinding
+import hcm.ditagis.com.mekong.qlsc.databinding.LayoutThongtinsucoBinding
 import hcm.ditagis.com.mekong.qlsc.entities.DAddress
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import hcm.ditagis.com.mekong.qlsc.utities.Constant.RequestCode
@@ -39,9 +41,9 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
             callout: Callout?, geocoder: Geocoder?) : AppCompatActivity(), View.OnClickListener {
     private var mSelectedArcGISFeature: ArcGISFeature? = null
     private val mServiceFeatureTable: ServiceFeatureTable
+    private lateinit var mBindingLayoutThongTinSuCo: LayoutThongtinsucoBinding
     val callout: Callout?
     private var lstFeatureType: MutableList<String>? = null
-    private var linearLayout: LinearLayout? = null
     private val mMapView: MapView
     private val mApplication: DApplication
     private var mServiceFeatureTableHanhChinh: ServiceFeatureTable? = null
@@ -61,9 +63,8 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
     fun refreshPopup(arcGISFeature: ArcGISFeature?) {
         mSelectedArcGISFeature = arcGISFeature
         val attributes = arcGISFeature!!.attributes
-        val listView = linearLayout!!.findViewById<ListView>(R.id.lstview_thongtinsuco)
         val featureViewInfoAdapter = FeatureViewInfoAdapter(mMainActivity, ArrayList())
-        listView.adapter = featureViewInfoAdapter
+        mBindingLayoutThongTinSuCo.lstviewThongtinsuco.adapter = featureViewInfoAdapter
 //        val outFields = mApplication.dFeatureLayer!!.getdLayerInfo().outFieldsArr
         val hiddenFields = mMainActivity.resources.getStringArray(R.array.hidden_Fields)
         var isHiddenField: Boolean
@@ -85,7 +86,7 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
 //                isOutField = false
 //                for (outField in outFields) {
 //                    if (outField == field.name) {
-                        isOutField = true
+            isOutField = true
 //                        break
 //                    }
 //                }
@@ -113,7 +114,7 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
                     }
                     val valueDomain = getValueDomain(codedValues, value.toString())
                     if (valueDomain != null) item.value = valueDomain.toString()
-                }  else when (field.fieldType) {
+                } else when (field.fieldType) {
                     Field.Type.DATE -> item.value = Constant.Companion.DATE_FORMAT_VIEW.format((value as Calendar).time)
                     Field.Type.OID, Field.Type.TEXT, Field.Type.SHORT, Field.Type.DOUBLE, Field.Type.INTEGER, Field.Type.FLOAT -> item.value = value.toString()
                 }
@@ -190,13 +191,10 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
             val longtitude = AtomicReference(0.0)
             val latitdue = AtomicReference(0.0)
             val address = AtomicReference("")
-            linearLayout = mMainActivity.layoutInflater.inflate(R.layout.layout_dialog_search_address, null) as LinearLayout
-            val txtTitle = linearLayout!!.findViewById<TextView>(R.id.txt_dialog_search_address_title)
-            txtTitle.text = "ĐỊA CHỈ"
-            val txtAddress = linearLayout!!.findViewById<TextView>(R.id.txt_dialog_search_address_address)
-            val txtUtity = linearLayout!!.findViewById<TextView>(R.id.txt_dialog_search_address_utity)
-            txtUtity.text = "PHẢN ÁNH SỰ CỐ"
-            linearLayout!!.findViewById<View>(R.id.txt_dialog_search_address_utity).setOnClickListener { view: View? ->
+            val bindingLayout = LayoutDialogSearchAddressBinding.inflate(mMainActivity.layoutInflater)
+            bindingLayout.txtDialogSearchAddressTitle.text = "ĐỊA CHỈ"
+            bindingLayout.txtDialogSearchAddressUtity.text = "PHẢN ÁNH SỰ CỐ"
+            bindingLayout.txtDialogSearchAddressUtity.setOnClickListener { view: View? ->
                 val point = longLatToPoint(longtitude.get(), latitdue.get())
                 mApplication.diemSuCo!!.vitri = address.get()
                 mApplication.addFeaturePoint = point
@@ -210,8 +208,8 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
                             }
                         }).execute()
             }
-            linearLayout!!.findViewById<View>(R.id.imgBtn_dialog_search_address_cancel).setOnClickListener { mMainActivity.handlingCancelAdd() }
-            linearLayout!!.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            bindingLayout.imgBtnDialogSearchAddressCancel.setOnClickListener { mMainActivity.handlingCancelAdd() }
+            bindingLayout.root.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             @SuppressLint("InflateParams") val findLocationAsycn = FindLocationAsycn(mMainActivity, false,
                     object : FindLocationAsycn.AsyncResponse {
                         override fun processFinish(output: List<DAddress>?) {
@@ -225,16 +223,16 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
 //                                        object : QueryFeatureHanhChinhAsync.AsyncResponse {
 //                                            override fun processFinish(output: Feature?) {
 //                                                if (output != null) {
-                                                    txtAddress.text = addressLine
-                                                    address.set(addressLine)
-                                                    longtitude.set(dAddress.longtitude)
-                                                    latitdue.set(dAddress.latitude)
-                                                    callout!!.location = position
-                                                    callout.content = linearLayout
-                                                    runOnUiThread {
-                                                        callout.refresh()
-                                                        callout.show()
-                                                    }
+                                bindingLayout.txtDialogSearchAddressAddress.text = addressLine
+                                address.set(addressLine)
+                                longtitude.set(dAddress.longtitude)
+                                latitdue.set(dAddress.latitude)
+                                callout!!.location = position
+                                callout.content = bindingLayout.root
+                                runOnUiThread {
+                                    callout.refresh()
+                                    callout.show()
+                                }
 //                                                } else {
 //                                                    Toast.makeText(mMapView.context, String.format("%s không thuộc địa bàn quản lý", addressLine), Toast.LENGTH_LONG).show()
 //                                                }
@@ -290,7 +288,7 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
             for (feature in quanhuyen_features!!) {
                 val maDonViHanhChinh = feature.attributes[mApplication.appInfo!!.config.IDHanhChinh]
                 val maHuyen = feature.attributes[mApplication.appInfo!!.config.MaHuyen]
-                if (maDonViHanhChinh != null && maDonViHanhChinh == idHanhChinh && maHuyen != null && maHuyen == maHuyenInput ) {
+                if (maDonViHanhChinh != null && maDonViHanhChinh == idHanhChinh && maHuyen != null && maHuyen == maHuyenInput) {
                     quanhuyen_feature = feature
                     return
                 }
@@ -310,54 +308,30 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
             (lstFeatureType as ArrayList<String>).add(mSelectedArcGISFeature!!.featureTable.featureTypes[i].name)
         }
         val inflater = LayoutInflater.from(mMainActivity.applicationContext)
-        linearLayout = inflater.inflate(R.layout.layout_thongtinsuco, null) as LinearLayout
+        mBindingLayoutThongTinSuCo = LayoutThongtinsucoBinding.inflate(inflater)
         refreshPopup(mSelectedArcGISFeature)
-        (linearLayout!!.findViewById<View>(R.id.txt_thongtin_ten) as TextView).text = featureLayer.name
-        linearLayout!!.findViewById<View>(R.id.imgBtn_layout_thongtinsuco_close).setOnClickListener(this)
-        linearLayout!!.findViewById<View>(R.id.txt_thongtinsuco_prev).setOnClickListener { queryFeature(true) }
-        linearLayout!!.findViewById<View>(R.id.txt_thongtinsuco_next).setOnClickListener { queryFeature(false) }
-        val txtNumber = linearLayout!!.findViewById<TextView>(R.id.txt_thongtinsuco_number)
+        mBindingLayoutThongTinSuCo.txtThongtinTen.text = featureLayer.name
+        mBindingLayoutThongTinSuCo.imgBtnLayoutThongtinsucoClose.setOnClickListener(this)
+        mBindingLayoutThongTinSuCo.txtThongtinsucoPrev.setOnClickListener { queryFeature(true) }
+        mBindingLayoutThongTinSuCo.txtThongtinsucoNext.setOnClickListener { queryFeature(false) }
+        //todo kiểm tra quyền xóa
         if (featureLayer.name == mMainActivity.getString(R.string.ALIAS_DIEM_SU_CO)) {
             //user admin mới có quyền xóa
             if (mApplication.dFeatureLayer!!.getdLayerInfo().isDelete) {
-                linearLayout!!.findViewById<View>(R.id.imgBtn_delete).setOnClickListener(this)
+                mBindingLayoutThongTinSuCo.imgBtnDelete.setOnClickListener(this)
             } else {
-                linearLayout!!.findViewById<View>(R.id.imgBtn_delete).visibility = View.GONE
+                mBindingLayoutThongTinSuCo.imgBtnDelete.visibility = View.GONE
             }
-            linearLayout!!.findViewById<View>(R.id.imgBtn_ViewMoreInfo).setOnClickListener(this)
+            mBindingLayoutThongTinSuCo.imgBtnViewMoreInfo.setOnClickListener(this)
         } else {
-            linearLayout!!.findViewById<View>(R.id.imgBtn_ViewMoreInfo).visibility = View.INVISIBLE
-            linearLayout!!.findViewById<View>(R.id.imgBtn_delete).visibility = View.INVISIBLE
+            mBindingLayoutThongTinSuCo.imgBtnViewMoreInfo.visibility = View.INVISIBLE
+            mBindingLayoutThongTinSuCo.imgBtnDelete.visibility = View.INVISIBLE
         }
-        linearLayout!!.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        mBindingLayoutThongTinSuCo.root.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         val envelope = mSelectedArcGISFeature!!.geometry.extent
         mMapView.setViewpointGeometryAsync(envelope, 0.0)
         // show CallOut
-        callout!!.show(linearLayout, envelope.center)
-    }
-
-    @SuppressLint("InflateParams")
-    fun showPopupFindLocation(position: Point?, location: String?) {
-        try {
-            if (position == null) return
-            clearSelection()
-            dimissCallout()
-            val inflater = LayoutInflater.from(mMainActivity.applicationContext)
-            linearLayout = inflater.inflate(R.layout.layout_timkiemdiachi, null) as LinearLayout
-            (linearLayout!!.findViewById<View>(R.id.txt_timkiemdiachi) as TextView).text = location
-            linearLayout!!.findViewById<View>(R.id.imgBtn_timkiemdiachi_themdiemsuco).setOnClickListener(this)
-            linearLayout!!.findViewById<View>(R.id.imgBtn_timkiemdiachi).setOnClickListener(this)
-            linearLayout!!.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            // show CallOut
-            callout!!.location = position
-            callout.content = linearLayout
-            runOnUiThread {
-                callout.refresh()
-                callout.show()
-            }
-        } catch (e: Exception) {
-            Log.e("Popup tìm kiếm", e.toString())
-        }
+        callout!!.show(mBindingLayoutThongTinSuCo.root, envelope.center)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
