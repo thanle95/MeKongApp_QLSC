@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="hcm.ditagis.com.vinhlong.qlsc.hcm.ditagis.com.cholone.qlsc.ThongKeActivity">
+    tools:context="hcm.ditagis.com.mekong.qlsc.hcm.ditagis.com.cholone.qlsc.ThongKeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/padding_layout"
-    tools:context="hcm.ditagis.com.vinhlong.qlsc.DoiMatKhauActivity">
+    tools:context="hcm.ditagis.com.mekong.qlsc.DoiMatKhauActivity">
 
     <LinearLayout
         android:id="@+id/layout_changepassword"

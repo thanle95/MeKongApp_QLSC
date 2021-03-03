@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="hcm.ditagis.com.vinhlong.qlsc">
+    package="hcm.ditagis.com.mekong.qlsc">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".entities.DApplication"
+        android:name="hcm.ditagis.com.mekong.qlsc.entities.DApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_foreground"
         android:label="@string/app_name"
@@ -27,12 +27,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ShowCaptureActivity" android:theme="@style/AppTheme.NoActionBar" android:parentActivityName=".CameraActivity"></activity>
-        <activity android:name=".CameraActivity" android:theme="@style/AppTheme.NoActionBar" android:parentActivityName=".AttachmentActivity"/>
-        <activity android:name=".ViewImageActivity" android:parentActivityName=".AttachmentActivity"/>
-        <activity android:name=".AttachmentActivity" android:parentActivityName=".MainActivity"/>
+        <activity android:name="hcm.ditagis.com.mekong.qlsc.ShowCaptureActivity" android:theme="@style/AppTheme.NoActionBar" android:parentActivityName="hcm.ditagis.com.mekong.qlsc.CameraActivity"></activity>
+        <activity android:name="hcm.ditagis.com.mekong.qlsc.CameraActivity" android:theme="@style/AppTheme.NoActionBar" android:parentActivityName="hcm.ditagis.com.mekong.qlsc.AttachmentActivity"/>
+        <activity android:name="hcm.ditagis.com.mekong.qlsc.ViewImageActivity" android:parentActivityName="hcm.ditagis.com.mekong.qlsc.AttachmentActivity"/>
+        <activity android:name="hcm.ditagis.com.mekong.qlsc.AttachmentActivity" android:parentActivityName="hcm.ditagis.com.mekong.qlsc.MainActivity"/>
         <activity
-            android:name=".MainActivity"
+            android:name="hcm.ditagis.com.mekong.qlsc.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -44,9 +44,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ThongKeActivity"
+            android:name="hcm.ditagis.com.mekong.qlsc.ThongKeActivity"
             android:label="Thống kê"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="hcm.ditagis.com.mekong.qlsc.MainActivity"
             android:screenOrientation="portrait" />
 
         <meta-data
@@ -54,20 +54,20 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".LoginActivity"
+            android:name="hcm.ditagis.com.mekong.qlsc.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ListTaskActivity"
-            android:parentActivityName=".MainActivity"
+            android:name="hcm.ditagis.com.mekong.qlsc.ListTaskActivity"
+            android:parentActivityName="hcm.ditagis.com.mekong.qlsc.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AddFeatureActivity"
-            android:parentActivityName=".MainActivity"
+            android:name="hcm.ditagis.com.mekong.qlsc.AddFeatureActivity"
+            android:parentActivityName="hcm.ditagis.com.mekong.qlsc.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UpdateActivity"
+            android:name="hcm.ditagis.com.mekong.qlsc.UpdateActivity"
             android:label="Cập nhật thuộc tính"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="hcm.ditagis.com.mekong.qlsc.MainActivity"
             android:screenOrientation="portrait" />
     </application>
 
