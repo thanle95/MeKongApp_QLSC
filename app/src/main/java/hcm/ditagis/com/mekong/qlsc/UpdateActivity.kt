@@ -163,7 +163,7 @@ class UpdateActivity : AppCompatActivity() {
                 bindingLayoutView.llayoutAddFeatureSpinner.hint = field.alias
                 bindingLayoutView.llayoutAddFeatureSpinner.tag = fieldName
 
-                bindingLayoutView.txtSpinTitle.setText(field.alias)
+                bindingLayoutView.txtSpinTitle.text = field.alias
                 adapter.addAll(values)
                 adapter.notifyDataSetChanged()
 
@@ -190,7 +190,7 @@ class UpdateActivity : AppCompatActivity() {
                                 bindingLayoutView.etxtNumber.inputType = InputType.TYPE_CLASS_NUMBER
                             }
                             Field.Type.DOUBLE, Field.Type.FLOAT -> {
-                                bindingLayoutView.etxtNumber.inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
+                                bindingLayoutView.etxtNumber.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED
                             }
                         }
                         mBinding.llayoutUpdateFeatureField.addView(bindingLayoutView.root)
@@ -210,7 +210,6 @@ class UpdateActivity : AppCompatActivity() {
                     }
                 }
             }
-
         }
         mBinding.llayoutUpdateFeatureProgress.visibility = View.GONE
         mBinding.llayoutUpdateFeatureMain.visibility = View.VISIBLE

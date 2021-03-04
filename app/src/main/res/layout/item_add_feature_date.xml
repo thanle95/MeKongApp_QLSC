@@ -30,6 +30,7 @@
         android:id="@+id/btn_add_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:background="@drawable/button_background_color_primary"
         android:text="Chọn"
         android:textColor="@drawable/button_text_color_primary" />
