@@ -20,7 +20,7 @@ import java.net.URL
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class PreparingTask(private val delegate: Response)  {
+class PreparingTask(private val delegate: Response) {
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var mDialog: BottomSheetDialog
@@ -28,25 +28,28 @@ class PreparingTask(private val delegate: Response)  {
     interface Response {
         fun post(output: List<DLayerInfo>?)
     }
-    fun execute(activity: Activity, application: DApplication){
+
+    fun execute(activity: Activity, application: DApplication) {
         preExecute(activity)
         executor.execute {
             getCapabilities(application)
-//            if(isAccess(application)) {
+            if (isAccess(application)) {
                 getAppInfo(application)
                 val layerInfos = getLayerInfo(application)
                 handler.post {
                     postExecute()
                     delegate.post(layerInfos)
                 }
-//            }
-//            else{
-//                postExecute()
-//                delegate.post(null)
-//            }
+            } else {
+                handler.post {
+                    postExecute()
+                    delegate.post(null)
+                }
+            }
         }
     }
-    private fun preExecute(activity: Activity){
+
+    private fun preExecute(activity: Activity) {
         mDialog = BottomSheetDialog(activity)
         val bindingView = LayoutProgressDialogBinding.inflate(activity.layoutInflater)
         bindingView.txtProgressDialogTitle.text = "Đang khởi tạo bản đồ..."
@@ -55,40 +58,18 @@ class PreparingTask(private val delegate: Response)  {
 
         mDialog.show()
     }
-    private fun postExecute(){
-        if(mDialog.isShowing)
+
+    private fun postExecute() {
+        if (mDialog.isShowing)
             mDialog.dismiss()
     }
+
     private fun isAccess(application: DApplication): Boolean {
-        try {
-            val url = URL(Constant.URL_API.IS_ACCESS + application.user!!.capability)
-            val conn = url.openConnection() as HttpURLConnection
-            try {
-                conn.doOutput = false
-                conn.requestMethod = Constant.HTTPRequest.GET_METHOD
-                conn.setRequestProperty(Constant.HTTPRequest.AUTHORIZATION, "Bearer " + application.user!!.accessToken)
-                conn.connect()
-
-                val bufferedReader = BufferedReader(InputStreamReader(conn.inputStream))
-                val builder = StringBuilder()
-                var line: String?
-                while (bufferedReader.readLine().also { line = it } != null) {
-                    builder.append(line)
-                }
-                if(builder.toString() == "true"){
-                    return true
-                }
-
-            } catch (e: Exception) {
-                Log.e("error", e.toString())
-            } finally {
-                conn.disconnect()
-            }
-        } catch (e: Exception) {
-            Log.e("Lỗi lấy LayerInfo", e.toString())
-        }
+        if (Constant.AppID.LIST.find { id -> application.user!!.capability == id } != null)
+            return true
         return false
     }
+
     private fun getCapabilities(application: DApplication) {
         try {
             val url = URL(Constant.URL_API.CAPABILITIES)
@@ -115,6 +96,7 @@ class PreparingTask(private val delegate: Response)  {
             Log.e("Lỗi lấy LayerInfo", e.toString())
         }
     }
+
     private fun getAppInfo(application: DApplication) {
         try {
             val url = URL(Constant.URL_API.APP_INFO + application.user!!.capability)
@@ -131,7 +113,7 @@ class PreparingTask(private val delegate: Response)  {
                 while (bufferedReader.readLine().also { line = it } != null) {
                     builder.append(line)
                 }
-               application.appInfo = parseAppInfo(builder.toString())
+                application.appInfo = parseAppInfo(builder.toString())
             } catch (e: Exception) {
                 Log.e("error", e.toString())
             } finally {
@@ -142,34 +124,34 @@ class PreparingTask(private val delegate: Response)  {
         }
     }
 
-    private fun getLayerInfo(application: DApplication): List<DLayerInfo>?{
+    private fun getLayerInfo(application: DApplication): List<DLayerInfo>? {
+        try {
+            val API_URL = Constant.URL_API.LAYER_INFO
+            val url = URL(API_URL)
+            val conn = url.openConnection() as HttpURLConnection
             try {
-                val API_URL = Constant.URL_API.LAYER_INFO
-                val url = URL(API_URL)
-                val conn = url.openConnection() as HttpURLConnection
-                try {
-                    conn.doOutput = false
-                    conn.requestMethod = Constant.HTTPRequest.GET_METHOD
-                    conn.setRequestProperty(Constant.HTTPRequest.AUTHORIZATION, "Bearer " + application.user!!.accessToken)
-                    conn.connect()
+                conn.doOutput = false
+                conn.requestMethod = Constant.HTTPRequest.GET_METHOD
+                conn.setRequestProperty(Constant.HTTPRequest.AUTHORIZATION, "Bearer " + application.user!!.accessToken)
+                conn.connect()
 
-                    val bufferedReader = BufferedReader(InputStreamReader(conn.inputStream))
-                    val builder = StringBuilder()
-                    var line: String?
-                    while (bufferedReader.readLine().also { line = it } != null) {
-                        builder.append(line)
-                    }
-                    return parseLayerInfo(builder.toString())
-                } catch (e: Exception) {
-                    Log.e("error", e.toString())
-                } finally {
-                    conn.disconnect()
+                val bufferedReader = BufferedReader(InputStreamReader(conn.inputStream))
+                val builder = StringBuilder()
+                var line: String?
+                while (bufferedReader.readLine().also { line = it } != null) {
+                    builder.append(line)
                 }
+                return parseLayerInfo(builder.toString())
             } catch (e: Exception) {
-                Log.e("Lỗi lấy LayerInfo", e.toString())
+                Log.e("error", e.toString())
+            } finally {
+                conn.disconnect()
             }
-            return listOf()
+        } catch (e: Exception) {
+            Log.e("Lỗi lấy LayerInfo", e.toString())
         }
+        return listOf()
+    }
 
     @Throws(JSONException::class)
     private fun parseLayerInfo(data: String?): List<DLayerInfo>? {
@@ -178,6 +160,7 @@ class PreparingTask(private val delegate: Response)  {
         val list: List<DLayerInfo> = gson.fromJson(data, outputType)
         return list
     }
+
     @Throws(JSONException::class)
     private fun parseAppInfo(data: String?): DAppInfo? {
         val outputType = object : TypeToken<DAppInfo>() {}.type
@@ -185,6 +168,7 @@ class PreparingTask(private val delegate: Response)  {
         val dAppInfo: DAppInfo = gson.fromJson(data, outputType)
         return dAppInfo
     }
+
     @Throws(JSONException::class)
     private fun parseStringArray(data: String?): Array<String>? {
         val outputType = object : TypeToken<Array<String>>() {}.type

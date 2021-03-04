@@ -11,6 +11,11 @@ import java.util.*
  * Created by ThanLe on 3/1/2018.
  */
 class Constant {
+    object AppID{
+        const val TIEN_GIANG = "40F85CEE-E177-EB11-80D2-E88E1868CDFA"
+        const val VINH_LONG = "8A117A29-B77C-EB11-80D2-E88E1868CDFA"
+        val LIST = arrayOf(TIEN_GIANG, VINH_LONG)
+    }
     object DateFormat {
         const val DATE_FORMAT_STRING = "dd/MM/yyyy"
         @JvmField
@@ -152,7 +157,6 @@ object PreferenceKey{
         const val LAYER_INFO = "$SERVER_API/auth/layerinfos"
         const val CAPABILITIES = "$SERVER_API/auth/capabilities"
         const val APP_INFO = "$SERVER_API/auth/appinfo/"
-        const val IS_ACCESS = "$SERVER_API/auth/isaccess/"
     }
 
 
