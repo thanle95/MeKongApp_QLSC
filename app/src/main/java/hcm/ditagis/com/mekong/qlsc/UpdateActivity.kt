@@ -30,8 +30,8 @@ class UpdateActivity : AppCompatActivity() {
         get() {
             val attributes = HashMap<String, Any>()
             var currentFieldName: String
-            for (i in 0 until mBinding.llayoutUpdateFeatureField.childCount) {
-                val viewI = mBinding.llayoutUpdateFeatureField.getChildAt(i) as LinearLayout
+            for (i in 0 until mBinding.llayoutField.childCount) {
+                val viewI = mBinding.llayoutField.getChildAt(i) as LinearLayout
                 for (j in 0 until viewI.childCount) {
                     try {
                         val viewJ = viewI.getChildAt(j) as TextInputLayout
@@ -87,14 +87,14 @@ class UpdateActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun update() {
-        mBinding.llayoutUpdateFeatureProgress.visibility = View.VISIBLE
-        mBinding.llayoutUpdateFeatureMain.visibility = View.GONE
-        mBinding.txtUpdateFeatureProgress.text = "Đang lưu..."
-        EditAsync(mBinding.txtUpdateFeatureProgress, this@UpdateActivity, mApplication.dFeatureLayer!!.serviceFeatureTable,
+        mBinding.llayoutProgress.visibility = View.VISIBLE
+        mBinding.llayoutMain.visibility = View.GONE
+        mBinding.txtProgress.text = "Đang lưu..."
+        EditAsync(mBinding.txtProgress, this@UpdateActivity, mApplication.dFeatureLayer!!.serviceFeatureTable,
                 mApplication.selectedArcGISFeature!!, object : EditAsync.AsyncResponse {
             override fun processFinish(feature: Boolean?) {
-                mBinding.llayoutUpdateFeatureProgress.visibility = View.GONE
-                mBinding.llayoutUpdateFeatureMain.visibility = View.VISIBLE
+                mBinding.llayoutProgress.visibility = View.GONE
+                mBinding.llayoutMain.visibility = View.VISIBLE
                 feature?.let {
                     Toast.makeText(this@UpdateActivity, "Cập nhật thành công", Toast.LENGTH_SHORT).show()
                 } ?: run {
@@ -118,16 +118,16 @@ class UpdateActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun initViews() {
-        mBinding.btnUpdateFeatureUpdate.setOnClickListener { update() }
+        mBinding.btnUpdate.setOnClickListener { update() }
 
-        mBinding.txtUpdateFeatureProgress.text = "Đang khởi tạo thuộc tính..."
-        mBinding.llayoutUpdateFeatureProgress.visibility = View.VISIBLE
-        mBinding.llayoutUpdateFeatureMain.visibility = View.GONE
+        mBinding.txtProgress.text = "Đang khởi tạo thuộc tính..."
+        mBinding.llayoutProgress.visibility = View.VISIBLE
+        mBinding.llayoutMain.visibility = View.GONE
         mArcGISFeature = mApplication.selectedArcGISFeature
 
-        mBinding.swipeUdpateFeature.setOnRefreshListener {
+        mBinding.swipe.setOnRefreshListener {
             loadData()
-            mBinding.swipeUdpateFeature.isRefreshing = false
+            mBinding.swipe.isRefreshing = false
         }
 
         loadData()
@@ -135,9 +135,9 @@ class UpdateActivity : AppCompatActivity() {
 
     private fun loadData() {
 
-        mBinding.llayoutUpdateFeatureField.removeAllViews()
-        mBinding.llayoutUpdateFeatureProgress.visibility = View.VISIBLE
-        mBinding.llayoutUpdateFeatureMain.visibility = View.GONE
+        mBinding.llayoutField.removeAllViews()
+        mBinding.llayoutProgress.visibility = View.VISIBLE
+        mBinding.llayoutMain.visibility = View.GONE
 
         for (fieldName in mArcGISFeature!!.attributes.keys) {
             if (Constant.Field.NONE_UPDATE_FIELDS.find { f -> f == fieldName } != null) continue
@@ -173,7 +173,7 @@ class UpdateActivity : AppCompatActivity() {
                         break
                     }
                 }
-                mBinding.llayoutUpdateFeatureField.addView(bindingLayoutView.root)
+                mBinding.llayoutField.addView(bindingLayoutView.root)
             } else {
 //                val nm = NumberFormat.getCurrencyInstance()
                 when (field.fieldType) {
@@ -193,7 +193,7 @@ class UpdateActivity : AppCompatActivity() {
                                 bindingLayoutView.etxtNumber.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED
                             }
                         }
-                        mBinding.llayoutUpdateFeatureField.addView(bindingLayoutView.root)
+                        mBinding.llayoutField.addView(bindingLayoutView.root)
                     }
                     Field.Type.DATE -> {
                         val bindingLayoutView = ItemAddFeatureDateBinding.inflate(layoutInflater)
@@ -202,7 +202,7 @@ class UpdateActivity : AppCompatActivity() {
                         if (value != null)
                             bindingLayoutView.editAddDateValue.setText(Constant.DATE_FORMAT.format((value as Calendar).time))
                         bindingLayoutView.btnAddDate.setOnClickListener { selectDate(field, bindingLayoutView) }
-                        mBinding.llayoutUpdateFeatureField.addView(bindingLayoutView.root)
+                        mBinding.llayoutField.addView(bindingLayoutView.root)
                     }
 
                     else -> {
@@ -211,8 +211,8 @@ class UpdateActivity : AppCompatActivity() {
                 }
             }
         }
-        mBinding.llayoutUpdateFeatureProgress.visibility = View.GONE
-        mBinding.llayoutUpdateFeatureMain.visibility = View.VISIBLE
+        mBinding.llayoutProgress.visibility = View.GONE
+        mBinding.llayoutMain.visibility = View.VISIBLE
 
     }
 

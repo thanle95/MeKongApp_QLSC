@@ -6,7 +6,10 @@ import android.os.AsyncTask
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.appcompat.widget.AppCompatSpinner
 import com.esri.arcgisruntime.data.*
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import hcm.ditagis.com.mekong.qlsc.utities.Constant
 import java.util.*
@@ -158,63 +161,67 @@ class AddFeatureAsync( private val mActivity: Activity,
     //        } catch (Exception e) {
 //            Log.e("Lỗi lấy attributes", e.toString());
 //        }
+
     private val attributes: HashMap<String, Any?>
-        private get() {
+        get() {
             val attributes = HashMap<String, Any?>()
-            //        try {
-            var currentAlias = ""
-            var countEmpty = 0
+            var currentFieldName: String
+            var hasValue = false
             for (i in 0 until mLLayoutField.childCount) {
-                val itemAddFeature = mLLayoutField.getChildAt(i) as LinearLayout
-                for (j in 0 until itemAddFeature.childCount) {
-                    val typeInput_itemAddFeature = itemAddFeature.getChildAt(j) as LinearLayout
-                    for (k in 0 until typeInput_itemAddFeature.childCount) {
-                        val view = typeInput_itemAddFeature.getChildAt(k)
-                        if (view.visibility == View.VISIBLE) {
-                            if (view is EditText && !currentAlias.isEmpty()) {
-                                val value = view.text.toString()
-                                if (value.length == 0) countEmpty++ else for (field in mServiceFeatureTable.fields) {
-                                    if (field.alias == currentAlias) {
-                                        if (field.name == Constant.FieldSuCo.GHI_CHU) {
-                                            mGhiChu = value
+                val viewI = mLLayoutField.getChildAt(i) as LinearLayout
+                for (j in 0 until viewI.childCount) {
+                    try {
+                        val viewJ = viewI.getChildAt(j) as TextInputLayout
+                        if (viewJ.visibility == View.VISIBLE
+                                && viewJ.hint != null) {
+                            val fieldName = viewJ.tag.toString()
+                            val field = mApplication.dFeatureLayer!!.serviceFeatureTable.getField(fieldName)
+                            currentFieldName = fieldName
+                            if (currentFieldName.isEmpty()) continue
+                            for (k in 0 until viewJ.childCount) {
+                                val viewK = viewJ.getChildAt(k)
+                                if (viewK is FrameLayout) {
+                                    for (l in 0 until viewK.childCount) {
+                                        val viewL = viewK.getChildAt(l)
+                                        if (viewL is TextInputEditText) {
+                                            if (field.domain != null) {
+                                                val codedValues = (field.domain as CodedValueDomain).codedValues
+
+                                                val valueDomain = getCodeDomain(codedValues, viewL.text.toString())
+                                                if (valueDomain != null) {
+                                                    attributes[currentFieldName] = valueDomain.toString()
+                                                    hasValue = true
+                                                }
+                                            } else {
+                                                attributes[currentFieldName] = viewL.text.toString()
+                                                hasValue = true
+                                            }
+
                                         }
-                                        if (field.domain != null) {
-                                            val codedValues = (field.domain as CodedValueDomain).codedValues
-                                            val valueDomain = getCodeDomain(codedValues, view.text.toString())
-                                            if (valueDomain != null) attributes[currentAlias] = valueDomain.toString() else countEmpty++
-                                        } else {
-                                            attributes[currentAlias] = view.text.toString()
-                                        }
-                                        break
                                     }
-                                }
-                            } else if (view is Spinner && !currentAlias.isEmpty()) {
-                                if (view.selectedItemPosition == 0) countEmpty++ else for (field in mServiceFeatureTable.fields) {
-                                    if (field.alias == currentAlias) {
-                                        if (field.domain != null) {
-                                            val codedValues = (field.domain as CodedValueDomain).codedValues
-                                            val codeDomain = getCodeDomain(codedValues, view.selectedItem.toString())
-                                            if (field.name == Constant.FieldSuCo.THONG_TIN_PHAN_ANH) mThongTinPhanAnh = codeDomain
-                                            if (codeDomain != null) attributes[currentAlias] = codeDomain.toString() else countEmpty++
-                                        } else {
+                                } else if (viewK is AppCompatSpinner) {
+                                    if (field.domain != null) {
+                                        val codedValues = (field.domain as CodedValueDomain).codedValues
+                                        val valueDomain = getCodeDomain(codedValues, viewK.selectedItem.toString())
+                                        if (valueDomain != null) {
+                                            attributes[currentFieldName] = valueDomain.toString()
+                                            hasValue = true
                                         }
-                                        break
                                     }
+
                                 }
-                            } else if (view is TextView) {
-                                currentAlias = view.text.toString()
-                                attributes[currentAlias] = null
                             }
+
                         }
+                    } catch (e: Exception) {
+
                     }
                 }
             }
-            if (countEmpty == 5 || (mGhiChu == null || mGhiChu!!.length == 0) && (if (mThongTinPhanAnh != null) mThongTinPhanAnh.toString().toShort().toInt() == 0 else false)) publishProgress()
-            //        } catch (Exception e) {
-//            Log.e("Lỗi lấy attributes", e.toString());
-//        }
+            if (!hasValue) publishProgress()
             return attributes
         }
+
 
     private fun addAttachment(arcGISFeature: ArcGISFeature, feature: Feature) {
         for (image in mApplication.images!!) {

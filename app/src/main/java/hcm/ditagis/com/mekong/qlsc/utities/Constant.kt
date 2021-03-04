@@ -107,6 +107,7 @@ class Constant {
         const val DO_SAU_LUNG_ONG = "DoSauLungOng"
         const val GHI_CHU = "GhiChu"
         const val NV_XU_LY = "NVXuLy"
+        val ADD_FIELDS = arrayOf(NGUOI_PHAN_ANH, SDT_PHAN_ANH, DIA_CHI, THONG_TIN_PHAN_ANH, GHI_CHU)
     }
     object CompressFormat {
         val JPEG = Bitmap.CompressFormat.JPEG

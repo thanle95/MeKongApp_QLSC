@@ -9,7 +9,7 @@
     tools:context=".AddFeatureActivity">
 
     <LinearLayout
-        android:id="@+id/llayout_add_feature_progress"
+        android:id="@+id/llayout_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -27,7 +27,7 @@
             android:minHeight="24dip" />
 
         <TextView
-            android:id="@+id/txt_add_feature_progress"
+            android:id="@+id/txt_progress"
             style="@style/MyTextAppearance.Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llayout_add_feature_main"
+        android:id="@+id/llayout_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -55,7 +55,7 @@
 
 
                 <LinearLayout
-                    android:id="@+id/llayout_add_feature_field"
+                    android:id="@+id/llayout_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -63,7 +63,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/llayout_add_feature_image"
+                    android:id="@+id/llayout_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_small"
@@ -85,7 +85,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"></View>
             <Button
-                android:id="@+id/btn_add_feature_pick_photo"
+                android:id="@+id/btn_pick_photo"
                 style="@style/MyTextAppearance.Blue.Big"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
                 android:visibility="gone"
                 android:text="Chọn ảnh" />
             <Button
-                android:id="@+id/btn_add_feature_capture"
+                android:id="@+id/btn_capture"
                 style="@style/MyTextAppearance.Blue.Big"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
                 android:text="Chụp ảnh" />
 
             <Button
-                android:id="@+id/btn_add_feature_add"
+                android:id="@+id/btn_add"
                 style="@style/MyTextAppearance.White.Big"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
