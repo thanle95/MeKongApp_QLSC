@@ -1,45 +1,56 @@
 package hcm.ditagis.com.mekong.qlsc.async
 
 import android.app.Activity
-import android.app.ProgressDialog
-import android.os.AsyncTask
+import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import hcm.ditagis.com.mekong.qlsc.R
-import hcm.ditagis.com.mekong.qlsc.entities.DApplication
+import hcm.ditagis.com.mekong.qlsc.databinding.LayoutProgressDialogBinding
 import hcm.ditagis.com.mekong.qlsc.entities.entitiesDB.User
 import hcm.ditagis.com.mekong.qlsc.utities.Constant
-import hcm.ditagis.com.mekong.qlsc.utities.Preference
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
-class NewLoginAsycn(private val mActivity: Activity, delegate: AsyncResponse) : AsyncTask<String?, Void?, Void?>() {
-    private val exception: Exception? = null
-    private var mDialog: ProgressDialog? = null
-    private val mDelegate: AsyncResponse
-    private val mDApplication: DApplication
-    var API_URL: String
-
-    interface AsyncResponse {
-        fun processFinish(output: Void?)
+class LoginTask(private val delegate: Response) {
+    private val executor: ExecutorService = Executors.newSingleThreadExecutor()
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var mDialog: BottomSheetDialog
+    interface Response {
+        fun post(user: User?)
     }
-
-    override fun onPreExecute() {
-        super.onPreExecute()
-        mDialog = ProgressDialog(mActivity, android.R.style.Theme_Material_Dialog_Alert)
-        mDialog!!.setMessage(mActivity.getString(R.string.connect_message))
-        mDialog!!.setCancelable(false)
-        mDialog!!.show()
+    fun execute(activity: Activity, username: String, password: String){
+        preExecute(activity)
+        executor.execute {
+            val user = getUser(username, password)
+            handler.post {
+                postExecute()
+                delegate.post(user)
+            }
+        }
     }
+    private fun preExecute(activity: Activity){
+        mDialog = BottomSheetDialog(activity)
+        val bindingView = LayoutProgressDialogBinding.inflate(activity.layoutInflater)
+        bindingView.txtProgressDialogTitle.text = "Đang đăng nhập..."
+        mDialog.setContentView(bindingView.root)
+        mDialog.setCancelable(false)
 
-    override fun doInBackground(vararg params: String?): Void? {
-        val userName = params[0]
-        val pin = params[1]
+        mDialog.show()
+    }
+    private fun postExecute(){
+        if(mDialog.isShowing)
+            mDialog.dismiss()
+    }
+    private fun getUser(username: String, password: String): User?{
         var conn: HttpURLConnection? = null
         try {
             val API_URL = Constant.URL_API.LOGIN
@@ -49,8 +60,8 @@ class NewLoginAsycn(private val mActivity: Activity, delegate: AsyncResponse) : 
             conn.instanceFollowRedirects = false
             conn.requestMethod = Constant.HTTPRequest.POST_METHOD
             val cred = JSONObject()
-            cred.put("username", userName)
-            cred.put("password", pin)
+            cred.put("username", username)
+            cred.put("password", password)
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
             conn.setRequestProperty("Accept", "application/json")
             conn.useCaches = false
@@ -71,11 +82,7 @@ class NewLoginAsycn(private val mActivity: Activity, delegate: AsyncResponse) : 
 
             bufferedReader.close()
             conn.disconnect()
-            val user = parseUser(stringBuilder.toString())
-            Preference.instance!!.savePreferences(mActivity.getString(R.string.preference_login_api),
-                    user.accessToken!!.replace("\"", ""))
-
-            mDApplication.user = user
+            return parseUser(stringBuilder.toString())
         } catch (e: Exception) {
             Log.e("Lỗi đăng nhập", e.toString())
         } finally {
@@ -83,25 +90,8 @@ class NewLoginAsycn(private val mActivity: Activity, delegate: AsyncResponse) : 
         }
         return null
     }
-
-    override fun onPostExecute(user: Void?) {
-//        if (user != null) {
-        mDialog!!.dismiss()
-        mDelegate.processFinish(user)
-        //        }
-    }
-
     private fun parseUser(data: String?): User {
         val userType = object : TypeToken<User>() {}.type
-        val gson = Gson()
-        val user: User = gson.fromJson(data, userType)
-
-        return user
-    }
-
-    init {
-        mDApplication = mActivity.application as DApplication
-        mDelegate = delegate
-        API_URL = mActivity.getString(R.string.URL_API) + "/Login"
+        return Gson().fromJson(data, userType)
     }
 }

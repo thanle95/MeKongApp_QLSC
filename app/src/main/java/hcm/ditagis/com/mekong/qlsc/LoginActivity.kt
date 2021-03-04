@@ -6,15 +6,27 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import hcm.ditagis.com.mekong.qlsc.async.NewLoginAsycn
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import hcm.ditagis.com.mekong.qlsc.async.LoginTask
 import hcm.ditagis.com.mekong.qlsc.databinding.ActivityLoginBinding
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
+import hcm.ditagis.com.mekong.qlsc.entities.entitiesDB.User
 import hcm.ditagis.com.mekong.qlsc.utities.CheckConnectInternet.isOnline
+import hcm.ditagis.com.mekong.qlsc.utities.Constant
 import hcm.ditagis.com.mekong.qlsc.utities.Preference.Companion.instance
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
+
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private var isLastLogin = false
@@ -30,8 +42,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         mBinding.btnLogin.setOnClickListener(this)
         mBinding.txtLoginChangeAccount.setOnClickListener(this)
 
-        mBinding.txtUsername.setText("tiwamythoxulysuco")
-        mBinding.txtPassword.setText("tiwamythoxulysuco")
+//        mBinding.txtUsername.setText("tiwamythoxulysuco")
+//        mBinding.txtPassword.setText("tiwamythoxulysuco")
         mBinding.txtVersion.text = "v" + packageManager.getPackageInfo(packageName, 0).versionName
         create()
     }
@@ -71,20 +83,21 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             return
         }
         mBinding.txtLoginValidation.visibility = View.GONE
-        val userName: String? = if (isLastLogin) instance!!.loadPreference(getString(R.string.preference_username)) else mBinding.txtUsername.text.toString().trim { it <= ' ' }
-        val passWord = mBinding.txtPassword.text.toString().trim { it <= ' ' }
-        if (userName!!.isEmpty() || passWord.isEmpty()) {
+        val username: String? = if (isLastLogin) instance!!.loadPreference(getString(R.string.preference_username)) else mBinding.txtUsername.text.toString().trim { it <= ' ' }
+        val password = mBinding.txtPassword.text.toString().trim { it <= ' ' }
+        if (username!!.isEmpty() || password.isEmpty()) {
             handleInfoLoginEmpty()
             return
         }
-        NewLoginAsycn(this,
-                object: NewLoginAsycn.AsyncResponse {
-                    override fun processFinish(output: Void?) {
-                        if (mApplication!!.user != null) handleLoginSuccess() else handleLoginFail()
-                    }
-                }).execute(userName,passWord)
+        LoginTask(object : LoginTask.Response {
+            override fun post(user: User?) {
+                if (user != null) {
+                    mApplication!!.user = user
+                    handleLoginSuccess()
+                } else handleLoginFail()
+            }
+        }).execute(this@LoginActivity, username, password)
     }
-
     private fun handleInfoLoginEmpty() {
         mBinding.txtLoginValidation.setText(R.string.info_login_empty)
         mBinding.txtLoginValidation.visibility = View.VISIBLE

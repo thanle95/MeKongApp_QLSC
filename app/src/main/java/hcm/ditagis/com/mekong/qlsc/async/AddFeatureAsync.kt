@@ -3,6 +3,8 @@ package hcm.ditagis.com.mekong.qlsc.async
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.AsyncTask
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -14,12 +16,15 @@ import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import hcm.ditagis.com.mekong.qlsc.utities.Constant
 import java.util.*
 import java.util.concurrent.ExecutionException
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+
 
 /**
  * Created by ThanLe on 4/16/2018.
  */
 @SuppressLint("StaticFieldLeak")
-class AddFeatureAsync( private val mActivity: Activity,
+class AddFeatureAsync(private val mActivity: Activity,
                       private val mServiceFeatureTable: ServiceFeatureTable, layout: LinearLayout,
                       delegate: AsyncResponse) : AsyncTask<Void?, Feature?, Void?>() {
 
@@ -41,7 +46,16 @@ class AddFeatureAsync( private val mActivity: Activity,
     }
 
      override fun doInBackground(vararg params: Void?): Void? {
-        val feature: Feature
+         val executor: ExecutorService = Executors.newSingleThreadExecutor()
+         val handler = Handler(Looper.getMainLooper())
+
+         executor.execute {
+             //Background work here
+             handler.post {
+
+             }
+         }
+         val feature: Feature
         try {
             feature = mServiceFeatureTable.createFeature()
             feature.geometry = mApplication.addFeaturePoint
