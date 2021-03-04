@@ -199,14 +199,13 @@ class Popup(private val mMainActivity: MainActivity, mapView: MapView, serviceFe
                 mApplication.diemSuCo!!.vitri = address.get()
                 mApplication.addFeaturePoint = point
                 //Kiểm tra cùng ngày, cùng vị trí đã có sự cố nào chưa, nếu có thì cảnh báo, chưa thì thêm bình thường
-                CheckExistFeatureAsync(mMainActivity, mMapView, mApplication.dFeatureLayer!!.serviceFeatureTable,
-                        object : CheckExistFeatureAsync.AsyncResponse {
-                            override fun processFinish(output: String?) {
+                CheckExistFeatureTask(object : CheckExistFeatureTask.Response {
+                            override fun post(output: String?) {
                                 if (output != null && output.isNotEmpty()) showDialogAddDuplicateGeometry(output) else {
                                     mMainActivity.addFeature()
                                 }
                             }
-                        }).execute()
+                        }).execute(mMainActivity, mMapView, mApplication)
             }
             bindingLayout.imgBtnDialogSearchAddressCancel.setOnClickListener { mMainActivity.handlingCancelAdd() }
             bindingLayout.root.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)

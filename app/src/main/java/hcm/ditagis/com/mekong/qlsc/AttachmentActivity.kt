@@ -18,7 +18,7 @@ import com.esri.arcgisruntime.data.Attachment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import hcm.ditagis.com.mekong.qlsc.adapter.AttachmentAdapter
-import hcm.ditagis.com.mekong.qlsc.async.AddAttachmentAsync
+import hcm.ditagis.com.mekong.qlsc.async.AddAttachmentTask
 import hcm.ditagis.com.mekong.qlsc.async.DeleteAttachmentAsync
 import hcm.ditagis.com.mekong.qlsc.async.FetchAttachmentAsync
 import hcm.ditagis.com.mekong.qlsc.async.FetchDataAsync
@@ -40,16 +40,6 @@ class AttachmentActivity : AppCompatActivity() {
     private var mSelectedItem: DAttachment? = null
     private var mAttachments: List<Attachment>? = null
     private lateinit var mBinding: ActivityAttachmentBinding
-
-    private//        for (String key : Constant.AttachmentName.codeValues.keySet()) {
-    //            if (mSelectedItem.getName().contains(key)) {
-    //                return Constant.AttachmentName.codeValues.get(key);
-    //            }
-    //        }
-    //        return null;
-    val fileName: String?
-        get() = mSelectedItem?.name + "_" + Calendar.getInstance().timeInMillis.toString()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -243,8 +233,8 @@ class AttachmentActivity : AppCompatActivity() {
         bitmap?.let { bitmap ->
             //Kiểm tra nếu mSelectedItem đã có hình ảnh thì cập nhật attachment đó
 //            mSelectedItem?.let { it ->
-            val response = object : AddAttachmentAsync.AsyncResponse {
-                override fun processFinish(success: Boolean?) {
+            val response = object : AddAttachmentTask.Response {
+                override fun post(success: Boolean?) {
                     success?.let {
                         if (it) {
                             Toast.makeText(mBinding.gridAddAttachment.context, "Thêm ảnh thành công", Toast.LENGTH_SHORT).show()
@@ -267,8 +257,8 @@ class AttachmentActivity : AppCompatActivity() {
             }
 
 
-            val async = AddAttachmentAsync(this@AttachmentActivity, mApplication.selectedArcGISFeature!!, getByteArrayFromBitmap(bitmap), response)
-            async.execute(fileName)
+            AddAttachmentTask(response).execute(this@AttachmentActivity,
+                    getByteArrayFromBitmap(bitmap), mApplication)
 //            }
 
             // }

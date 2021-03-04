@@ -5,7 +5,6 @@
     <string name="message_error_add_feature">Không tạo được thuộc tính. Vui lòng thử lại sau</string>
     <string name="message_not_area_management">Vị trí không thuộc địa bàn quản lý</string>
     <string name="message_no_geocoder_available">Cần cập nhật phiên bản Google+ mới nhất để dùng tính năng này</string>
-    <string name="message_preparing">Đang khởi tạo bản đồ…</string>
     <string name="message_unloaded_map">Chưa khởi tạo xong bản đồ Vui lòng làm mới lại dữ liệu</string>
 
 

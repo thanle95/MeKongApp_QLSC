@@ -1,15 +1,13 @@
 package hcm.ditagis.com.mekong.qlsc.async
 
-import android.annotation.SuppressLint
-import android.app.ProgressDialog
-import android.content.Context
-import android.os.AsyncTask
+import android.app.Activity
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import com.esri.arcgisruntime.concurrent.ListenableFuture
-import com.esri.arcgisruntime.data.FeatureQueryResult
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import hcm.ditagis.com.mekong.qlsc.R
+import hcm.ditagis.com.mekong.qlsc.databinding.LayoutProgressDialogBinding
 import hcm.ditagis.com.mekong.qlsc.entities.DAppInfo
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import hcm.ditagis.com.mekong.qlsc.entities.DLayerInfo
@@ -19,53 +17,50 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
-class PreparingAsycn(@field:SuppressLint("StaticFieldLeak") private val mContext: Context, private val mDApplication: DApplication, private val mDelegate: AsyncResponse) : AsyncTask<Void?, ListenableFuture<FeatureQueryResult?>?, List<DLayerInfo>?>() {
-    private var mDialog: ProgressDialog? = null
+class PreparingTask(private val delegate: Response)  {
+    private val executor: ExecutorService = Executors.newSingleThreadExecutor()
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var mDialog: BottomSheetDialog
 
-    interface AsyncResponse {
-        fun processFinish(output: List<DLayerInfo>?)
+    interface Response {
+        fun post(output: List<DLayerInfo>?)
     }
-
-    override fun onPreExecute() {
-        super.onPreExecute()
-        mDialog = ProgressDialog(mContext, android.R.style.Theme_Material_Dialog_Alert)
-        mDialog!!.setMessage(mContext.getString(R.string.preparing))
-        mDialog!!.setCancelable(false)
-        mDialog!!.show()
-    }
-
-    override fun doInBackground(vararg params: Void?): List<DLayerInfo>? {
-        try {
-            getCapabilities()
-            getAppInfo()
-            return layerInfoAPI
-        } catch (e: Exception) {
-            Log.e("Lỗi lấy danh sách DMA", e.toString())
+    fun execute(activity: Activity, application: DApplication){
+        preExecute(activity)
+        executor.execute {
+            getCapabilities(application)
+            getAppInfo(application)
+            val layerInfos = getLayerInfo(application)
+            handler.post {
+                postExecute()
+                delegate.post(layerInfos)
+            }
         }
-        return null
     }
+    private fun preExecute(activity: Activity){
+        mDialog = BottomSheetDialog(activity)
+        val bindingView = LayoutProgressDialogBinding.inflate(activity.layoutInflater)
+        bindingView.txtProgressDialogTitle.text = "Đang khởi tạo bản đồ..."
+        mDialog.setContentView(bindingView.root)
+        mDialog.setCancelable(false)
 
-    @SafeVarargs
-    override fun onProgressUpdate(vararg values: ListenableFuture<FeatureQueryResult?>?) {
-        super.onProgressUpdate(*values)
+        mDialog.show()
     }
-
-    override fun onPostExecute(value: List<DLayerInfo>?) {
-//        if (khachHang != null) {
-        mDialog!!.dismiss()
-        mDelegate.processFinish(value)
-        //        }
+    private fun postExecute(){
+        if(mDialog.isShowing)
+            mDialog.dismiss()
     }
-
-    private fun getCapabilities() {
+    private fun getCapabilities(application: DApplication) {
         try {
             val url = URL(Constant.URL_API.CAPABILITIES)
             val conn = url.openConnection() as HttpURLConnection
             try {
                 conn.doOutput = false
                 conn.requestMethod = Constant.HTTPRequest.GET_METHOD
-                conn.setRequestProperty(Constant.HTTPRequest.AUTHORIZATION, "Bearer " + mDApplication.user!!.accessToken)
+                conn.setRequestProperty(Constant.HTTPRequest.AUTHORIZATION, "Bearer " + application.user!!.accessToken)
                 conn.connect()
 
                 val bufferedReader = BufferedReader(InputStreamReader(conn.inputStream))
@@ -74,7 +69,7 @@ class PreparingAsycn(@field:SuppressLint("StaticFieldLeak") private val mContext
                 while (bufferedReader.readLine().also { line = it } != null) {
                     builder.append(line)
                 }
-                mDApplication.user!!.capability = parseStringArray(builder.toString())!![0]
+                application.user!!.capability = parseStringArray(builder.toString())!![0]
             } catch (e: Exception) {
                 Log.e("error", e.toString())
             } finally {
@@ -84,14 +79,14 @@ class PreparingAsycn(@field:SuppressLint("StaticFieldLeak") private val mContext
             Log.e("Lỗi lấy LayerInfo", e.toString())
         }
     }
-    private fun getAppInfo() {
+    private fun getAppInfo(application: DApplication) {
         try {
-            val url = URL(Constant.URL_API.APP_INFO + mDApplication.user!!.capability)
+            val url = URL(Constant.URL_API.APP_INFO + application.user!!.capability)
             val conn = url.openConnection() as HttpURLConnection
             try {
                 conn.doOutput = false
                 conn.requestMethod = Constant.HTTPRequest.GET_METHOD
-                conn.setRequestProperty(Constant.HTTPRequest.AUTHORIZATION, "Bearer " + mDApplication.user!!.accessToken)
+                conn.setRequestProperty(Constant.HTTPRequest.AUTHORIZATION, "Bearer " + application.user!!.accessToken)
                 conn.connect()
 
                 val bufferedReader = BufferedReader(InputStreamReader(conn.inputStream))
@@ -100,7 +95,7 @@ class PreparingAsycn(@field:SuppressLint("StaticFieldLeak") private val mContext
                 while (bufferedReader.readLine().also { line = it } != null) {
                     builder.append(line)
                 }
-               mDApplication.appInfo = parseAppInfo(builder.toString())
+               application.appInfo = parseAppInfo(builder.toString())
             } catch (e: Exception) {
                 Log.e("error", e.toString())
             } finally {
@@ -111,8 +106,7 @@ class PreparingAsycn(@field:SuppressLint("StaticFieldLeak") private val mContext
         }
     }
 
-    private val layerInfoAPI: List<DLayerInfo>?
-        private get() {
+    private fun getLayerInfo(application: DApplication): List<DLayerInfo>?{
             try {
                 val API_URL = Constant.URL_API.LAYER_INFO
                 val url = URL(API_URL)
@@ -120,7 +114,7 @@ class PreparingAsycn(@field:SuppressLint("StaticFieldLeak") private val mContext
                 try {
                     conn.doOutput = false
                     conn.requestMethod = Constant.HTTPRequest.GET_METHOD
-                    conn.setRequestProperty(Constant.HTTPRequest.AUTHORIZATION, "Bearer " + mDApplication.user!!.accessToken)
+                    conn.setRequestProperty(Constant.HTTPRequest.AUTHORIZATION, "Bearer " + application.user!!.accessToken)
                     conn.connect()
 
                     val bufferedReader = BufferedReader(InputStreamReader(conn.inputStream))

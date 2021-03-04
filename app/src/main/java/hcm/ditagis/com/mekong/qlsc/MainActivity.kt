@@ -27,7 +27,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.widget.CompoundButtonCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment
 import com.esri.arcgisruntime.ArcGISRuntimeException
 import com.esri.arcgisruntime.data.*
@@ -50,7 +49,7 @@ import com.esri.arcgisruntime.util.ListenableList
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import hcm.ditagis.com.mekong.qlsc.async.FindLocationAsycn
-import hcm.ditagis.com.mekong.qlsc.async.PreparingAsycn
+import hcm.ditagis.com.mekong.qlsc.async.PreparingTask
 import hcm.ditagis.com.mekong.qlsc.async.QueryServiceFeatureTableGetListAsync
 import hcm.ditagis.com.mekong.qlsc.async.UpdateAttachmentAsync
 import hcm.ditagis.com.mekong.qlsc.databinding.*
@@ -140,23 +139,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun preparing() {
-        val preparingAsycn = PreparingAsycn(this, mApplication!!,
-                object : PreparingAsycn.AsyncResponse {
-                    override fun processFinish(output: List<DLayerInfo>?) {
-                        if (output != null && output.isNotEmpty()) {
-                            mApplication!!.layerInfos = output
-                            startMain()
-                        } else {
-                            Toast.makeText(this@MainActivity, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show()
-                            startSignIn()
-                        }
+        PreparingTask(object : PreparingTask.Response {
+            override fun post(output: List<DLayerInfo>?) {
+                if (output != null && output.isNotEmpty()) {
+                    mApplication!!.layerInfos = output
+                    startMain()
+                } else {
+                    Toast.makeText(this@MainActivity, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show()
+                    startSignIn()
+                }
 
-                    }
-                })
-
-
-
-        if (isOnline(this)) preparingAsycn.execute()
+            }
+        }).execute(this@MainActivity, mApplication!!)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -181,7 +175,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf())
         colors = intArrayOf(R.color.colorTextColor_1, R.color.colorTextColor_1)
 
-       mBinding.appBar.layoutLayer.visibility = View.INVISIBLE
+        mBinding.appBar.layoutLayer.visibility = View.INVISIBLE
         setLicense()
         mGeocoder = Geocoder(this.applicationContext, Locale.getDefault())
         setSupportActionBar(mBinding.appBar.toolbar)

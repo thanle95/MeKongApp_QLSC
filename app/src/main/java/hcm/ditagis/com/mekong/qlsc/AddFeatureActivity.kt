@@ -15,7 +15,7 @@ import com.esri.arcgisruntime.data.Feature
 import com.esri.arcgisruntime.data.Field
 import com.esri.arcgisruntime.layers.FeatureLayer
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import hcm.ditagis.com.mekong.qlsc.async.AddFeatureAsync
+import hcm.ditagis.com.mekong.qlsc.async.AddFeatureTask
 import hcm.ditagis.com.mekong.qlsc.databinding.*
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import hcm.ditagis.com.mekong.qlsc.utities.Constant
@@ -64,6 +64,7 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
 //                }).execute(true)
 
     }
+
     private fun loadData() {
 
         mBinding.llayoutField.removeAllViews()
@@ -72,7 +73,7 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
         for (fieldName in Constant.FieldSuCo.ADD_FIELDS) {
             if (Constant.Field.NONE_UPDATE_FIELDS.find { f -> f == fieldName } != null) continue
             val field = mFeatureLayer!!.featureTable.fields.find { field -> field.name == fieldName }
-            if( field == null) continue
+            if (field == null) continue
             if (field.domain != null) {
                 val bindingLayoutView = ItemAddFeatureSpinnerBinding.inflate(layoutInflater)
 //                val bindingLayoutSpinner = this@UpdateActivity.layoutInflater.inflate(R.layout.item_add_feature_spinner, null, false) as LinearLayout
@@ -135,6 +136,7 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
         mBinding.llayoutMain.visibility = View.VISIBLE
 
     }
+
     private fun selectDate(field: Field, bindingLayoutView: ItemAddFeatureDateBinding) {
 //        mRootView.fab_parent.close(false)
         val dialog = BottomSheetDialog(this@AddFeatureActivity)
@@ -198,6 +200,7 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
 
         dialog.show()
     }
+
     private fun hadPoint(): Boolean {
         return mApplication!!.addFeaturePoint != null
     }
@@ -237,19 +240,18 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
                 mBinding.llayoutProgress.visibility = View.VISIBLE
                 mBinding.llayoutMain.visibility = View.GONE
                 mBinding.txtProgress.text = "Đang lưu..."
-                AddFeatureAsync(this@AddFeatureActivity, mApplication!!.dFeatureLayer!!.serviceFeatureTable,
-                        mBinding.llayoutField,
-                        object : AddFeatureAsync.AsyncResponse {
-                            override fun processFinish(output: Feature?) {
+                AddFeatureTask(object : AddFeatureTask.Response {
+                    override fun post(output: Feature?) {
+                        if (output != null) {
+                            goHome()
+                        } else {
+                            Toast.makeText(mBinding.root.context, "Nhập thiếu dữ liệu hoặc có lỗi xảy ra", Toast.LENGTH_SHORT).show()
+                        }
+                        mBinding.llayoutProgress.visibility = View.GONE
+                        mBinding.llayoutMain.visibility = View.VISIBLE
+                    }
 
-                                if (output != null) {
-                                    goHome()
-                                }
-                                mBinding.llayoutProgress.visibility = View.GONE
-                                mBinding.llayoutMain.visibility = View.VISIBLE
-                            }
-
-                        }).execute()
+                }).execute(this@AddFeatureActivity, mApplication!!, mBinding.llayoutField)
 
 
             }

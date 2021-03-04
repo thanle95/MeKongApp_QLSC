@@ -136,7 +136,6 @@
     <!--activity end-->
     <string name="change_password_check_old_password_message">Đang kiểm tra mật khẩu cũ…</string>
     <string name="change_password_message">Đang đổi mật khẩu…</string>
-    <string name="preparing">Đang khởi tạo bản đồ…</string>
 
 
     <!--sql begin-->
