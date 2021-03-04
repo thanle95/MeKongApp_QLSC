@@ -32,12 +32,18 @@ class PreparingTask(private val delegate: Response)  {
         preExecute(activity)
         executor.execute {
             getCapabilities(application)
-            getAppInfo(application)
-            val layerInfos = getLayerInfo(application)
-            handler.post {
-                postExecute()
-                delegate.post(layerInfos)
-            }
+//            if(isAccess(application)) {
+                getAppInfo(application)
+                val layerInfos = getLayerInfo(application)
+                handler.post {
+                    postExecute()
+                    delegate.post(layerInfos)
+                }
+//            }
+//            else{
+//                postExecute()
+//                delegate.post(null)
+//            }
         }
     }
     private fun preExecute(activity: Activity){
@@ -52,6 +58,36 @@ class PreparingTask(private val delegate: Response)  {
     private fun postExecute(){
         if(mDialog.isShowing)
             mDialog.dismiss()
+    }
+    private fun isAccess(application: DApplication): Boolean {
+        try {
+            val url = URL(Constant.URL_API.IS_ACCESS + application.user!!.capability)
+            val conn = url.openConnection() as HttpURLConnection
+            try {
+                conn.doOutput = false
+                conn.requestMethod = Constant.HTTPRequest.GET_METHOD
+                conn.setRequestProperty(Constant.HTTPRequest.AUTHORIZATION, "Bearer " + application.user!!.accessToken)
+                conn.connect()
+
+                val bufferedReader = BufferedReader(InputStreamReader(conn.inputStream))
+                val builder = StringBuilder()
+                var line: String?
+                while (bufferedReader.readLine().also { line = it } != null) {
+                    builder.append(line)
+                }
+                if(builder.toString() == "true"){
+                    return true
+                }
+
+            } catch (e: Exception) {
+                Log.e("error", e.toString())
+            } finally {
+                conn.disconnect()
+            }
+        } catch (e: Exception) {
+            Log.e("Lỗi lấy LayerInfo", e.toString())
+        }
+        return false
     }
     private fun getCapabilities(application: DApplication) {
         try {
@@ -132,7 +168,7 @@ class PreparingTask(private val delegate: Response)  {
             } catch (e: Exception) {
                 Log.e("Lỗi lấy LayerInfo", e.toString())
             }
-            return null
+            return listOf()
         }
 
     @Throws(JSONException::class)

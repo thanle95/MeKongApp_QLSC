@@ -3,29 +3,18 @@ package hcm.ditagis.com.mekong.qlsc
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import hcm.ditagis.com.mekong.qlsc.async.LoginTask
 import hcm.ditagis.com.mekong.qlsc.databinding.ActivityLoginBinding
 import hcm.ditagis.com.mekong.qlsc.entities.DApplication
 import hcm.ditagis.com.mekong.qlsc.entities.entitiesDB.User
 import hcm.ditagis.com.mekong.qlsc.utities.CheckConnectInternet.isOnline
 import hcm.ditagis.com.mekong.qlsc.utities.Constant
-import hcm.ditagis.com.mekong.qlsc.utities.Preference.Companion.instance
-import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
+import hcm.ditagis.com.mekong.qlsc.utities.DPreference
+import hcm.ditagis.com.mekong.qlsc.utities.DPreference.Companion.preference
 
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
@@ -42,40 +31,24 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         mBinding.btnLogin.setOnClickListener(this)
         mBinding.txtLoginChangeAccount.setOnClickListener(this)
 
-//        mBinding.txtUsername.setText("tiwamythoxulysuco")
-//        mBinding.txtPassword.setText("tiwamythoxulysuco")
+//        mBinding.txtUsername.setText("tiwacaibexulysuco")
+//        mBinding.txtPassword.setText("tiwacaibexulysuco")
         mBinding.txtVersion.text = "v" + packageManager.getPackageInfo(packageName, 0).versionName
         create()
     }
 
     private fun create() {
-        instance!!.setContext(this)
-        val preference_userName = instance!!.loadPreference(getString(R.string.preference_username))
-
-        //nếu chưa từng đăng nhập thành công trước đó
-        //nhập username và password bình thường
-        isLastLogin = !(preference_userName == null || preference_userName.isEmpty())
-        try {
-            if (!mApplication!!.isCheckedVersion) {
-                mApplication!!.isCheckedVersion = true
-            }
-        } catch (e: PackageManager.NameNotFoundException) {
-            Toast.makeText(this, "Có lỗi xảy ra khi kiểm tra phiên bản", Toast.LENGTH_LONG).show()
+        preference!!.setContext(this)
+        val username = preference!!.loadPreference(Constant.PreferenceKey.USERNAME)
+        val password = preference!!.loadPreference(Constant.PreferenceKey.PASSWORD)
+        if (username != null && password != null) {
+            mBinding.txtUsername.setText(username)
+            mBinding.txtPassword.setText(password)
         }
+
     }
 
-    private fun goURLBrowser(input: String) {
-        var url = input
-        var result = false
-        if (!url.startsWith("http://") && !url.startsWith("https://")) url = "http://$url"
-        val webpage = Uri.parse(url)
-        val intent = Intent(Intent.ACTION_VIEW, webpage)
-        try {
-            startActivity(intent)
-            result = true
-        } catch (ignored: Exception) {
-        }
-    }
+
 
     private fun login() {
         if (!isOnline(this)) {
@@ -83,8 +56,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             return
         }
         mBinding.txtLoginValidation.visibility = View.GONE
-        val username: String? = if (isLastLogin) instance!!.loadPreference(getString(R.string.preference_username)) else mBinding.txtUsername.text.toString().trim { it <= ' ' }
-        val password = mBinding.txtPassword.text.toString().trim { it <= ' ' }
+        val username = mBinding.txtUsername.text.toString()
+        val password = mBinding.txtPassword.text.toString()
         if (username!!.isEmpty() || password.isEmpty()) {
             handleInfoLoginEmpty()
             return
@@ -93,11 +66,12 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             override fun post(user: User?) {
                 if (user != null) {
                     mApplication!!.user = user
-                    handleLoginSuccess()
+                    handleLoginSuccess(username, password)
                 } else handleLoginFail()
             }
         }).execute(this@LoginActivity, username, password)
     }
+
     private fun handleInfoLoginEmpty() {
         mBinding.txtLoginValidation.setText(R.string.info_login_empty)
         mBinding.txtLoginValidation.visibility = View.VISIBLE
@@ -108,10 +82,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         mBinding.txtLoginValidation.visibility = View.VISIBLE
     }
 
-    private fun handleLoginSuccess() {
-        instance!!.savePreferences(getString(R.string.preference_username), mBinding.txtUsername.text.toString())
-        //        Preference.getInstance().savePreferences(getString(R.string.preference_password), khachHang.getPassWord());
-        instance!!.savePreferences(getString(R.string.preference_displayname), mApplication!!.user!!.displayName)
+    private fun handleLoginSuccess(username: String, password: String) {
+        preference!!.savePreferences(Constant.PreferenceKey.USERNAME, username)
+        preference!!.savePreferences(Constant.PreferenceKey.PASSWORD, password)
         mBinding.txtUsername.setText("")
         mBinding.txtPassword.setText("")
         val intent = Intent()
@@ -122,7 +95,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private fun changeAccount() {
         mBinding.txtUsername.setText("")
         mBinding.txtPassword.setText("")
-        instance!!.savePreferences(getString(R.string.preference_username), "")
+        preference!!.deletePreferences()
         create()
     }
 

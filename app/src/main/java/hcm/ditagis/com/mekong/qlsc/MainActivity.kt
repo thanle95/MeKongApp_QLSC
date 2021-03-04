@@ -144,8 +144,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (output != null && output.isNotEmpty()) {
                     mApplication!!.layerInfos = output
                     startMain()
-                } else {
-                    Toast.makeText(this@MainActivity, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show()
+                } else if (output == null) {
+                    Toast.makeText(this@MainActivity, "Tài khoản của bạn không có quyền truy cập ứng dụng này", Toast.LENGTH_SHORT).show()
+                    startSignIn()
+                }
+                else{
+                    Toast.makeText(this@MainActivity, "Không tìm thấy lớp dữ liệu. Vui lòng liên hệ quản trị viên", Toast.LENGTH_SHORT).show()
                     startSignIn()
                 }
 
@@ -257,12 +261,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             mBinding.navView.menu.add(1, 1, 1, "v" + packageManager.getPackageInfo(packageName, 0).versionName)
         } catch (e: PackageManager.NameNotFoundException) {
         }
-        val bindingHeaderNavigation = NavHeaderQuanLySuCoBinding.inflate(layoutInflater)
-        bindingHeaderNavigation.navNameNv.text = displayName
-//        val headerLayout = mBinding.navView.getHeaderView(0)
-//        val nav_name_nv = headerLayout.findViewById<TextView>(R.id.nav_name_nv)
-//
-//        nav_name_nv.text = displayName
+        mBinding.navView.getHeaderView(0).findViewById<TextView>(R.id.nav_name_nv).text = displayName
     }
 
     private fun findViewById() {
@@ -363,10 +362,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     val finalUrl = url
                     mURL_HanhChinh = "$url/${mApplication!!.appInfo!!.config.hanhChinhID}"
                     imageLayersHanhChinh!!.addDoneLoadingListener {
+                        //todo không focus đúng khi chọn tài khoản cái bè
                         for (layer in mBinding.appBar.content.mapView.map.operationalLayers) {
+                            if (layer is FeatureLayer) continue
                             val fullExtent = layer.fullExtent
-                            if (fullExtent != null && fullExtent.xMin > 0 && fullExtent.yMin > 0 && fullExtent.xMax > 0
-                                    && fullExtent.yMax > 0) {
+                            if (fullExtent != null && fullExtent.xMin != 0.0 && fullExtent.yMin != 0.0
+                                    && fullExtent.xMax != 0.0 && fullExtent.yMax != 0.0) {
                                 try {
                                     mBinding.appBar.content.mapView.setViewpointGeometryAsync(fullExtent, 50.0)
 

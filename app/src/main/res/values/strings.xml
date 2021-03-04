@@ -256,7 +256,6 @@
 
     <!--preference begin-->
     <string name="preference_login_api">preference_login_api</string>
-    <string name="preference_username">username</string>
     <string name="preference_displayname">displayname</string>
     <string name="async_dang_tai_du_lieu">Đang tải dữ liệu…</string>
     <string name="IDHanhChinh">IDHanhChinh</string>

@@ -7,7 +7,7 @@ import android.content.SharedPreferences
 /**
  * Created by ThanLe on 4/11/2018.
  */
-class Preference private constructor() {
+class DPreference private constructor() {
     private var mContext: Context? = null
     fun setContext(context: Context?) {
         mContext = context
@@ -51,11 +51,11 @@ class Preference private constructor() {
 
     companion object {
         @SuppressLint("StaticFieldLeak")
-        private var mInstance: Preference? = null
+        private var mInstance: DPreference? = null
         @JvmStatic
-        val instance: Preference?
+        val preference: DPreference?
             get() {
-                if (mInstance == null) mInstance = Preference()
+                if (mInstance == null) mInstance = DPreference()
                 return mInstance
             }
     }

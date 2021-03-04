@@ -143,12 +143,16 @@ class Constant {
         const val HU_VAN = 5.toShort()
         const val ONG_BE = 6.toShort()
     }
-
+object PreferenceKey{
+    const val USERNAME = "username"
+    const val PASSWORD = "password"
+}
     object URL_API {
         const val LOGIN = "$SERVER_API/Auth/Login"
         const val LAYER_INFO = "$SERVER_API/auth/layerinfos"
         const val CAPABILITIES = "$SERVER_API/auth/capabilities"
         const val APP_INFO = "$SERVER_API/auth/appinfo/"
+        const val IS_ACCESS = "$SERVER_API/auth/isaccess/"
     }
 
 
