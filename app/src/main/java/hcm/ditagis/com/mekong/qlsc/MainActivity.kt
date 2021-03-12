@@ -385,8 +385,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     mFeatureLayer = FeatureLayer(serviceFeatureTable)
                     if (dLayerInfo.definition.toLowerCase() == "null" || dLayerInfo.definition.toLowerCase() == "1=1") {
                         mFeatureLayer!!.definitionExpression = Constant.DEFINITION_HIDE_COMPLETE +
-                                String.format(" and  %s = '%s'",
-                                        Constant.FieldSuCo.NV_XU_LY, mApplication!!.user!!.username)
+                                String.format(" and  %s = '%s' or %s = '%s'",
+                                        Constant.FieldSuCo.NV_XU_LY, mApplication!!.user!!.username,
+                                Constant.Field.CREATED_USER, mApplication!!.user!!.username)
                     } else mFeatureLayer!!.definitionExpression = dLayerInfo.definition
                     mFeatureLayer!!.id = dLayerInfo.layerId
                     mFeatureLayer!!.name = dLayerInfo.layerName
