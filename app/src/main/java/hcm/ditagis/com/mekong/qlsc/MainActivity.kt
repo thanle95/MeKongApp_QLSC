@@ -256,11 +256,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun setLoginInfos() {
         val displayName = mApplication!!.user!!.displayName
         mBinding.navView.setNavigationItemSelectedListener(this)
-//        navigationView.menu.add(1, 1, 1, Constant.SERVER_API.replace("/api", ""))
-        try {
-            mBinding.navView.menu.add(1, 1, 1, "v" + packageManager.getPackageInfo(packageName, 0).versionName)
-        } catch (e: PackageManager.NameNotFoundException) {
-        }
         mBinding.navView.getHeaderView(0).findViewById<TextView>(R.id.nav_name_nv).text = displayName
     }
 
@@ -291,7 +286,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startActivityForResult(intentAdd, Constant.RequestCode.ADD)
     }
 
-    fun handlingAddFeatureSuccess() {
+    private fun handlingAddFeatureSuccess() {
         handlingCancelAdd()
         mapViewHandler!!.query(String.format(Constant.QUERY_BY_OBJECTID, mApplication!!.diemSuCo!!.objectID))
         mApplication!!.diemSuCo!!.clear()
@@ -388,7 +383,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 } else if (dLayerInfo.layerId.contains(Constant.LAYER_ID.SU_CO)) {
                     val serviceFeatureTable = ServiceFeatureTable(url)
                     mFeatureLayer = FeatureLayer(serviceFeatureTable)
-                    if (dLayerInfo.definition.toLowerCase() == "null") {
+                    if (dLayerInfo.definition.toLowerCase() == "null" || dLayerInfo.definition.toLowerCase() == "1=1") {
                         mFeatureLayer!!.definitionExpression = Constant.DEFINITION_HIDE_COMPLETE +
                                 String.format(" and  %s = '%s'",
                                         Constant.FieldSuCo.NV_XU_LY, mApplication!!.user!!.username)
@@ -403,7 +398,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         mApplication!!.dFeatureLayer = mDFeatureLayer
                         mDFeatureLayers!!.add(mDFeatureLayer!!)
                         val callout = mBinding.appBar.content.mapView.callout
-                        mPopUp = Popup(this@MainActivity, mBinding.appBar.content.mapView, serviceFeatureTable, callout, mGeocoder)
+                        mPopUp = Popup(this@MainActivity, mBinding.appBar.content.mapView,
+                                serviceFeatureTable, callout, mGeocoder)
                         DFeatureLayerDiemSuCo = mDFeatureLayer
                         mapViewHandler = MapViewHandler(this, mDFeatureLayer!!, callout, mBinding.appBar.content.mapView, mPopUp!!,
                                 this@MainActivity, mGeocoder!!)

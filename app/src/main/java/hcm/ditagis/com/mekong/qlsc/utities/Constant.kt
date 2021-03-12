@@ -11,22 +11,27 @@ import java.util.*
  * Created by ThanLe on 3/1/2018.
  */
 class Constant {
-    object AppID{
+    object AppID {
         const val TIEN_GIANG = "40F85CEE-E177-EB11-80D2-E88E1868CDFA"
         const val VINH_LONG = "8A117A29-B77C-EB11-80D2-E88E1868CDFA"
         val LIST = arrayOf(TIEN_GIANG, VINH_LONG)
     }
+
     object DateFormat {
         const val DATE_FORMAT_STRING = "dd/MM/yyyy"
+
         @JvmField
         val DATE_FORMAT_YEAR_FIRST = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
         @JvmField
         val DATE_FORMAT = SimpleDateFormat(DATE_FORMAT_STRING)
         val DATE_FORMAT_VIEW = SimpleDateFormat("HH:mm:ss dd/MM/yyyy")
     }
+
     object Message {
         const val UNDEFINED = "Lỗi chưa xác định"
     }
+
     object URLImage {
         const val IMAGES_FOLDER = "$SERVER/images/map/suco"
         const val MAC_DINH = "$IMAGES_FOLDER/marker.png"
@@ -80,13 +85,14 @@ class Constant {
         const val LAST_EDITED_USER = "last_edited_user"
         const val LAST_EDITED_DATE = "last_edited_date"
         val NONE_UPDATE_FIELDS = arrayOf(CREATED_DATE, CREATED_USER, LAST_EDITED_DATE, LAST_EDITED_USER, OBJECTID,
-        FieldSuCo.TG_PHAN_ANH)
+                FieldSuCo.TG_PHAN_ANH)
     }
 
     object OptionAddImage {
         const val CAPTURE = "Chụp ảnh"
         const val PICK = "Chọn ảnh"
     }
+
     object FieldSuCo {
         const val ID_SUCO = "IDSuCo"
         const val NGUOI_PHAN_ANH = "NguoiPhanAnh"
@@ -114,6 +120,7 @@ class Constant {
         const val NV_XU_LY = "NVXuLy"
         val ADD_FIELDS = arrayOf(NGUOI_PHAN_ANH, SDT_PHAN_ANH, DIA_CHI, THONG_TIN_PHAN_ANH, GHI_CHU)
     }
+
     object CompressFormat {
         val JPEG = Bitmap.CompressFormat.JPEG
         val PNG = Bitmap.CompressFormat.PNG
@@ -122,6 +129,7 @@ class Constant {
         val TYPE_COMPRESS = PNG
 
     }
+
     object TrangThaiSuCo {
         const val MOI_TIEP_NHAN = 0.toShort()
         const val DANG_SUA = 2.toShort()
@@ -148,10 +156,12 @@ class Constant {
         const val HU_VAN = 5.toShort()
         const val ONG_BE = 6.toShort()
     }
-object PreferenceKey{
-    const val USERNAME = "username"
-    const val PASSWORD = "password"
-}
+
+    object PreferenceKey {
+        const val USERNAME = "username"
+        const val PASSWORD = "password"
+    }
+
     object URL_API {
         const val LOGIN = "$SERVER_API/Auth/Login"
         const val LAYER_INFO = "$SERVER_API/auth/layerinfos"
@@ -169,20 +179,25 @@ object PreferenceKey{
         const val QLCN1 = "qlcn1"
         const val QLCN2 = "qlcn2"
     }
-    object LAYER_ID{
+
+    object LAYER_ID {
         const val SU_CO = "DiemSuCo"
         const val BASEMAP = "BASEMAP"
     }
+
     companion object {
         const val EMPTY = ""
+
         @SuppressLint("SimpleDateFormat")
         val DATE_FORMAT = SimpleDateFormat("dd_MM_yyyy")
+
         @SuppressLint("SimpleDateFormat")
         val DATE_FORMAT_VIEW = SimpleDateFormat("HH:mm:ss dd/MM/yyyy")
 
         const val SERVER = "http://171.244.32.245:100"
         const val SERVER_API = "http://171.244.32.245:100"
-//        const val SERVER_API = "http://vwaco.vn:9092/api"
+
+        //        const val SERVER_API = "http://vwaco.vn:9092/api"
         const val NULL = ""
         val OPTION_IMAGE_LIST: List<String> = object : ArrayList<String>() {
             init {
@@ -193,6 +208,7 @@ object PreferenceKey{
         const val QUERY_BY_OBJECTID = Field.OBJECTID + " = %d"
         const val QUERY_BY_SUCOID = FieldSuCo.ID_SUCO + " = '%s'"
         val SPATIAL_REFERENCE_VN2000 = SpatialReference.create("PROJCS[\"TPHCM_VN2000\",GEOGCS[\"GCS_VN_2000\",DATUM[\"D_Vietnam_2000\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",500000.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",105.75],PARAMETER[\"Scale_Factor\",0.9999],PARAMETER[\"Latitude_Of_Origin\",0.0],UNIT[\"Meter\",1.0]]")
+
         @JvmField
         val REQUEST_PERMISSIONS = arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -202,6 +218,7 @@ object PreferenceKey{
         const val MAX_SCALE_IMAGE_WITH_LABLES = 18000.0
         const val DEFINITION_HIDE_COMPLETE = " TrangThai <> 3"
         private var mInstance: Constant? = null
+
         @JvmStatic
         val instance: Constant?
             get() {

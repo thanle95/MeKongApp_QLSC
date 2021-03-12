@@ -10,8 +10,8 @@ android {
         applicationId "mekong.ditagis.com.qlsc"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 10003
-        versionName "1.0.3"
+        versionCode 10004
+        versionName "1.0.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

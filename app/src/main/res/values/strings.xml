@@ -12,7 +12,7 @@
     <string name="validate_change_password_lack">Mật khẩu phải đủ 6 ký tự</string>
     <string name="validate_password_old">Mật khẩu cũ không đúng</string>
 
-    <string name="app_name">MêKông - Quản lý sự cố</string>
+    <string name="app_name">Me Kong - Quản lý sự cố</string>
     <string name="dialog_title_add">Thêm sự cố</string>
     <string name="btn_OK">OK</string>
     <string name="btn_save">Lưu thay đổi</string>
